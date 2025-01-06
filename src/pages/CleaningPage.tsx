@@ -5,9 +5,30 @@ import { Calendar } from "@/components/ui/calendar";
 import { useToast } from "@/hooks/use-toast";
 
 const providers = [
-  { id: 10, name: "Julie Leroy", rating: 4.6, hourlyRate: 45, yearsExperience: 5 },
-  { id: 11, name: "Marc Girard", rating: 4.8, hourlyRate: 50, yearsExperience: 8 },
-  { id: 12, name: "Anne Roux", rating: 4.7, hourlyRate: 48, yearsExperience: 6 },
+  { 
+    id: 10, 
+    name: "Julie Leroy", 
+    rating: 4.6, 
+    hourlyRate: 45, 
+    yearsExperience: 5,
+    image: "/photo-1649972904349-6e44c42644a7"
+  },
+  { 
+    id: 11, 
+    name: "Marc Girard", 
+    rating: 4.8, 
+    hourlyRate: 50, 
+    yearsExperience: 8,
+    image: "/photo-1581092795360-fd1ca04f0952"
+  },
+  { 
+    id: 12, 
+    name: "Anne Roux", 
+    rating: 4.7, 
+    hourlyRate: 48, 
+    yearsExperience: 6,
+    image: "/photo-1581091226825-a6a2a5aee158"
+  },
 ];
 
 const CleaningPage = () => {
@@ -51,7 +72,14 @@ const CleaningPage = () => {
                   onClick={() => setSelectedProvider(provider.id)}
                 >
                   <CardHeader>
-                    <CardTitle>{provider.name}</CardTitle>
+                    <div className="flex items-center space-x-4">
+                      <img 
+                        src={provider.image}
+                        alt={provider.name}
+                        className="w-16 h-16 rounded-full object-cover"
+                      />
+                      <CardTitle>{provider.name}</CardTitle>
+                    </div>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-2">
