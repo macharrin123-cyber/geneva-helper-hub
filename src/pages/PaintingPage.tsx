@@ -24,7 +24,6 @@ const providers = [
 ];
 
 const PaintingPage = () => {
-  console.log("PaintingPage rendering");
   const { toast } = useToast();
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [selectedProvider, setSelectedProvider] = useState<number | null>(null);
@@ -46,11 +45,11 @@ const PaintingPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gray-50">
       <Navigation />
       
-      <main className="container mx-auto pt-20 pb-12 px-4">
-        <div className="max-w-7xl mx-auto">
+      <main className="pt-20 pb-12">
+        <div className="max-w-7xl mx-auto px-4">
           <h1 className="text-3xl font-bold text-gray-900 mb-8">Painting Services in Geneva</h1>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

@@ -10,34 +10,27 @@ import ElectricalPage from "./pages/ElectricalPage";
 import PaintingPage from "./pages/PaintingPage";
 import CarpentryPage from "./pages/CarpentryPage";
 import CleaningPage from "./pages/CleaningPage";
-import PaymentPage from "./pages/PaymentPage";
 
 const queryClient = new QueryClient();
 
-const App = () => {
-  console.log("App component rendering");
-  return (
-    <QueryClientProvider client={queryClient}>
+const App = () => (
+  <QueryClientProvider client={queryClient}>
+    <TooltipProvider>
+      <Toaster />
+      <Sonner />
       <BrowserRouter>
-        <TooltipProvider>
-          <div className="min-h-screen bg-background">
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/signup" element={<Signup />} />
-              <Route path="/plumbing" element={<PlumbingPage />} />
-              <Route path="/electrical" element={<ElectricalPage />} />
-              <Route path="/painting" element={<PaintingPage />} />
-              <Route path="/carpentry" element={<CarpentryPage />} />
-              <Route path="/cleaning" element={<CleaningPage />} />
-              <Route path="/payment/:bookingId" element={<PaymentPage />} />
-            </Routes>
-            <Toaster />
-            <Sonner />
-          </div>
-        </TooltipProvider>
+        <Routes>
+          <Route path="/" element={<Index />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/plumbing" element={<PlumbingPage />} />
+          <Route path="/electrical" element={<ElectricalPage />} />
+          <Route path="/painting" element={<PaintingPage />} />
+          <Route path="/carpentry" element={<CarpentryPage />} />
+          <Route path="/cleaning" element={<CleaningPage />} />
+        </Routes>
       </BrowserRouter>
-    </QueryClientProvider>
-  );
-};
+    </TooltipProvider>
+  </QueryClientProvider>
+);
 
 export default App;

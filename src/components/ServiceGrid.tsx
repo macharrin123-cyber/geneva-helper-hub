@@ -45,29 +45,25 @@ const services = [
 ];
 
 const ServiceGrid = () => {
-  console.log("ServiceGrid component rendering");
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
-      {services.map((service) => {
-        console.log(`Rendering service: ${service.name}`);
-        return (
-          <Link
-            key={service.id}
-            to={service.path}
-            className="block group"
-          >
-            <div className="border rounded-lg p-6 hover:shadow-lg transition-shadow">
-              <div className={`${service.color} p-4 rounded-full w-16 h-16 flex items-center justify-center mb-4`}>
-                <service.icon className="w-8 h-8 text-gray-700" />
-              </div>
-              <h3 className="text-xl font-semibold mb-2 group-hover:text-primary">
-                {service.name}
-              </h3>
-              <p className="text-gray-600">{service.description}</p>
+      {services.map((service) => (
+        <Link
+          key={service.id}
+          to={service.path}
+          className="block group"
+        >
+          <div className="border rounded-lg p-6 hover:shadow-lg transition-shadow">
+            <div className={`${service.color} p-4 rounded-full w-16 h-16 flex items-center justify-center mb-4`}>
+              <service.icon className="w-8 h-8 text-gray-700" />
             </div>
-          </Link>
-        )
-      })}
+            <h3 className="text-xl font-semibold mb-2 group-hover:text-primary">
+              {service.name}
+            </h3>
+            <p className="text-gray-600">{service.description}</p>
+          </div>
+        </Link>
+      ))}
     </div>
   );
 };
