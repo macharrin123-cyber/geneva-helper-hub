@@ -3,6 +3,7 @@ import Navigation from "@/components/Navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Calendar } from "@/components/ui/calendar";
 import { useToast } from "@/hooks/use-toast";
+import BookingForm from "@/components/BookingForm";
 
 const providers = [
   { 
@@ -36,21 +37,7 @@ const PlumbingPage = () => {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [selectedProvider, setSelectedProvider] = useState<number | null>(null);
 
-  const handleBooking = (providerId: number) => {
-    if (!selectedDate) {
-      toast({
-        title: "Please select a date",
-        description: "You need to select a date before booking",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    toast({
-      title: "Booking Confirmed!",
-      description: `Your appointment has been scheduled for ${selectedDate.toLocaleDateString()}`,
-    });
-  };
+  const selectedProviderData = providers.find(p => p.id === selectedProvider);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -94,21 +81,23 @@ const PlumbingPage = () => {
 
             {selectedProvider && (
               <div className="space-y-6">
-                <h2 className="text-xl font-semibold text-gray-800">Select Date</h2>
+                <h2 className="text-xl font-semibold text-gray-800">Select Date & Time</h2>
                 <Card>
                   <CardContent className="pt-6">
                     <Calendar
                       mode="single"
                       selected={selectedDate}
                       onSelect={setSelectedDate}
-                      className="rounded-md border"
+                      className="rounded-md border mb-6"
                     />
-                    <button
-                      onClick={() => handleBooking(selectedProvider)}
-                      className="w-full mt-4 bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90 transition-colors"
-                    >
-                      Book Appointment
-                    </button>
+                    {selectedDate && selectedProviderData && (
+                      <BookingForm 
+                        providerId={selectedProviderData.id}
+                        providerName={selectedProviderData.name}
+                        selectedDate={selectedDate}
+                        hourlyRate={selectedProviderData.hourlyRate}
+                      />
+                    )}
                   </CardContent>
                 </Card>
               </div>
