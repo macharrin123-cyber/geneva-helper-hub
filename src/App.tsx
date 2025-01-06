@@ -14,25 +14,28 @@ import PaymentPage from "./pages/PaymentPage";
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/plumbing" element={<PlumbingPage />} />
-          <Route path="/electrical" element={<ElectricalPage />} />
-          <Route path="/painting" element={<PaintingPage />} />
-          <Route path="/carpentry" element={<CarpentryPage />} />
-          <Route path="/cleaning" element={<CleaningPage />} />
-          <Route path="/payment/:bookingId" element={<PaymentPage />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+const App = () => {
+  console.log("App component rendering");
+  return (
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/plumbing" element={<PlumbingPage />} />
+            <Route path="/electrical" element={<ElectricalPage />} />
+            <Route path="/painting" element={<PaintingPage />} />
+            <Route path="/carpentry" element={<CarpentryPage />} />
+            <Route path="/cleaning" element={<CleaningPage />} />
+            <Route path="/payment/:bookingId" element={<PaymentPage />} />
+          </Routes>
+          <Toaster />
+          <Sonner />
+        </BrowserRouter>
+      </TooltipProvider>
+    </QueryClientProvider>
+  );
+};
 
 export default App;
