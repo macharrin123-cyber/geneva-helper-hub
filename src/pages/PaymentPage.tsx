@@ -5,6 +5,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements, PaymentElement, useStripe, useElements } from "@stripe/react-stripe-js";
+
+// Initialize Stripe
+const stripePromise = loadStripe('pk_test_51OxMKqFXxGPZGLBPWXhDDNxZxZxZxZxZxZxZxZxZx'); // Replace with your publishable key
 
 interface LocationState {
   booking: {
@@ -16,12 +21,62 @@ interface LocationState {
   };
 }
 
+const PaymentForm = ({ amount, onSuccess }: { amount: number, onSuccess: () => void }) => {
+  const stripe = useStripe();
+  const elements = useElements();
+  const [isProcessing, setIsProcessing] = useState(false);
+  const { toast } = useToast();
+
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+
+    if (!stripe || !elements) {
+      return;
+    }
+
+    setIsProcessing(true);
+
+    const { error } = await stripe.confirmPayment({
+      elements,
+      confirmParams: {
+        return_url: `${window.location.origin}/payment-success`,
+      },
+    });
+
+    if (error) {
+      toast({
+        title: "Payment Failed",
+        description: error.message,
+        variant: "destructive",
+      });
+    } else {
+      onSuccess();
+    }
+
+    setIsProcessing(false);
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <PaymentElement />
+      <button
+        type="submit"
+        disabled={!stripe || isProcessing}
+        className="w-full bg-primary text-white px-4 py-3 rounded-md hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        {isProcessing ? "Processing..." : "Pay Now"}
+      </button>
+    </form>
+  );
+};
+
 const PaymentPage = () => {
   const { toast } = useToast();
   const location = useLocation();
   const navigate = useNavigate();
   const [comments, setComments] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
+  const [clientSecret, setClientSecret] = useState("");
   
   // Type assertion for location.state
   const bookingData = (location.state as LocationState)?.booking;
@@ -45,8 +100,7 @@ const PaymentPage = () => {
     );
   }
 
-  const handlePayment = async () => {
-    setIsProcessing(true);
+  const handlePaymentSuccess = async () => {
     try {
       // Create the booking in the database
       const { data, error } = await supabase
@@ -60,7 +114,8 @@ const PaymentPage = () => {
             street_address: "123 Test Street", // This should come from user input or profile
             city: "Geneva",
             postal_code: "1201",
-            address: "123 Test Street, Geneva, 1201"
+            address: "123 Test Street, Geneva, 1201",
+            payment_status: "completed"
           }
         ])
         .select()
@@ -73,7 +128,6 @@ const PaymentPage = () => {
         description: "Your service has been booked successfully.",
       });
 
-      // Redirect to home page or booking confirmation page
       navigate('/');
     } catch (error) {
       console.error('Error creating booking:', error);
@@ -82,8 +136,6 @@ const PaymentPage = () => {
         description: "There was an error processing your booking. Please try again.",
         variant: "destructive",
       });
-    } finally {
-      setIsProcessing(false);
     }
   };
 
@@ -140,13 +192,21 @@ const PaymentPage = () => {
             </CardContent>
           </Card>
 
-          <button
-            onClick={handlePayment}
-            disabled={isProcessing}
-            className="w-full bg-primary text-white px-4 py-3 rounded-md hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {isProcessing ? "Processing..." : "Confirm and Pay"}
-          </button>
+          <Card className="mb-6">
+            <CardHeader>
+              <CardTitle>Payment Method</CardTitle>
+            </CardHeader>
+            <CardContent>
+              {clientSecret && (
+                <Elements stripe={stripePromise} options={{ clientSecret }}>
+                  <PaymentForm 
+                    amount={bookingData.hourlyRate} 
+                    onSuccess={handlePaymentSuccess}
+                  />
+                </Elements>
+              )}
+            </CardContent>
+          </Card>
         </div>
       </main>
     </div>
