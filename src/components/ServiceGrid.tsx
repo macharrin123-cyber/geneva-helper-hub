@@ -8,6 +8,7 @@ const services = [
     icon: Wrench,
     description: "Professional plumbing services for your home",
     color: "bg-blue-100",
+    path: "/plumbing"
   },
   {
     id: 2,
@@ -15,6 +16,7 @@ const services = [
     icon: Zap,
     description: "Licensed electricians for all your needs",
     color: "bg-yellow-100",
+    path: "/electrical"
   },
   {
     id: 3,
@@ -22,6 +24,7 @@ const services = [
     icon: Paintbrush,
     description: "Transform your space with our painting services",
     color: "bg-red-100",
+    path: "/painting"
   },
   {
     id: 4,
@@ -29,6 +32,7 @@ const services = [
     icon: Hammer,
     description: "Expert carpentry and woodworking",
     color: "bg-orange-100",
+    path: "/carpentry"
   },
   {
     id: 5,
@@ -36,6 +40,7 @@ const services = [
     icon: Trash2,
     description: "Professional cleaning services",
     color: "bg-green-100",
+    path: "/cleaning"
   },
 ];
 
@@ -45,7 +50,7 @@ const ServiceGrid = () => {
       {services.map((service) => (
         <Link
           key={service.id}
-          to={`/service/${service.id}`}
+          to={service.path}
           className="block group"
         >
           <div className="border rounded-lg p-6 hover:shadow-lg transition-shadow">

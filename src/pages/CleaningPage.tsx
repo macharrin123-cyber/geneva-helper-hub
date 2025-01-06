@@ -1,52 +1,19 @@
-import { useParams } from "react-router-dom";
+import { useState } from "react";
 import Navigation from "@/components/Navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Calendar } from "@/components/ui/calendar";
-import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 
-// Mock data for providers based on service type
-const serviceProviders = {
-  1: [ // Plumbing
-    { id: 1, name: "Jean Dupont", rating: 4.8, hourlyRate: 85, yearsExperience: 15 },
-    { id: 2, name: "Marie Martin", rating: 4.6, hourlyRate: 75, yearsExperience: 8 },
-    { id: 3, name: "Pierre Bernard", rating: 4.9, hourlyRate: 90, yearsExperience: 20 },
-  ],
-  2: [ // Electrical
-    { id: 4, name: "Sophie Laurent", rating: 4.7, hourlyRate: 80, yearsExperience: 12 },
-    { id: 5, name: "Lucas Moreau", rating: 4.5, hourlyRate: 70, yearsExperience: 6 },
-  ],
-  3: [ // Painting
-    { id: 6, name: "Emma Petit", rating: 4.8, hourlyRate: 65, yearsExperience: 10 },
-    { id: 7, name: "Thomas Dubois", rating: 4.6, hourlyRate: 60, yearsExperience: 7 },
-  ],
-  4: [ // Carpentry
-    { id: 8, name: "Antoine Richard", rating: 4.9, hourlyRate: 85, yearsExperience: 18 },
-    { id: 9, name: "Claire Simon", rating: 4.7, hourlyRate: 75, yearsExperience: 9 },
-  ],
-  5: [ // Cleaning
-    { id: 10, name: "Julie Leroy", rating: 4.6, hourlyRate: 45, yearsExperience: 5 },
-    { id: 11, name: "Marc Girard", rating: 4.8, hourlyRate: 50, yearsExperience: 8 },
-    { id: 12, name: "Anne Roux", rating: 4.7, hourlyRate: 48, yearsExperience: 6 },
-  ],
-};
+const providers = [
+  { id: 10, name: "Julie Leroy", rating: 4.6, hourlyRate: 45, yearsExperience: 5 },
+  { id: 11, name: "Marc Girard", rating: 4.8, hourlyRate: 50, yearsExperience: 8 },
+  { id: 12, name: "Anne Roux", rating: 4.7, hourlyRate: 48, yearsExperience: 6 },
+];
 
-const serviceNames = {
-  1: "Plumbing",
-  2: "Electrical",
-  3: "Painting",
-  4: "Carpentry",
-  5: "Cleaning",
-};
-
-const ServicePage = () => {
-  const { id } = useParams();
+const CleaningPage = () => {
   const { toast } = useToast();
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [selectedProvider, setSelectedProvider] = useState<number | null>(null);
-
-  const serviceName = serviceNames[id as keyof typeof serviceNames] || "Service";
-  const providers = serviceProviders[id as keyof typeof serviceProviders] || [];
 
   const handleBooking = (providerId: number) => {
     if (!selectedDate) {
@@ -70,7 +37,7 @@ const ServicePage = () => {
       
       <main className="pt-20 pb-12">
         <div className="max-w-7xl mx-auto px-4">
-          <h1 className="text-3xl font-bold text-gray-900 mb-8">{serviceName} Services in Geneva</h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-8">Cleaning Services in Geneva</h1>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-6">
@@ -125,4 +92,4 @@ const ServicePage = () => {
   );
 };
 
-export default ServicePage;
+export default CleaningPage;
