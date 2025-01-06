@@ -149,7 +149,8 @@ const PlumbingPage = () => {
                     <div className="space-y-2">
                       <button
                         onClick={() => handleBooking(selectedProvider)}
-                        className="w-full bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90 transition-colors"
+                        disabled={!selectedDate || !selectedTime}
+                        className="w-full bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         Book Appointment
                       </button>
