@@ -24,6 +24,19 @@ const SignupForm = () => {
     setImagePreview(preview);
   };
 
+  const isFormValid = () => {
+    return (
+      imageFile !== null &&
+      formData.name.trim() !== "" &&
+      formData.email.trim() !== "" &&
+      formData.phone.trim() !== "" &&
+      formData.service !== "" &&
+      formData.experience.trim() !== "" &&
+      formData.description.trim() !== "" &&
+      formData.hourlyRate.trim() !== ""
+    );
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -173,7 +186,8 @@ const SignupForm = () => {
 
       <button
         type="submit"
-        className="w-full bg-primary text-white py-2 px-4 rounded-md hover:bg-primary/90 transition-colors"
+        disabled={!isFormValid()}
+        className="w-full bg-primary text-white py-2 px-4 rounded-md hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
       >
         Submit Application
       </button>
