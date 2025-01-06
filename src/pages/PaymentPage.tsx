@@ -1,15 +1,11 @@
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Navigation from "@/components/Navigation";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { loadStripe } from "@stripe/stripe-js";
-import { Elements, PaymentElement, useStripe, useElements } from "@stripe/react-stripe-js";
-
-// Initialize Stripe
-const stripePromise = loadStripe('pk_test_51OxMKqFXxGPZGLBPWXhDDNxZxZxZxZxZxZxZxZxZx'); // Replace with your publishable key
+import BookingSummary from "@/components/payment/BookingSummary";
+import CommentsSection from "@/components/payment/CommentsSection";
+import PaymentSection from "@/components/payment/PaymentSection";
 
 interface LocationState {
   booking: {
@@ -21,64 +17,12 @@ interface LocationState {
   };
 }
 
-const PaymentForm = ({ amount, onSuccess }: { amount: number, onSuccess: () => void }) => {
-  const stripe = useStripe();
-  const elements = useElements();
-  const [isProcessing, setIsProcessing] = useState(false);
-  const { toast } = useToast();
-
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
-
-    if (!stripe || !elements) {
-      return;
-    }
-
-    setIsProcessing(true);
-
-    const { error } = await stripe.confirmPayment({
-      elements,
-      confirmParams: {
-        return_url: `${window.location.origin}/payment-success`,
-      },
-    });
-
-    if (error) {
-      toast({
-        title: "Payment Failed",
-        description: error.message,
-        variant: "destructive",
-      });
-    } else {
-      onSuccess();
-    }
-
-    setIsProcessing(false);
-  };
-
-  return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <PaymentElement />
-      <button
-        type="submit"
-        disabled={!stripe || isProcessing}
-        className="w-full bg-primary text-white px-4 py-3 rounded-md hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-      >
-        {isProcessing ? "Processing..." : "Pay Now"}
-      </button>
-    </form>
-  );
-};
-
 const PaymentPage = () => {
   const { toast } = useToast();
   const location = useLocation();
   const navigate = useNavigate();
   const [comments, setComments] = useState("");
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [clientSecret, setClientSecret] = useState("");
   
-  // Type assertion for location.state
   const bookingData = (location.state as LocationState)?.booking;
 
   if (!bookingData) {
@@ -87,13 +31,9 @@ const PaymentPage = () => {
         <Navigation />
         <main className="pt-20 pb-12">
           <div className="max-w-3xl mx-auto px-4">
-            <Card>
-              <CardContent className="pt-6">
-                <p className="text-center text-gray-600">
-                  No booking information found. Please start a new booking.
-                </p>
-              </CardContent>
-            </Card>
+            <p className="text-center text-gray-600">
+              No booking information found. Please start a new booking.
+            </p>
           </div>
         </main>
       </div>
@@ -102,8 +42,7 @@ const PaymentPage = () => {
 
   const handlePaymentSuccess = async () => {
     try {
-      // Create the booking in the database
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('service_bookings')
         .insert([
           {
@@ -111,15 +50,13 @@ const PaymentPage = () => {
             service_date: bookingData.date.toISOString().split('T')[0],
             service_time: bookingData.time,
             comments: comments.trim() || null,
-            street_address: "123 Test Street", // This should come from user input or profile
+            street_address: "123 Test Street",
             city: "Geneva",
             postal_code: "1201",
             address: "123 Test Street, Geneva, 1201",
             payment_status: "completed"
           }
-        ])
-        .select()
-        .single();
+        ]);
 
       if (error) throw error;
 
@@ -146,67 +83,9 @@ const PaymentPage = () => {
         <div className="max-w-3xl mx-auto px-4">
           <h1 className="text-3xl font-bold text-gray-900 mb-8">Complete Your Booking</h1>
           
-          <Card className="mb-6">
-            <CardHeader>
-              <CardTitle>Booking Summary</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Service Provider</span>
-                  <span className="font-medium">{bookingData.providerName}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Date</span>
-                  <span className="font-medium">{bookingData.date.toLocaleDateString()}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Time</span>
-                  <span className="font-medium">{bookingData.time}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Rate</span>
-                  <span className="font-medium">CHF {bookingData.hourlyRate}/hour</span>
-                </div>
-                <div className="border-t pt-4">
-                  <div className="flex justify-between">
-                    <span className="text-lg font-semibold">Total</span>
-                    <span className="text-lg font-semibold">CHF {bookingData.hourlyRate}</span>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="mb-6">
-            <CardHeader>
-              <CardTitle>Additional Comments</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <Textarea
-                placeholder="Add any special instructions or comments for the service provider (optional)"
-                value={comments}
-                onChange={(e) => setComments(e.target.value)}
-                className="min-h-[100px]"
-              />
-            </CardContent>
-          </Card>
-
-          <Card className="mb-6">
-            <CardHeader>
-              <CardTitle>Payment Method</CardTitle>
-            </CardHeader>
-            <CardContent>
-              {clientSecret && (
-                <Elements stripe={stripePromise} options={{ clientSecret }}>
-                  <PaymentForm 
-                    amount={bookingData.hourlyRate} 
-                    onSuccess={handlePaymentSuccess}
-                  />
-                </Elements>
-              )}
-            </CardContent>
-          </Card>
+          <BookingSummary bookingData={bookingData} />
+          <CommentsSection comments={comments} onChange={setComments} />
+          <PaymentSection amount={bookingData.hourlyRate} onSuccess={handlePaymentSuccess} />
         </div>
       </main>
     </div>
