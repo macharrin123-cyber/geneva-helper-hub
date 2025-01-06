@@ -18,22 +18,24 @@ const App = () => {
   console.log("App component rendering");
   return (
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/plumbing" element={<PlumbingPage />} />
-            <Route path="/electrical" element={<ElectricalPage />} />
-            <Route path="/painting" element={<PaintingPage />} />
-            <Route path="/carpentry" element={<CarpentryPage />} />
-            <Route path="/cleaning" element={<CleaningPage />} />
-            <Route path="/payment/:bookingId" element={<PaymentPage />} />
-          </Routes>
-          <Toaster />
-          <Sonner />
-        </BrowserRouter>
-      </TooltipProvider>
+      <BrowserRouter>
+        <TooltipProvider>
+          <div className="min-h-screen bg-background">
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/signup" element={<Signup />} />
+              <Route path="/plumbing" element={<PlumbingPage />} />
+              <Route path="/electrical" element={<ElectricalPage />} />
+              <Route path="/painting" element={<PaintingPage />} />
+              <Route path="/carpentry" element={<CarpentryPage />} />
+              <Route path="/cleaning" element={<CleaningPage />} />
+              <Route path="/payment/:bookingId" element={<PaymentPage />} />
+            </Routes>
+            <Toaster />
+            <Sonner />
+          </div>
+        </TooltipProvider>
+      </BrowserRouter>
     </QueryClientProvider>
   );
 };
