@@ -10,6 +10,7 @@ import ElectricalPage from "./pages/ElectricalPage";
 import PaintingPage from "./pages/PaintingPage";
 import CarpentryPage from "./pages/CarpentryPage";
 import CleaningPage from "./pages/CleaningPage";
+import PaymentPage from "./pages/PaymentPage";
 
 const queryClient = new QueryClient();
 
@@ -27,6 +28,7 @@ const App = () => (
           <Route path="/painting" element={<PaintingPage />} />
           <Route path="/carpentry" element={<CarpentryPage />} />
           <Route path="/cleaning" element={<CleaningPage />} />
+          <Route path="/payment" element={<PaymentPage />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>

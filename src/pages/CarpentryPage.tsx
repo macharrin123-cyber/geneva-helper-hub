@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Calendar } from "@/components/ui/calendar";
@@ -46,6 +47,7 @@ const generateTimeSlots = () => {
 
 const CarpentryPage = () => {
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [selectedTime, setSelectedTime] = useState<string>("");
   const [selectedProvider, setSelectedProvider] = useState<number | null>(null);
@@ -60,9 +62,27 @@ const CarpentryPage = () => {
       return;
     }
 
-    toast({
-      title: "Booking Confirmed!",
-      description: `Your appointment has been scheduled for ${selectedDate.toLocaleDateString()} at ${selectedTime}`,
+    const provider = providers.find(p => p.id === providerId);
+    if (!provider) {
+      toast({
+        title: "Error",
+        description: "Selected provider not found",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Navigate to payment page with booking details
+    navigate('/payment', {
+      state: {
+        booking: {
+          providerId: provider.id,
+          providerName: provider.name,
+          date: selectedDate,
+          time: selectedTime,
+          hourlyRate: provider.hourlyRate
+        }
+      }
     });
   };
 
