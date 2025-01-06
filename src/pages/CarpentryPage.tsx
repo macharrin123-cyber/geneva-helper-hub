@@ -3,6 +3,14 @@ import Navigation from "@/components/Navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Calendar } from "@/components/ui/calendar";
 import { useToast } from "@/hooks/use-toast";
+import { Phone } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const providers = [
   { 
@@ -11,6 +19,7 @@ const providers = [
     rating: 4.9, 
     hourlyRate: 85, 
     yearsExperience: 18,
+    phone: "+41 76 890 12 34",
     image: "/photo-1581092795360-fd1ca04f0952"
   },
   { 
@@ -19,20 +28,33 @@ const providers = [
     rating: 4.7, 
     hourlyRate: 75, 
     yearsExperience: 9,
+    phone: "+41 76 901 23 45",
     image: "/photo-1649972904349-6e44c42644a7"
   },
 ];
 
+// Generate available time slots between 8 AM and 9 PM
+const generateTimeSlots = () => {
+  const slots = [];
+  for (let hour = 8; hour <= 21; hour++) {
+    const formattedHour = hour.toString().padStart(2, '0');
+    slots.push(`${formattedHour}:00`);
+    slots.push(`${formattedHour}:30`);
+  }
+  return slots;
+};
+
 const CarpentryPage = () => {
   const { toast } = useToast();
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
+  const [selectedTime, setSelectedTime] = useState<string>("");
   const [selectedProvider, setSelectedProvider] = useState<number | null>(null);
 
   const handleBooking = (providerId: number) => {
-    if (!selectedDate) {
+    if (!selectedDate || !selectedTime) {
       toast({
-        title: "Please select a date",
-        description: "You need to select a date before booking",
+        title: "Please select both date and time",
+        description: "You need to select both a date and time before booking",
         variant: "destructive",
       });
       return;
@@ -40,7 +62,15 @@ const CarpentryPage = () => {
 
     toast({
       title: "Booking Confirmed!",
-      description: `Your appointment has been scheduled for ${selectedDate.toLocaleDateString()}`,
+      description: `Your appointment has been scheduled for ${selectedDate.toLocaleDateString()} at ${selectedTime}`,
+    });
+  };
+
+  const handleCall = (provider: typeof providers[0]) => {
+    // In a real app, this would initiate a phone call
+    toast({
+      title: "Calling Provider",
+      description: `Connecting you with ${provider.name} at ${provider.phone}`,
     });
   };
 
@@ -86,21 +116,43 @@ const CarpentryPage = () => {
 
             {selectedProvider && (
               <div className="space-y-6">
-                <h2 className="text-xl font-semibold text-gray-800">Select Date</h2>
+                <h2 className="text-xl font-semibold text-gray-800">Select Date & Time</h2>
                 <Card>
                   <CardContent className="pt-6">
                     <Calendar
                       mode="single"
                       selected={selectedDate}
                       onSelect={setSelectedDate}
-                      className="rounded-md border"
+                      className="rounded-md border mb-4"
                     />
-                    <button
-                      onClick={() => handleBooking(selectedProvider)}
-                      className="w-full mt-4 bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90 transition-colors"
-                    >
-                      Book Appointment
-                    </button>
+                    <Select onValueChange={setSelectedTime} value={selectedTime}>
+                      <SelectTrigger className="w-full mb-4">
+                        <SelectValue placeholder="Select time" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {generateTimeSlots().map((time) => (
+                          <SelectItem key={time} value={time}>
+                            {time}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <div className="space-y-2">
+                      <button
+                        onClick={() => handleBooking(selectedProvider)}
+                        disabled={!selectedDate || !selectedTime}
+                        className="w-full bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        Book Appointment
+                      </button>
+                      <button
+                        onClick={() => handleCall(providers.find(p => p.id === selectedProvider)!)}
+                        className="w-full flex items-center justify-center gap-2 bg-secondary text-secondary-foreground px-4 py-2 rounded-md hover:bg-secondary/80 transition-colors"
+                      >
+                        <Phone className="w-4 h-4" />
+                        Call Provider
+                      </button>
+                    </div>
                   </CardContent>
                 </Card>
               </div>

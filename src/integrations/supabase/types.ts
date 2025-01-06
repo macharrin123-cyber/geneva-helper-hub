@@ -9,7 +9,57 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      service_bookings: {
+        Row: {
+          address: string
+          city: string
+          comments: string | null
+          created_at: string | null
+          id: string
+          payment_intent_id: string | null
+          payment_status: string | null
+          postal_code: string
+          provider_id: number
+          service_date: string
+          service_time: string
+          status: string | null
+          street_address: string
+          user_id: string | null
+        }
+        Insert: {
+          address: string
+          city: string
+          comments?: string | null
+          created_at?: string | null
+          id?: string
+          payment_intent_id?: string | null
+          payment_status?: string | null
+          postal_code: string
+          provider_id: number
+          service_date: string
+          service_time: string
+          status?: string | null
+          street_address: string
+          user_id?: string | null
+        }
+        Update: {
+          address?: string
+          city?: string
+          comments?: string | null
+          created_at?: string | null
+          id?: string
+          payment_intent_id?: string | null
+          payment_status?: string | null
+          postal_code?: string
+          provider_id?: number
+          service_date?: string
+          service_time?: string
+          status?: string | null
+          street_address?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
