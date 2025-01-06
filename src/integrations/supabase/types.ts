@@ -20,7 +20,6 @@ export type Database = {
           payment_status: string | null
           postal_code: string
           provider_id: number
-          provider_response: string | null
           service_date: string
           service_time: string
           status: string | null
@@ -37,7 +36,6 @@ export type Database = {
           payment_status?: string | null
           postal_code: string
           provider_id: number
-          provider_response?: string | null
           service_date: string
           service_time: string
           status?: string | null
@@ -54,7 +52,6 @@ export type Database = {
           payment_status?: string | null
           postal_code?: string
           provider_id?: number
-          provider_response?: string | null
           service_date?: string
           service_time?: string
           status?: string | null
