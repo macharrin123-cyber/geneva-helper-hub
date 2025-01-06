@@ -1,30 +1,27 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
 import Navigation from "@/components/Navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useToast } from "@/hooks/use-toast";
+import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
-import { Tables } from "@/integrations/supabase/types";
-
-type ServiceBooking = Tables<"service_bookings">;
+import { Check, X } from "lucide-react";
 
 const ProviderDashboard = () => {
+  const [bookings, setBookings] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   const { toast } = useToast();
   const navigate = useNavigate();
-  const [bookings, setBookings] = useState<ServiceBooking[]>([]);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const checkAuth = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
         navigate('/login');
-        return;
       }
-      fetchBookings();
     };
-
     checkAuth();
+    fetchBookings();
   }, [navigate]);
 
   const fetchBookings = async () => {
@@ -36,15 +33,14 @@ const ProviderDashboard = () => {
 
       if (providerError) throw providerError;
 
-      const { data: bookingsData, error: bookingsError } = await supabase
+      const { data, error } = await supabase
         .from('service_bookings')
         .select('*')
         .eq('provider_id', providerData.id)
         .order('service_date', { ascending: true });
 
-      if (bookingsError) throw bookingsError;
-
-      setBookings(bookingsData);
+      if (error) throw error;
+      setBookings(data || []);
     } catch (error) {
       console.error('Error fetching bookings:', error);
       toast({
@@ -66,16 +62,12 @@ const ProviderDashboard = () => {
 
       if (error) throw error;
 
-      setBookings(bookings.map(booking => 
-        booking.id === bookingId 
-          ? { ...booking, provider_response: response }
-          : booking
-      ));
-
       toast({
         title: "Success",
-        description: `Booking ${response}`,
+        description: `Booking ${response} successfully`,
       });
+
+      fetchBookings();
     } catch (error) {
       console.error('Error updating booking:', error);
       toast({
@@ -90,64 +82,80 @@ const ProviderDashboard = () => {
     <div className="min-h-screen bg-gray-50">
       <Navigation />
       
-      <main className="pt-24 pb-12">
+      <main className="pt-20 pb-12">
         <div className="max-w-7xl mx-auto px-4">
           <h1 className="text-3xl font-bold text-gray-900 mb-8">Provider Dashboard</h1>
           
           {loading ? (
-            <p className="text-center text-gray-600">Loading bookings...</p>
-          ) : bookings.length === 0 ? (
-            <p className="text-center text-gray-600">No bookings found</p>
+            <p>Loading bookings...</p>
           ) : (
             <div className="grid gap-6">
               {bookings.map((booking) => (
                 <Card key={booking.id}>
                   <CardHeader>
-                    <CardTitle>Booking on {new Date(booking.service_date).toLocaleDateString()}</CardTitle>
+                    <CardTitle>Booking Request - {new Date(booking.service_date).toLocaleDateString()}</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-4">
                       <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <p className="text-sm text-gray-600">Time</p>
+                          <p className="text-sm text-gray-500">Time</p>
                           <p className="font-medium">{booking.service_time}</p>
                         </div>
                         <div>
-                          <p className="text-sm text-gray-600">Address</p>
-                          <p className="font-medium">{booking.address}</p>
+                          <p className="text-sm text-gray-500">Address</p>
+                          <p className="font-medium">{booking.street_address}, {booking.city}</p>
                         </div>
-                        <div>
-                          <p className="text-sm text-gray-600">Status</p>
-                          <p className="font-medium capitalize">{booking.provider_response}</p>
-                        </div>
-                        {booking.comments && (
-                          <div className="col-span-2">
-                            <p className="text-sm text-gray-600">Comments</p>
-                            <p className="font-medium">{booking.comments}</p>
-                          </div>
-                        )}
                       </div>
                       
+                      {booking.comments && (
+                        <div>
+                          <p className="text-sm text-gray-500">Comments</p>
+                          <p className="font-medium">{booking.comments}</p>
+                        </div>
+                      )}
+
                       {booking.provider_response === 'pending' && (
                         <div className="flex gap-4">
-                          <button
+                          <Button
                             onClick={() => handleResponse(booking.id, 'approved')}
-                            className="flex-1 bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90 transition-colors"
+                            className="flex items-center gap-2"
                           >
+                            <Check className="w-4 h-4" />
                             Approve
-                          </button>
-                          <button
+                          </Button>
+                          <Button
+                            variant="destructive"
                             onClick={() => handleResponse(booking.id, 'denied')}
-                            className="flex-1 bg-destructive text-white px-4 py-2 rounded-md hover:bg-destructive/90 transition-colors"
+                            className="flex items-center gap-2"
                           >
+                            <X className="w-4 h-4" />
                             Deny
-                          </button>
+                          </Button>
+                        </div>
+                      )}
+
+                      {booking.provider_response !== 'pending' && (
+                        <div className={`inline-flex px-3 py-1 rounded-full text-sm ${
+                          booking.provider_response === 'approved' 
+                            ? 'bg-green-100 text-green-800' 
+                            : 'bg-red-100 text-red-800'
+                        }`}>
+                          Status: {booking.provider_response}
                         </div>
                       )}
                     </div>
                   </CardContent>
                 </Card>
               ))}
+
+              {bookings.length === 0 && (
+                <Card>
+                  <CardContent className="py-8">
+                    <p className="text-center text-gray-500">No booking requests yet</p>
+                  </CardContent>
+                </Card>
+              )}
             </div>
           )}
         </div>
