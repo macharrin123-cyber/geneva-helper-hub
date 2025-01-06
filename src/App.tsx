@@ -22,7 +22,6 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/signup" element={<Signup />} />
-          <Route path="/login" element={<Signup />} /> {/* Temporarily pointing to Signup until Login page is created */}
           <Route path="/plumbing" element={<PlumbingPage />} />
           <Route path="/electrical" element={<ElectricalPage />} />
           <Route path="/painting" element={<PaintingPage />} />

@@ -1,16 +1,8 @@
 import { Link } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import ServiceGrid from "@/components/ServiceGrid";
-import Welcome from "@/components/Welcome";
-import { useIsMobile } from "@/hooks/use-mobile";
 
 const Index = () => {
-  const isMobile = useIsMobile();
-
-  if (isMobile) {
-    return <Welcome />;
-  }
-
   return (
     <div className="min-h-screen bg-gray-50">
       <Navigation />
