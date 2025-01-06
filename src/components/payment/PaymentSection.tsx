@@ -10,7 +10,7 @@ import {
 } from "@stripe/react-stripe-js";
 import { supabase } from "@/integrations/supabase/client";
 
-const stripePromise = loadStripe("pk_test_51OxMKqFXxGPZGLBPWXhDDNxZxZxZxZxZxZxZxZxZx");
+const stripePromise = loadStripe(process.env.STRIPE_PUBLISHABLE_KEY || "");
 
 interface PaymentFormProps {
   amount: number;
@@ -62,14 +62,25 @@ const PaymentForm = ({ amount, onSuccess }: PaymentFormProps) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <PaymentElement />
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <div className="space-y-4">
+        <div className="rounded-md border p-4 bg-white">
+          <h3 className="text-sm font-medium text-gray-700 mb-4">Card Details</h3>
+          <PaymentElement options={{
+            layout: {
+              type: 'tabs',
+              defaultCollapsed: false,
+            },
+            paymentMethodOrder: ['card', 'apple_pay']
+          }} />
+        </div>
+      </div>
       <button
         type="submit"
         disabled={!stripe || isProcessing}
         className="w-full bg-primary text-white px-4 py-3 rounded-md hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        {isProcessing ? "Processing..." : "Pay Now"}
+        {isProcessing ? "Processing..." : `Pay CHF ${amount}`}
       </button>
     </form>
   );
@@ -124,7 +135,15 @@ const PaymentSection = ({ amount, onSuccess }: PaymentSectionProps) => {
         <CardTitle>Payment Method</CardTitle>
       </CardHeader>
       <CardContent>
-        <Elements stripe={stripePromise} options={{ clientSecret }}>
+        <Elements stripe={stripePromise} options={{ 
+          clientSecret,
+          appearance: {
+            theme: 'stripe',
+            variables: {
+              colorPrimary: '#0F172A',
+            },
+          },
+        }}>
           <PaymentForm amount={amount} onSuccess={onSuccess} />
         </Elements>
       </CardContent>
