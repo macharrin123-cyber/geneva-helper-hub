@@ -9,7 +9,12 @@ const Navigation = () => {
     <nav className="bg-white shadow-lg fixed w-full top-0 z-50">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex justify-between h-16">
-          <div className="flex-shrink-0 flex items-center">
+          <div className="flex-shrink-0 flex items-center gap-2">
+            <img 
+              src="/lovable-uploads/62b2a12e-2e10-4096-adae-5afec671bbf9.png" 
+              alt="Geneva Coat of Arms" 
+              className="h-8 w-auto"
+            />
             <Link to="/" className="text-primary text-xl font-bold">
               Geneva Services
             </Link>
