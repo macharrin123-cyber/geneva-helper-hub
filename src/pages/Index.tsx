@@ -16,6 +16,11 @@ const Index = () => {
             <p className="text-xl text-gray-600 mb-8">
               Connect with trusted local professionals for all your home service needs
             </p>
+          </div>
+
+          <ServiceGrid />
+
+          <div className="text-center mt-12">
             <Link
               to="/signup"
               className="inline-block bg-primary text-white px-6 py-3 rounded-md hover:bg-primary/90 transition-colors"
@@ -23,8 +28,6 @@ const Index = () => {
               Become a Service Provider
             </Link>
           </div>
-
-          <ServiceGrid />
         </div>
       </main>
     </div>
