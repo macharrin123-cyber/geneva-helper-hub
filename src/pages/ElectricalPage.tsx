@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Calendar } from "@/components/ui/calendar";
@@ -33,7 +34,6 @@ const providers = [
   },
 ];
 
-// Generate available time slots between 8 AM and 9 PM
 const generateTimeSlots = () => {
   const slots = [];
   for (let hour = 8; hour <= 21; hour++) {
@@ -46,6 +46,7 @@ const generateTimeSlots = () => {
 
 const ElectricalPage = () => {
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [selectedTime, setSelectedTime] = useState<string>("");
   const [selectedProvider, setSelectedProvider] = useState<number | null>(null);
@@ -60,14 +61,31 @@ const ElectricalPage = () => {
       return;
     }
 
-    toast({
-      title: "Booking Confirmed!",
-      description: `Your appointment has been scheduled for ${selectedDate.toLocaleDateString()} at ${selectedTime}`,
+    const provider = providers.find(p => p.id === providerId);
+    if (!provider) {
+      toast({
+        title: "Error",
+        description: "Selected provider not found",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Navigate to payment page with booking details
+    navigate('/payment', {
+      state: {
+        booking: {
+          providerId: provider.id,
+          providerName: provider.name,
+          date: selectedDate,
+          time: selectedTime,
+          hourlyRate: provider.hourlyRate
+        }
+      }
     });
   };
 
   const handleCall = (provider: typeof providers[0]) => {
-    // In a real app, this would initiate a phone call
     toast({
       title: "Calling Provider",
       description: `Connecting you with ${provider.name} at ${provider.phone}`,
