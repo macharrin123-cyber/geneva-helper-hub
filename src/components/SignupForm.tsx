@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import ImageUpload from "./signup/ImageUpload";
+import FormInput from "./signup/FormInput";
+import ServiceSelect from "./signup/ServiceSelect";
 
 const SignupForm = () => {
   const { toast } = useToast();
@@ -16,16 +19,9 @@ const SignupForm = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setImageFile(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
+  const handleImageChange = (file: File | null, preview: string | null) => {
+    setImageFile(file);
+    setImagePreview(preview);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -66,6 +62,22 @@ const SignupForm = () => {
 
       if (dbError) throw dbError;
 
+      // Send application email
+      const response = await fetch('/functions/v1/send-provider-application', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...formData,
+          imageUrl: publicUrl,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to send application email');
+      }
+
       toast({
         title: "Application submitted!",
         description: "We'll review your information and get back to you soon.",
@@ -95,133 +107,59 @@ const SignupForm = () => {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6 max-w-xl mx-auto">
-      <div>
-        <label htmlFor="image" className="block text-sm font-medium text-gray-700">
-          Profile Image
-        </label>
-        <div className="mt-1 flex items-center space-x-4">
-          <input
-            type="file"
-            id="image"
-            accept="image/*"
-            onChange={handleImageChange}
-            className="hidden"
-          />
-          <label
-            htmlFor="image"
-            className="cursor-pointer inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
-          >
-            Upload Image
-          </label>
-          {imagePreview && (
-            <div className="relative w-20 h-20">
-              <img
-                src={imagePreview}
-                alt="Preview"
-                className="w-full h-full object-cover rounded-full"
-              />
-            </div>
-          )}
-        </div>
-      </div>
+      <ImageUpload onImageChange={handleImageChange} imagePreview={imagePreview} />
 
-      {/* Existing form fields */}
-      <div>
-        <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-          Full Name
-        </label>
-        <input
-          type="text"
-          id="name"
-          value={formData.name}
-          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-          required
-        />
-      </div>
+      <FormInput
+        id="name"
+        label="Full Name"
+        type="text"
+        value={formData.name}
+        onChange={(value) => setFormData({ ...formData, name: value })}
+      />
 
-      <div>
-        <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-          Email
-        </label>
-        <input
-          type="email"
-          id="email"
-          value={formData.email}
-          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-          required
-        />
-      </div>
+      <FormInput
+        id="email"
+        label="Email"
+        type="email"
+        value={formData.email}
+        onChange={(value) => setFormData({ ...formData, email: value })}
+      />
 
-      <div>
-        <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
-          Phone Number
-        </label>
-        <input
-          type="tel"
-          id="phone"
-          value={formData.phone}
-          onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-          required
-        />
-      </div>
+      <FormInput
+        id="phone"
+        label="Phone Number"
+        type="tel"
+        value={formData.phone}
+        onChange={(value) => setFormData({ ...formData, phone: value })}
+      />
 
-      <div>
-        <label htmlFor="service" className="block text-sm font-medium text-gray-700">
-          Service Type
-        </label>
-        <select
-          id="service"
-          value={formData.service}
-          onChange={(e) => setFormData({ ...formData, service: e.target.value })}
-          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-          required
-        >
-          <option value="">Select a service</option>
-          <option value="plumbing">Plumbing</option>
-          <option value="electrical">Electrical</option>
-          <option value="cleaning">Cleaning</option>
-          <option value="carpentry">Carpentry</option>
-          <option value="painting">Painting</option>
-        </select>
-      </div>
+      <ServiceSelect
+        value={formData.service}
+        onChange={(value) => setFormData({ ...formData, service: value })}
+      />
 
-      <div>
-        <label htmlFor="hourlyRate" className="block text-sm font-medium text-gray-700">
-          Hourly Rate (CHF)
-        </label>
-        <input
-          type="number"
-          id="hourlyRate"
-          value={formData.hourlyRate}
-          onChange={(e) => setFormData({ ...formData, hourlyRate: e.target.value })}
-          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-          required
-          min="0"
-          step="0.01"
-        />
-      </div>
+      <FormInput
+        id="hourlyRate"
+        label="Hourly Rate (CHF)"
+        type="number"
+        value={formData.hourlyRate}
+        onChange={(value) => setFormData({ ...formData, hourlyRate: value })}
+        min="0"
+        step="0.01"
+      />
 
-      <div>
-        <label htmlFor="experience" className="block text-sm font-medium text-gray-700">
-          Years of Experience
-        </label>
-        <input
-          type="number"
-          id="experience"
-          value={formData.experience}
-          onChange={(e) => setFormData({ ...formData, experience: e.target.value })}
-          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-          required
-          min="0"
-        />
-      </div>
+      <FormInput
+        id="experience"
+        label="Years of Experience"
+        type="number"
+        value={formData.experience}
+        onChange={(value) => setFormData({ ...formData, experience: value })}
+        min="0"
+      />
 
       <div>
         <label htmlFor="description" className="block text-sm font-medium text-gray-700">
-          Description of Services
+          Description of Services *
         </label>
         <textarea
           id="description"
