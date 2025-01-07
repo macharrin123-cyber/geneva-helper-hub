@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import ImageUpload from "./signup/ImageUpload";
 import FormInput from "./signup/FormInput";
@@ -18,6 +18,7 @@ const SignupForm = () => {
   });
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleImageChange = (file: File | null, preview: string | null) => {
     setImageFile(file);
@@ -49,22 +50,34 @@ const SignupForm = () => {
       return;
     }
 
+    setIsSubmitting(true);
+
     try {
+      console.log('Starting form submission...');
+      
       // Upload image to Supabase Storage
       const fileExt = imageFile.name.split('.').pop();
       const fileName = `${crypto.randomUUID()}.${fileExt}`;
+      
+      console.log('Uploading image to storage...');
       const { error: uploadError, data } = await supabase.storage
         .from('provider-images')
         .upload(fileName, imageFile);
 
-      if (uploadError) throw uploadError;
+      if (uploadError) {
+        console.error('Storage upload error:', uploadError);
+        throw uploadError;
+      }
 
       // Get the public URL of the uploaded image
       const { data: { publicUrl } } = supabase.storage
         .from('provider-images')
         .getPublicUrl(fileName);
 
+      console.log('Image uploaded successfully, URL:', publicUrl);
+
       // Create provider record in the database
+      console.log('Creating provider record...');
       const { error: dbError } = await supabase
         .from('service_providers')
         .insert({
@@ -73,9 +86,15 @@ const SignupForm = () => {
           service_type: formData.service,
         });
 
-      if (dbError) throw dbError;
+      if (dbError) {
+        console.error('Database insert error:', dbError);
+        throw dbError;
+      }
+
+      console.log('Provider record created successfully');
 
       // Send application email
+      console.log('Sending application email...');
       const response = await fetch('/functions/v1/send-provider-application', {
         method: 'POST',
         headers: {
@@ -88,8 +107,12 @@ const SignupForm = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to send application email');
+        const errorData = await response.json();
+        console.error('Email sending error:', errorData);
+        throw new Error(errorData.details || 'Failed to send application email');
       }
+
+      console.log('Application email sent successfully');
 
       toast({
         title: "Application submitted!",
@@ -112,9 +135,11 @@ const SignupForm = () => {
       console.error('Error submitting form:', error);
       toast({
         title: "Error",
-        description: "There was a problem submitting your application. Please try again.",
+        description: error.message || "There was a problem submitting your application. Please try again.",
         variant: "destructive",
       });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -186,10 +211,10 @@ const SignupForm = () => {
 
       <button
         type="submit"
-        disabled={!isFormValid()}
+        disabled={!isFormValid() || isSubmitting}
         className="w-full bg-primary text-white py-2 px-4 rounded-md hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
       >
-        Submit Application
+        {isSubmitting ? "Submitting..." : "Submit Application"}
       </button>
     </form>
   );
