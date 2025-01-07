@@ -25,12 +25,23 @@ export const uploadProviderImage = async (imageFile: File) => {
 export const createProviderRecord = async (publicUrl: string, hourlyRate: number, serviceType: string) => {
   console.log('Creating provider record with data:', { publicUrl, hourlyRate, serviceType });
   
+  // Get the current user's ID
+  const { data: { user } } = await supabase.auth.getUser();
+  
+  if (!user) {
+    console.error('No authenticated user found');
+    throw new Error('You must be logged in to create a provider profile');
+  }
+
+  console.log('Current user ID:', user.id);
+
   const { error: dbError, data } = await supabase
     .from('service_providers')
     .insert({
       image_url: publicUrl,
       hourly_rate: hourlyRate,
       service_type: serviceType,
+      user_id: user.id // Add the user_id to the record
     })
     .select()
     .single();
