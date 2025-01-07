@@ -1,18 +1,10 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const navigate = useNavigate();
-
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    navigate('/');
-  };
 
   return (
     <nav className="bg-white shadow-lg fixed w-full top-0 z-50">
@@ -33,25 +25,12 @@ const Navigation = () => {
             <Link to="/" className="text-gray-700 hover:text-primary px-3 py-2 rounded-md">
               Home
             </Link>
-            <Link to="/browse" className="text-gray-700 hover:text-primary px-3 py-2 rounded-md">
-              Browse Services
-            </Link>
-            <Link to="/client-dashboard" className="text-gray-700 hover:text-primary px-3 py-2 rounded-md">
-              My Bookings
-            </Link>
-            <Link to="/provider-dashboard" className="text-gray-700 hover:text-primary px-3 py-2 rounded-md">
-              Provider Dashboard
-            </Link>
             <Link to="/signup" className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90">
               Become a Provider
             </Link>
-            <Button
-              variant="outline"
-              onClick={handleLogout}
-              className="text-gray-700 hover:text-primary"
-            >
-              Logout
-            </Button>
+            <Link to="/signin" className="text-gray-700 hover:text-primary px-3 py-2 rounded-md">
+              Sign In
+            </Link>
           </div>
 
           <div className="md:hidden flex items-center">
@@ -76,43 +55,19 @@ const Navigation = () => {
                 Home
               </Link>
               <Link
-                to="/browse"
-                className="block text-gray-700 hover:text-primary px-3 py-2 rounded-md"
-                onClick={() => setIsOpen(false)}
-              >
-                Browse Services
-              </Link>
-              <Link
-                to="/client-dashboard"
-                className="block text-gray-700 hover:text-primary px-3 py-2 rounded-md"
-                onClick={() => setIsOpen(false)}
-              >
-                My Bookings
-              </Link>
-              <Link
-                to="/provider-dashboard"
-                className="block text-gray-700 hover:text-primary px-3 py-2 rounded-md"
-                onClick={() => setIsOpen(false)}
-              >
-                Provider Dashboard
-              </Link>
-              <Link
                 to="/signup"
                 className="block bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90"
                 onClick={() => setIsOpen(false)}
               >
                 Become a Provider
               </Link>
-              <Button
-                variant="outline"
-                onClick={() => {
-                  handleLogout();
-                  setIsOpen(false);
-                }}
-                className="w-full text-left"
+              <Link
+                to="/signin"
+                className="block text-gray-700 hover:text-primary px-3 py-2 rounded-md"
+                onClick={() => setIsOpen(false)}
               >
-                Logout
-              </Button>
+                Sign In
+              </Link>
             </div>
           </div>
         )}
