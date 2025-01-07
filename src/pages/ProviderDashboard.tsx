@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { Check, X } from "lucide-react";
+import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 
 const ProviderDashboard = () => {
   const [bookings, setBookings] = useState<any[]>([]);
@@ -78,6 +79,36 @@ const ProviderDashboard = () => {
     }
   };
 
+  // Prepare data for the pie chart
+  const statusCounts = bookings.reduce((acc: Record<string, number>, booking) => {
+    const status = booking.provider_response || 'pending';
+    acc[status] = (acc[status] || 0) + 1;
+    return acc;
+  }, {});
+
+  const pieChartData = Object.entries(statusCounts).map(([name, value]) => ({
+    name,
+    value
+  }));
+
+  const COLORS = {
+    approved: '#10B981',
+    denied: '#EF4444',
+    pending: '#F59E0B'
+  };
+
+  // Prepare data for the bar chart
+  const monthlyBookings = bookings.reduce((acc: Record<string, number>, booking) => {
+    const month = new Date(booking.service_date).toLocaleString('default', { month: 'short' });
+    acc[month] = (acc[month] || 0) + 1;
+    return acc;
+  }, {});
+
+  const barChartData = Object.entries(monthlyBookings).map(([month, count]) => ({
+    month,
+    bookings: count
+  }));
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Navigation />
@@ -89,74 +120,128 @@ const ProviderDashboard = () => {
           {loading ? (
             <p>Loading bookings...</p>
           ) : (
-            <div className="grid gap-6">
-              {bookings.map((booking) => (
-                <Card key={booking.id}>
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <Card>
                   <CardHeader>
-                    <CardTitle>Booking Request - {new Date(booking.service_date).toLocaleDateString()}</CardTitle>
+                    <CardTitle>Booking Status Distribution</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="space-y-4">
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <p className="text-sm text-gray-500">Time</p>
-                          <p className="font-medium">{booking.service_time}</p>
-                        </div>
-                        <div>
-                          <p className="text-sm text-gray-500">Address</p>
-                          <p className="font-medium">{booking.street_address}, {booking.city}</p>
-                        </div>
-                      </div>
-                      
-                      {booking.comments && (
-                        <div>
-                          <p className="text-sm text-gray-500">Comments</p>
-                          <p className="font-medium">{booking.comments}</p>
-                        </div>
-                      )}
-
-                      {booking.provider_response === 'pending' && (
-                        <div className="flex gap-4">
-                          <Button
-                            onClick={() => handleResponse(booking.id, 'approved')}
-                            className="flex items-center gap-2"
+                    <div className="h-[300px] w-full">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <PieChart>
+                          <Pie
+                            data={pieChartData}
+                            cx="50%"
+                            cy="50%"
+                            labelLine={false}
+                            label={({ name, percent }) => `${name} (${(percent * 100).toFixed(0)}%)`}
+                            outerRadius={80}
+                            fill="#8884d8"
+                            dataKey="value"
                           >
-                            <Check className="w-4 h-4" />
-                            Approve
-                          </Button>
-                          <Button
-                            variant="destructive"
-                            onClick={() => handleResponse(booking.id, 'denied')}
-                            className="flex items-center gap-2"
-                          >
-                            <X className="w-4 h-4" />
-                            Deny
-                          </Button>
-                        </div>
-                      )}
-
-                      {booking.provider_response !== 'pending' && (
-                        <div className={`inline-flex px-3 py-1 rounded-full text-sm ${
-                          booking.provider_response === 'approved' 
-                            ? 'bg-green-100 text-green-800' 
-                            : 'bg-red-100 text-red-800'
-                        }`}>
-                          Status: {booking.provider_response}
-                        </div>
-                      )}
+                            {pieChartData.map((entry, index) => (
+                              <Cell 
+                                key={`cell-${index}`} 
+                                fill={COLORS[entry.name as keyof typeof COLORS] || '#8884d8'} 
+                              />
+                            ))}
+                          </Pie>
+                          <Tooltip />
+                        </PieChart>
+                      </ResponsiveContainer>
                     </div>
                   </CardContent>
                 </Card>
-              ))}
 
-              {bookings.length === 0 && (
                 <Card>
-                  <CardContent className="py-8">
-                    <p className="text-center text-gray-500">No booking requests yet</p>
+                  <CardHeader>
+                    <CardTitle>Monthly Booking Trends</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="h-[300px] w-full">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={barChartData}>
+                          <XAxis dataKey="month" />
+                          <YAxis />
+                          <Tooltip />
+                          <Bar dataKey="bookings" fill="#1E3A8A" />
+                        </BarChart>
+                      </ResponsiveContainer>
+                    </div>
                   </CardContent>
                 </Card>
-              )}
-            </div>
+              </div>
+
+              <div className="grid gap-6">
+                {bookings.map((booking) => (
+                  <Card key={booking.id}>
+                    <CardHeader>
+                      <CardTitle>Booking Request - {new Date(booking.service_date).toLocaleDateString()}</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-4">
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <p className="text-sm text-gray-500">Time</p>
+                            <p className="font-medium">{booking.service_time}</p>
+                          </div>
+                          <div>
+                            <p className="text-sm text-gray-500">Address</p>
+                            <p className="font-medium">{booking.street_address}, {booking.city}</p>
+                          </div>
+                        </div>
+                        
+                        {booking.comments && (
+                          <div>
+                            <p className="text-sm text-gray-500">Comments</p>
+                            <p className="font-medium">{booking.comments}</p>
+                          </div>
+                        )}
+
+                        {booking.provider_response === 'pending' && (
+                          <div className="flex gap-4">
+                            <Button
+                              onClick={() => handleResponse(booking.id, 'approved')}
+                              className="flex items-center gap-2"
+                            >
+                              <Check className="w-4 h-4" />
+                              Approve
+                            </Button>
+                            <Button
+                              variant="destructive"
+                              onClick={() => handleResponse(booking.id, 'denied')}
+                              className="flex items-center gap-2"
+                            >
+                              <X className="w-4 h-4" />
+                              Deny
+                            </Button>
+                          </div>
+                        )}
+
+                        {booking.provider_response !== 'pending' && (
+                          <div className={`inline-flex px-3 py-1 rounded-full text-sm ${
+                            booking.provider_response === 'approved' 
+                              ? 'bg-green-100 text-green-800' 
+                              : 'bg-red-100 text-red-800'
+                          }`}>
+                            Status: {booking.provider_response}
+                          </div>
+                        )}
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+
+                {bookings.length === 0 && (
+                  <Card>
+                    <CardContent className="py-8">
+                      <p className="text-center text-gray-500">No booking requests yet</p>
+                    </CardContent>
+                  </Card>
+                )}
+              </div>
+            </>
           )}
         </div>
       </main>
