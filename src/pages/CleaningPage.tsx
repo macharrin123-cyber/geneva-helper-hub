@@ -1,112 +1,180 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Navigation from "@/components/Navigation";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Calendar } from "@/components/ui/calendar";
+import { useToast } from "@/hooks/use-toast";
+import { Phone } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+const providers = [
+  { 
+    id: 10, 
+    name: "Sophie Martin", 
+    rating: 4.8, 
+    hourlyRate: 45, 
+    yearsExperience: 8,
+    phone: "+41 76 234 56 78",
+    image: "/photo-1581091226825-a6a2a5aee158"
+  },
+  { 
+    id: 11, 
+    name: "Marc Dubois", 
+    rating: 4.7, 
+    hourlyRate: 40, 
+    yearsExperience: 5,
+    phone: "+41 76 345 67 89",
+    image: "/photo-1649972904349-6e44c42644a7"
+  },
+];
+
+const generateTimeSlots = () => {
+  const slots = [];
+  for (let hour = 8; hour <= 21; hour++) {
+    const formattedHour = hour.toString().padStart(2, '0');
+    slots.push(`${formattedHour}:00`);
+    slots.push(`${formattedHour}:30`);
+  }
+  return slots;
+};
 
 const CleaningPage = () => {
+  const { toast } = useToast();
+  const navigate = useNavigate();
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
+  const [selectedTime, setSelectedTime] = useState<string>("");
+  const [selectedProvider, setSelectedProvider] = useState<number | null>(null);
+
+  const handleBooking = (providerId: number) => {
+    if (!selectedDate || !selectedTime) {
+      toast({
+        title: "Please select both date and time",
+        description: "You need to select both a date and time before booking",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const provider = providers.find(p => p.id === providerId);
+    if (!provider) {
+      toast({
+        title: "Error",
+        description: "Selected provider not found",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Navigate to payment page with booking details
+    navigate('/payment', {
+      state: {
+        booking: {
+          providerId: provider.id,
+          providerName: provider.name,
+          date: selectedDate,
+          time: selectedTime,
+          hourlyRate: provider.hourlyRate
+        }
+      }
+    });
+  };
+
+  const handleCall = (provider: typeof providers[0]) => {
+    toast({
+      title: "Calling Provider",
+      description: `Connecting you with ${provider.name} at ${provider.phone}`,
+    });
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Navigation />
       
-      <main className="pt-24 pb-12">
+      <main className="pt-20 pb-12">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">
-              Professional Cleaning & Moving Services
-            </h1>
-            <p className="text-xl text-gray-600">
-              Expert cleaning and moving solutions for your home and office
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-8 mb-12">
-            <Card>
-              <CardHeader>
-                <CardTitle>Home & Office Cleaning</CardTitle>
-                <CardDescription>Professional cleaning services for any space</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="aspect-video relative overflow-hidden rounded-lg">
-                  <img 
-                    src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158"
-                    alt="Professional cleaning service"
-                    className="object-cover w-full h-full"
-                  />
-                </div>
-                <ul className="space-y-2">
-                  <li className="flex items-center">
-                    <span className="mr-2">✓</span>
-                    Regular cleaning maintenance
-                  </li>
-                  <li className="flex items-center">
-                    <span className="mr-2">✓</span>
-                    Deep cleaning services
-                  </li>
-                  <li className="flex items-center">
-                    <span className="mr-2">✓</span>
-                    Window and carpet cleaning
-                  </li>
-                </ul>
-                <Button asChild className="w-full">
-                  <Link to="/book/cleaning">Book Cleaning Service</Link>
-                </Button>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Moving Services</CardTitle>
-                <CardDescription>Full-service moving solutions</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="aspect-video relative overflow-hidden rounded-lg">
-                  <img 
-                    src="https://images.unsplash.com/photo-1649972904349-6e44c42644a7"
-                    alt="Moving service"
-                    className="object-cover w-full h-full"
-                  />
-                </div>
-                <ul className="space-y-2">
-                  <li className="flex items-center">
-                    <span className="mr-2">✓</span>
-                    Professional packing services
-                  </li>
-                  <li className="flex items-center">
-                    <span className="mr-2">✓</span>
-                    Loading and unloading
-                  </li>
-                  <li className="flex items-center">
-                    <span className="mr-2">✓</span>
-                    Furniture assembly/disassembly
-                  </li>
-                  <li className="flex items-center">
-                    <span className="mr-2">✓</span>
-                    Post-move cleaning
-                  </li>
-                </ul>
-                <Button asChild className="w-full">
-                  <Link to="/book/moving">Book Moving Service</Link>
-                </Button>
-              </CardContent>
-            </Card>
-          </div>
-
-          <div className="text-center">
-            <h2 className="text-2xl font-semibold mb-4">Why Choose Our Services?</h2>
-            <div className="grid md:grid-cols-3 gap-6">
-              <div className="p-6 bg-white rounded-lg shadow-sm">
-                <h3 className="font-semibold mb-2">Professional Staff</h3>
-                <p className="text-gray-600">Experienced and vetted professionals</p>
-              </div>
-              <div className="p-6 bg-white rounded-lg shadow-sm">
-                <h3 className="font-semibold mb-2">Flexible Scheduling</h3>
-                <p className="text-gray-600">Book services at your convenience</p>
-              </div>
-              <div className="p-6 bg-white rounded-lg shadow-sm">
-                <h3 className="font-semibold mb-2">Satisfaction Guaranteed</h3>
-                <p className="text-gray-600">100% satisfaction or money back</p>
-              </div>
+          <h1 className="text-3xl font-bold text-gray-900 mb-8">Cleaning Services in Geneva</h1>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-6">
+              <h2 className="text-xl font-semibold text-gray-800">Available Providers</h2>
+              {providers.map((provider) => (
+                <Card 
+                  key={provider.id}
+                  className={`cursor-pointer transition-shadow hover:shadow-lg ${
+                    selectedProvider === provider.id ? 'ring-2 ring-primary' : ''
+                  }`}
+                  onClick={() => setSelectedProvider(provider.id)}
+                >
+                  <CardHeader>
+                    <div className="flex items-center space-x-4">
+                      <img 
+                        src={provider.image}
+                        alt={provider.name}
+                        className="w-16 h-16 rounded-full object-cover"
+                      />
+                      <CardTitle>{provider.name}</CardTitle>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-2">
+                      <p className="text-sm text-gray-600">Rating: {provider.rating} ⭐</p>
+                      <p className="text-sm text-gray-600">Rate: CHF {provider.hourlyRate}/hour</p>
+                      <p className="text-sm text-gray-600">{provider.yearsExperience} years of experience</p>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
             </div>
+
+            {selectedProvider && (
+              <div className="space-y-6">
+                <h2 className="text-xl font-semibold text-gray-800">Select Date & Time</h2>
+                <Card>
+                  <CardContent className="pt-6">
+                    <Calendar
+                      mode="single"
+                      selected={selectedDate}
+                      onSelect={setSelectedDate}
+                      className="rounded-md border mb-4"
+                    />
+                    <Select onValueChange={setSelectedTime} value={selectedTime}>
+                      <SelectTrigger className="w-full mb-4">
+                        <SelectValue placeholder="Select time" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {generateTimeSlots().map((time) => (
+                          <SelectItem key={time} value={time}>
+                            {time}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <div className="space-y-2">
+                      <button
+                        onClick={() => handleBooking(selectedProvider)}
+                        disabled={!selectedDate || !selectedTime}
+                        className="w-full bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        Book Appointment
+                      </button>
+                      <button
+                        onClick={() => handleCall(providers.find(p => p.id === selectedProvider)!)}
+                        className="w-full flex items-center justify-center gap-2 bg-secondary text-secondary-foreground px-4 py-2 rounded-md hover:bg-secondary/80 transition-colors"
+                      >
+                        <Phone className="w-4 h-4" />
+                        Call Provider
+                      </button>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
           </div>
         </div>
       </main>
