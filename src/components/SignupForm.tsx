@@ -1,13 +1,12 @@
 import { useState } from "react";
-import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
 import ImageUpload from "./signup/ImageUpload";
 import FormInput from "./signup/FormInput";
 import ServiceSelect from "./signup/ServiceSelect";
+import { useProviderSignup, ProviderFormData } from "@/hooks/useProviderSignup";
 
 const SignupForm = () => {
-  const { toast } = useToast();
-  const [formData, setFormData] = useState({
+  const { handleSubmit, isSubmitting } = useProviderSignup();
+  const [formData, setFormData] = useState<ProviderFormData>({
     name: "",
     email: "",
     phone: "",
@@ -18,7 +17,6 @@ const SignupForm = () => {
   });
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleImageChange = (file: File | null, preview: string | null) => {
     setImageFile(file);
@@ -38,88 +36,11 @@ const SignupForm = () => {
     );
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const success = await handleSubmit(formData, imageFile);
     
-    if (!imageFile) {
-      toast({
-        title: "Error",
-        description: "Please upload a profile image",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    setIsSubmitting(true);
-
-    try {
-      console.log('Starting form submission...');
-      
-      // Upload image to Supabase Storage
-      const fileExt = imageFile.name.split('.').pop();
-      const fileName = `${crypto.randomUUID()}.${fileExt}`;
-      
-      console.log('Uploading image to storage...');
-      const { error: uploadError, data } = await supabase.storage
-        .from('provider-images')
-        .upload(fileName, imageFile);
-
-      if (uploadError) {
-        console.error('Storage upload error:', uploadError);
-        throw uploadError;
-      }
-
-      // Get the public URL of the uploaded image
-      const { data: { publicUrl } } = supabase.storage
-        .from('provider-images')
-        .getPublicUrl(fileName);
-
-      console.log('Image uploaded successfully, URL:', publicUrl);
-
-      // Create provider record in the database
-      console.log('Creating provider record...');
-      const { error: dbError } = await supabase
-        .from('service_providers')
-        .insert({
-          image_url: publicUrl,
-          hourly_rate: parseFloat(formData.hourlyRate),
-          service_type: formData.service,
-        });
-
-      if (dbError) {
-        console.error('Database insert error:', dbError);
-        throw dbError;
-      }
-
-      console.log('Provider record created successfully');
-
-      // Send application email
-      console.log('Sending application email...');
-      const response = await fetch('/functions/v1/send-provider-application', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...formData,
-          imageUrl: publicUrl,
-        }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error('Email sending error:', errorData);
-        throw new Error(errorData.details || 'Failed to send application email');
-      }
-
-      console.log('Application email sent successfully');
-
-      toast({
-        title: "Application submitted!",
-        description: "We'll review your information and get back to you soon.",
-      });
-
-      // Reset form
+    if (success) {
       setFormData({
         name: "",
         email: "",
@@ -131,20 +52,11 @@ const SignupForm = () => {
       });
       setImageFile(null);
       setImagePreview(null);
-    } catch (error) {
-      console.error('Error submitting form:', error);
-      toast({
-        title: "Error",
-        description: error.message || "There was a problem submitting your application. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 max-w-xl mx-auto">
+    <form onSubmit={onSubmit} className="space-y-6 max-w-xl mx-auto">
       <ImageUpload onImageChange={handleImageChange} imagePreview={imagePreview} />
 
       <FormInput
