@@ -10,7 +10,8 @@ import {
 } from "@stripe/react-stripe-js";
 import { supabase } from "@/integrations/supabase/client";
 
-const stripePromise = loadStripe(process.env.STRIPE_PUBLISHABLE_KEY || "");
+// Initialize Stripe with the publishable key
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || '');
 
 interface PaymentFormProps {
   amount: number;
