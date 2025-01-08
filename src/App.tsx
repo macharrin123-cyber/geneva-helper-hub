@@ -17,6 +17,7 @@ import ProviderDashboard from "./pages/ProviderDashboard";
 import ClientDashboard from "./pages/ClientDashboard";
 import ThankYouPage from "./pages/ThankYouPage";
 import ContactPage from "./pages/ContactPage";
+import HowWeWork from "./pages/HowWeWork";
 
 const queryClient = new QueryClient();
 
@@ -41,6 +42,7 @@ const App = () => (
           <Route path="/client-dashboard" element={<ClientDashboard />} />
           <Route path="/thank-you" element={<ThankYouPage />} />
           <Route path="/contact" element={<ContactPage />} />
+          <Route path="/how-we-work" element={<HowWeWork />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>

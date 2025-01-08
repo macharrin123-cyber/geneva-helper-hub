@@ -61,6 +61,9 @@ const Navigation = () => {
             <Link to="/" className="text-gray-700 hover:text-primary px-3 py-2 rounded-md">
               Home
             </Link>
+            <Link to="/how-we-work" className="text-gray-700 hover:text-primary px-3 py-2 rounded-md">
+              How We Work
+            </Link>
             <Link to="/contact" className="text-gray-700 hover:text-primary px-3 py-2 rounded-md">
               Contact
             </Link>
@@ -105,6 +108,13 @@ const Navigation = () => {
                 onClick={() => setIsOpen(false)}
               >
                 Home
+              </Link>
+              <Link
+                to="/how-we-work"
+                className="block text-gray-700 hover:text-primary px-3 py-2 rounded-md"
+                onClick={() => setIsOpen(false)}
+              >
+                How We Work
               </Link>
               <Link
                 to="/contact"
