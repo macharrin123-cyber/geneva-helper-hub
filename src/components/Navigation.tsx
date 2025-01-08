@@ -69,11 +69,11 @@ const Navigation = () => {
             </Link>
             {!user ? (
               <>
-                <Link to="/signup" className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90">
-                  Become a Provider
-                </Link>
                 <Link to="/signin" className="text-gray-700 hover:text-primary px-3 py-2 rounded-md">
                   Sign In
+                </Link>
+                <Link to="/signup" className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90">
+                  Become a Provider
                 </Link>
               </>
             ) : (
@@ -126,18 +126,18 @@ const Navigation = () => {
               {!user ? (
                 <>
                   <Link
-                    to="/signup"
-                    className="block bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    Become a Provider
-                  </Link>
-                  <Link
                     to="/signin"
                     className="block text-gray-700 hover:text-primary px-3 py-2 rounded-md"
                     onClick={() => setIsOpen(false)}
                   >
                     Sign In
+                  </Link>
+                  <Link
+                    to="/signup"
+                    className="block bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    Become a Provider
                   </Link>
                 </>
               ) : (
