@@ -135,8 +135,8 @@ export const useProviderSignup = () => {
         description: "We'll review your information and get back to you soon.",
       });
 
-      // Redirect to provider dashboard after successful signup
-      navigate('/provider-dashboard');
+      // Navigate to thank you page instead of provider dashboard
+      navigate('/thank-you');
 
       return true;
     } catch (error: any) {
