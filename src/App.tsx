@@ -11,6 +11,7 @@ import ElectricalPage from "./pages/ElectricalPage";
 import PaintingPage from "./pages/PaintingPage";
 import CarpentryPage from "./pages/CarpentryPage";
 import CleaningPage from "./pages/CleaningPage";
+import MovingPage from "./pages/MovingPage";
 import PaymentPage from "./pages/PaymentPage";
 import ProviderDashboard from "./pages/ProviderDashboard";
 import ClientDashboard from "./pages/ClientDashboard";
@@ -33,6 +34,7 @@ const App = () => (
           <Route path="/painting" element={<PaintingPage />} />
           <Route path="/carpentry" element={<CarpentryPage />} />
           <Route path="/cleaning" element={<CleaningPage />} />
+          <Route path="/moving" element={<MovingPage />} />
           <Route path="/payment" element={<PaymentPage />} />
           <Route path="/provider-dashboard" element={<ProviderDashboard />} />
           <Route path="/client-dashboard" element={<ClientDashboard />} />

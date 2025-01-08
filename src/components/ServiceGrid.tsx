@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Wrench, Zap, Paintbrush, Hammer, Brush } from "lucide-react";
+import { Wrench, Zap, Paintbrush, Hammer, Brush, Truck } from "lucide-react";
 
 const services = [
   {
@@ -41,6 +41,14 @@ const services = [
     description: "Professional cleaning services",
     color: "bg-green-100",
     path: "/cleaning"
+  },
+  {
+    id: 6,
+    name: "Moving",
+    icon: Truck,
+    description: "Professional moving and relocation services",
+    color: "bg-purple-100",
+    path: "/moving"
   },
 ];
 
