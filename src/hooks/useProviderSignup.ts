@@ -41,26 +41,51 @@ export const useProviderSignup = () => {
       const { data: { session } } = await supabase.auth.getSession();
       
       if (!session) {
-        // If not authenticated, sign up the user
-        const { error: signUpError } = await supabase.auth.signUp({
+        console.log('No session found, creating new user...');
+        // Generate a random password for the user
+        const password = Math.random().toString(36).slice(-8);
+        
+        const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
           email: formData.email,
-          password: "temporary-password", // You might want to add a password field to your form
+          password: password,
+          options: {
+            data: {
+              name: formData.name,
+              phone: formData.phone,
+            }
+          }
         });
 
         if (signUpError) {
           console.error('Signup error:', signUpError);
+          throw new Error(signUpError.message);
+        }
+
+        if (!signUpData.user) {
           throw new Error('Failed to create user account');
         }
+
+        console.log('User created successfully:', signUpData.user.id);
+      }
+
+      // Get the current session after signup
+      const { data: { session: currentSession } } = await supabase.auth.getSession();
+      
+      if (!currentSession?.user) {
+        throw new Error('No user session found after signup');
       }
 
       // Upload image
+      console.log('Uploading provider image...');
       const publicUrl = await uploadProviderImage(imageFile);
 
       // Create provider record
+      console.log('Creating provider record...');
       await createProviderRecord(
         publicUrl,
         parseFloat(formData.hourlyRate),
-        formData.service
+        formData.service,
+        currentSession.user.id
       );
 
       // Send application email

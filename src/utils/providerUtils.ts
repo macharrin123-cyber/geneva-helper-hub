@@ -1,56 +1,47 @@
 import { supabase } from "@/integrations/supabase/client";
 
-export const uploadProviderImage = async (imageFile: File) => {
-  console.log('Starting image upload...');
-  const fileExt = imageFile.name.split('.').pop();
-  const fileName = `${crypto.randomUUID()}.${fileExt}`;
-  
+export const uploadProviderImage = async (file: File): Promise<string> => {
+  const fileExt = file.name.split('.').pop();
+  const fileName = `${Math.random()}.${fileExt}`;
+  const filePath = `${fileName}`;
+
   const { error: uploadError, data } = await supabase.storage
     .from('provider-images')
-    .upload(fileName, imageFile);
+    .upload(filePath, file);
 
   if (uploadError) {
-    console.error('Storage upload error:', uploadError);
-    throw uploadError;
+    console.error('Error uploading image:', uploadError);
+    throw new Error('Failed to upload profile image');
   }
 
   const { data: { publicUrl } } = supabase.storage
     .from('provider-images')
-    .getPublicUrl(fileName);
+    .getPublicUrl(filePath);
 
-  console.log('Image uploaded successfully, URL:', publicUrl);
   return publicUrl;
 };
 
-export const createProviderRecord = async (publicUrl: string, hourlyRate: number, serviceType: string) => {
-  console.log('Creating provider record with data:', { publicUrl, hourlyRate, serviceType });
+export const createProviderRecord = async (
+  imageUrl: string,
+  hourlyRate: number,
+  serviceType: string,
+  userId: string
+) => {
+  console.log('Creating provider record with:', { imageUrl, hourlyRate, serviceType, userId });
   
-  // Get the current user's ID
-  const { data: { user } } = await supabase.auth.getUser();
-  
-  if (!user) {
-    console.error('No authenticated user found');
-    throw new Error('You must be logged in to create a provider profile');
-  }
-
-  console.log('Current user ID:', user.id);
-
-  const { error: dbError, data } = await supabase
+  const { error } = await supabase
     .from('service_providers')
-    .insert({
-      image_url: publicUrl,
-      hourly_rate: hourlyRate,
-      service_type: serviceType,
-      user_id: user.id // Add the user_id to the record
-    })
-    .select()
-    .single();
+    .insert([
+      {
+        image_url: imageUrl,
+        hourly_rate: hourlyRate,
+        service_type: serviceType,
+        user_id: userId
+      }
+    ]);
 
-  if (dbError) {
-    console.error('Database insert error:', dbError);
-    throw dbError;
+  if (error) {
+    console.error('Error creating provider record:', error);
+    throw new Error('Failed to create provider record');
   }
-
-  console.log('Provider record created successfully:', data);
-  return data;
 };
