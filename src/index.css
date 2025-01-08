@@ -4,7 +4,7 @@
 
 @layer base {
   :root {
-    --background: 210 50% 98%; /* Light blue haze */
+    --background: 210 50% 95%; /* Slightly darker blue haze */
     --foreground: 222.2 84% 4.9%;
 
     --card: 0 0% 100%;
