@@ -11,7 +11,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 
 // Initialize Stripe with the publishable key
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || '');
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || '');
 
 interface PaymentFormProps {
   amount: number;
