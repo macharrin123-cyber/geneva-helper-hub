@@ -1,61 +1,58 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { supabase } from "@/integrations/supabase/client";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Navigation from "@/components/Navigation";
-import { useToast } from "@/hooks/use-toast";
 
 const SignIn = () => {
   const navigate = useNavigate();
-  const { toast } = useToast();
 
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        if (event === "SIGNED_IN") {
-          // Get user profile to determine user type
-          const { data: profile } = await supabase
-            .from("profiles")
-            .select("user_type")
-            .eq("id", session?.user?.id)
-            .single();
-
-          console.log("User profile:", profile);
-
-          if (profile?.user_type === "provider") {
-            navigate("/provider-dashboard");
-          } else {
-            navigate("/");
-          }
-
-          toast({
-            title: "Welcome back!",
-            description: "You have successfully signed in.",
-          });
-        }
+    // Check if user is already logged in
+    const checkUser = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        navigate("/");
       }
-    );
+    };
+    
+    checkUser();
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === "SIGNED_IN") {
+        navigate("/");
+      }
+    });
 
     return () => subscription.unsubscribe();
-  }, [navigate, toast]);
+  }, [navigate]);
 
   return (
     <div className="min-h-screen bg-gray-50">
       <Navigation />
-      <main className="pt-24 pb-12">
-        <div className="max-w-md mx-auto px-4">
-          <h1 className="text-3xl font-bold text-center mb-8">Sign In</h1>
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <Auth
-              supabaseClient={supabase}
-              appearance={{ theme: ThemeSupa }}
-              theme="light"
-              providers={[]}
-            />
-          </div>
+      <div className="max-w-md mx-auto pt-24 px-4">
+        <div className="bg-white p-8 rounded-lg shadow-md">
+          <h1 className="text-2xl font-bold text-center mb-6">Welcome Back</h1>
+          <Auth
+            supabaseClient={supabase}
+            appearance={{
+              theme: ThemeSupa,
+              variables: {
+                default: {
+                  colors: {
+                    brand: '#2563eb',
+                    brandAccent: '#1d4ed8',
+                  },
+                },
+              },
+            }}
+            providers={[]}
+            redirectTo={window.location.origin}
+          />
         </div>
-      </main>
+      </div>
     </div>
   );
 };
