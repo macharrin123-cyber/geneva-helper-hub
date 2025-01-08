@@ -14,10 +14,25 @@ export interface ProviderFormData {
   hourlyRate: string;
 }
 
+const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
 export const useProviderSignup = () => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
+
+  const waitForSession = async (maxAttempts = 5): Promise<boolean> => {
+    for (let i = 0; i < maxAttempts; i++) {
+      console.log(`Attempt ${i + 1} to get session...`);
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        console.log('Session found:', session.user.id);
+        return true;
+      }
+      await delay(1000); // Wait 1 second between attempts
+    }
+    return false;
+  };
 
   const handleSubmit = async (
     formData: ProviderFormData,
@@ -66,6 +81,12 @@ export const useProviderSignup = () => {
         }
 
         console.log('User created successfully:', signUpData.user.id);
+        
+        // Wait for session to be established
+        const sessionEstablished = await waitForSession();
+        if (!sessionEstablished) {
+          throw new Error('Failed to establish session after multiple attempts');
+        }
       }
 
       // Get the current session after signup
