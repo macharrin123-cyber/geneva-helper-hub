@@ -54,7 +54,7 @@ const ProviderDashboard = () => {
     }
   };
 
-  const handleResponse = async (bookingId: number, response: 'approved' | 'denied') => {
+  const handleResponse = async (bookingId: string, response: 'approved' | 'denied') => {
     try {
       const { error } = await supabase
         .from('service_bookings')
