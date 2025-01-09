@@ -38,6 +38,28 @@ export const translations = {
     'service.cleaningDesc': 'Professional home and office cleaning',
     'service.moving': 'Moving',
     'service.movingDesc': 'Reliable moving and relocation services',
+
+    // Service Pages
+    'services.plumbing': 'Plumbing Services',
+    'services.electrical': 'Electrical Services',
+    'services.painting': 'Painting Services',
+    'services.carpentry': 'Carpentry Services',
+    'services.cleaning': 'Cleaning Services',
+    'services.moving': 'Moving Services',
+    'services.availableProviders': 'Available Service Providers',
+    'services.rating': 'Rating',
+    'services.rate': 'Rate',
+    'services.experience': 'years of experience',
+    'services.selectDateTime': 'Select Date & Time',
+    'services.selectTime': 'Select time',
+    'services.bookAppointment': 'Book Appointment',
+    'services.callProvider': 'Call Provider',
+    'services.selectDateTimeError': 'Please select date and time',
+    'services.selectDateTimeErrorDesc': 'You need to select both a date and time before booking',
+    'services.providerNotFound': 'Provider not found',
+    'services.providerNotFoundDesc': 'The selected provider could not be found',
+    'services.callingProvider': 'Calling Provider',
+    'services.connectingWith': 'Connecting you with',
   },
   fr: {
     // Navigation
@@ -66,6 +88,28 @@ export const translations = {
     'service.cleaningDesc': 'Nettoyage professionnel de maisons et bureaux',
     'service.moving': 'Déménagement',
     'service.movingDesc': 'Services de déménagement et relocation fiables',
+
+    // Service Pages
+    'services.plumbing': 'Services de Plomberie',
+    'services.electrical': 'Services d\'Électricité',
+    'services.painting': 'Services de Peinture',
+    'services.carpentry': 'Services de Menuiserie',
+    'services.cleaning': 'Services de Nettoyage',
+    'services.moving': 'Services de Déménagement',
+    'services.availableProviders': 'Prestataires Disponibles',
+    'services.rating': 'Évaluation',
+    'services.rate': 'Tarif',
+    'services.experience': 'ans d\'expérience',
+    'services.selectDateTime': 'Sélectionnez Date et Heure',
+    'services.selectTime': 'Sélectionnez l\'heure',
+    'services.bookAppointment': 'Réserver un Rendez-vous',
+    'services.callProvider': 'Appeler le Prestataire',
+    'services.selectDateTimeError': 'Veuillez sélectionner une date et une heure',
+    'services.selectDateTimeErrorDesc': 'Vous devez sélectionner une date et une heure avant de réserver',
+    'services.providerNotFound': 'Prestataire non trouvé',
+    'services.providerNotFoundDesc': 'Le prestataire sélectionné n\'a pas pu être trouvé',
+    'services.callingProvider': 'Appel du Prestataire',
+    'services.connectingWith': 'Connexion avec',
   }
 };
 
