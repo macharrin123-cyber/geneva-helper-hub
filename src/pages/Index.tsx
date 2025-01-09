@@ -7,6 +7,13 @@ import { Search } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
 const Index = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -68,6 +75,36 @@ const Index = () => {
       rating: 5,
       text: "The platform made it easy to find cleaning jobs that fit my schedule. Excellent for freelancers!",
       service: "Cleaning"
+    },
+    {
+      name: "Michael Chen",
+      rating: 5,
+      text: "Outstanding platform for finding skilled professionals. The booking process was seamless!",
+      service: "Plumbing"
+    },
+    {
+      name: "Emma Rodriguez",
+      rating: 5,
+      text: "I've been using this service for both my home and office. The quality of work is consistently high.",
+      service: "Painting"
+    },
+    {
+      name: "David Kim",
+      rating: 5,
+      text: "As a service provider, I appreciate how easy it is to manage my schedule and connect with clients.",
+      service: "Moving"
+    },
+    {
+      name: "Sophie Martin",
+      rating: 5,
+      text: "The verification process gives me confidence in hiring professionals. Haven't been disappointed yet!",
+      service: "Electrical"
+    },
+    {
+      name: "James Wilson",
+      rating: 5,
+      text: "Great platform for finding reliable help. The rating system really helps in choosing the right person.",
+      service: "Carpentry"
     }
   ];
 
@@ -151,31 +188,37 @@ const Index = () => {
                 <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center">
                   What Our Community Says
                 </h2>
-                <div className="grid md:grid-cols-3 gap-8">
-                  {reviews.map((review, index) => (
-                    <div key={index} className="bg-white p-6 rounded-lg shadow-md">
-                      <div className="flex items-center mb-4">
-                        <div className="flex-1">
-                          <h3 className="font-semibold text-lg">{review.name}</h3>
-                          <p className="text-sm text-gray-500">{review.service}</p>
+                <Carousel className="w-full max-w-5xl mx-auto">
+                  <CarouselContent className="-ml-2 md:-ml-4">
+                    {reviews.map((review, index) => (
+                      <CarouselItem key={index} className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
+                        <div className="bg-white p-6 rounded-lg shadow-md h-full">
+                          <div className="flex items-center mb-4">
+                            <div className="flex-1">
+                              <h3 className="font-semibold text-lg">{review.name}</h3>
+                              <p className="text-sm text-gray-500">{review.service}</p>
+                            </div>
+                            <div className="flex">
+                              {[...Array(review.rating)].map((_, i) => (
+                                <svg
+                                  key={i}
+                                  className="w-5 h-5 text-yellow-400"
+                                  fill="currentColor"
+                                  viewBox="0 0 20 20"
+                                >
+                                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                              ))}
+                            </div>
+                          </div>
+                          <p className="text-gray-600">{review.text}</p>
                         </div>
-                        <div className="flex">
-                          {[...Array(review.rating)].map((_, i) => (
-                            <svg
-                              key={i}
-                              className="w-5 h-5 text-yellow-400"
-                              fill="currentColor"
-                              viewBox="0 0 20 20"
-                            >
-                              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                            </svg>
-                          ))}
-                        </div>
-                      </div>
-                      <p className="text-gray-600">{review.text}</p>
-                    </div>
-                  ))}
-                </div>
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+                  <CarouselPrevious />
+                  <CarouselNext />
+                </Carousel>
               </div>
             </>
           )}
