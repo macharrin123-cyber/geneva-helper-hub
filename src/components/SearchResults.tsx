@@ -34,6 +34,11 @@ const SearchResults = ({ searchTerm }: SearchResultsProps) => {
     enabled: searchTerm.length > 0,
   });
 
+  // If search term is empty, return null to allow parent to show original content
+  if (!searchTerm) {
+    return null;
+  }
+
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-48">

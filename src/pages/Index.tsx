@@ -17,7 +17,6 @@ import {
 
 const Index = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [hasSearched, setHasSearched] = useState(false);
   const { t } = useLanguage();
 
   // Refs for sections we want to animate
@@ -53,7 +52,6 @@ const Index = () => {
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setHasSearched(true);
     console.log("Search submitted with term:", searchTerm);
   };
 
@@ -136,7 +134,7 @@ const Index = () => {
             </form>
           </div>
 
-          {hasSearched ? (
+          {searchTerm ? (
             <SearchResults searchTerm={searchTerm} />
           ) : (
             <>
