@@ -1,58 +1,61 @@
 import { Link } from "react-router-dom";
 import { Wrench, Zap, Paintbrush, Hammer, Brush, Truck } from "lucide-react";
-
-const services = [
-  {
-    id: 1,
-    name: "Plumbing",
-    icon: Wrench,
-    description: "Professional plumbing services for your home",
-    color: "bg-blue-100",
-    path: "/plumbing"
-  },
-  {
-    id: 2,
-    name: "Electrical",
-    icon: Zap,
-    description: "Licensed electricians for all your needs",
-    color: "bg-yellow-100",
-    path: "/electrical"
-  },
-  {
-    id: 3,
-    name: "Painting",
-    icon: Paintbrush,
-    description: "Transform your space with our painting services",
-    color: "bg-red-100",
-    path: "/painting"
-  },
-  {
-    id: 4,
-    name: "Carpentry",
-    icon: Hammer,
-    description: "Expert carpentry and woodworking",
-    color: "bg-orange-100",
-    path: "/carpentry"
-  },
-  {
-    id: 5,
-    name: "Cleaning",
-    icon: Brush,
-    description: "Professional cleaning services",
-    color: "bg-green-100",
-    path: "/cleaning"
-  },
-  {
-    id: 6,
-    name: "Moving",
-    icon: Truck,
-    description: "Professional moving and relocation services",
-    color: "bg-purple-100",
-    path: "/moving"
-  },
-];
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const ServiceGrid = () => {
+  const { t } = useLanguage();
+
+  const services = [
+    {
+      id: 1,
+      name: t('service.plumbing'),
+      icon: Wrench,
+      description: t('service.plumbingDesc'),
+      color: "bg-blue-100",
+      path: "/plumbing"
+    },
+    {
+      id: 2,
+      name: t('service.electrical'),
+      icon: Zap,
+      description: t('service.electricalDesc'),
+      color: "bg-yellow-100",
+      path: "/electrical"
+    },
+    {
+      id: 3,
+      name: t('service.painting'),
+      icon: Paintbrush,
+      description: t('service.paintingDesc'),
+      color: "bg-red-100",
+      path: "/painting"
+    },
+    {
+      id: 4,
+      name: t('service.carpentry'),
+      icon: Hammer,
+      description: t('service.carpentryDesc'),
+      color: "bg-orange-100",
+      path: "/carpentry"
+    },
+    {
+      id: 5,
+      name: t('service.cleaning'),
+      icon: Brush,
+      description: t('service.cleaningDesc'),
+      color: "bg-green-100",
+      path: "/cleaning"
+    },
+    {
+      id: 6,
+      name: t('service.moving'),
+      icon: Truck,
+      description: t('service.movingDesc'),
+      color: "bg-purple-100",
+      path: "/moving"
+    },
+  ];
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
       {services.map((service) => (

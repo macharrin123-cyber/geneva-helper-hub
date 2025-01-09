@@ -1,15 +1,23 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { useLanguage } from "@/contexts/LanguageContext";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [user, setUser] = useState<any>(null);
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { language, setLanguage, t } = useLanguage();
 
   useEffect(() => {
     // Check current session
@@ -59,21 +67,38 @@ const Navigation = () => {
           
           <div className="hidden md:flex items-center space-x-4">
             <Link to="/" className="text-gray-700 hover:text-primary px-3 py-2 rounded-md">
-              Home
+              {t('nav.home')}
             </Link>
             <Link to="/how-we-work" className="text-gray-700 hover:text-primary px-3 py-2 rounded-md">
-              How We Work
+              {t('nav.howWeWork')}
             </Link>
             <Link to="/contact" className="text-gray-700 hover:text-primary px-3 py-2 rounded-md">
-              Contact
+              {t('nav.contact')}
             </Link>
+
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon">
+                  <Globe className="h-5 w-5" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={() => setLanguage('en')}>
+                  🇬🇧 English
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setLanguage('fr')}>
+                  🇫🇷 Français
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
             {!user ? (
               <>
                 <Link to="/signin" className="text-gray-700 hover:text-primary px-3 py-2 rounded-md">
-                  Sign In
+                  {t('nav.signIn')}
                 </Link>
                 <Link to="/signup" className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90">
-                  Become a Provider
+                  {t('nav.becomeProvider')}
                 </Link>
               </>
             ) : (
@@ -82,7 +107,7 @@ const Navigation = () => {
                   onClick={handleSignOut}
                   className="text-gray-700 hover:text-primary px-3 py-2 rounded-md"
                 >
-                  Sign Out
+                  {t('nav.signOut')}
                 </button>
               </>
             )}
@@ -107,22 +132,38 @@ const Navigation = () => {
                 className="block text-gray-700 hover:text-primary px-3 py-2 rounded-md"
                 onClick={() => setIsOpen(false)}
               >
-                Home
+                {t('nav.home')}
               </Link>
               <Link
                 to="/how-we-work"
                 className="block text-gray-700 hover:text-primary px-3 py-2 rounded-md"
                 onClick={() => setIsOpen(false)}
               >
-                How We Work
+                {t('nav.howWeWork')}
               </Link>
               <Link
                 to="/contact"
                 className="block text-gray-700 hover:text-primary px-3 py-2 rounded-md"
                 onClick={() => setIsOpen(false)}
               >
-                Contact
+                {t('nav.contact')}
               </Link>
+
+              <div className="flex gap-2 px-3 py-2">
+                <button
+                  onClick={() => setLanguage('en')}
+                  className="text-gray-700 hover:text-primary"
+                >
+                  🇬🇧 English
+                </button>
+                <button
+                  onClick={() => setLanguage('fr')}
+                  className="text-gray-700 hover:text-primary"
+                >
+                  🇫🇷 Français
+                </button>
+              </div>
+
               {!user ? (
                 <>
                   <Link
@@ -130,14 +171,14 @@ const Navigation = () => {
                     className="block text-gray-700 hover:text-primary px-3 py-2 rounded-md"
                     onClick={() => setIsOpen(false)}
                   >
-                    Sign In
+                    {t('nav.signIn')}
                   </Link>
                   <Link
                     to="/signup"
                     className="block bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90"
                     onClick={() => setIsOpen(false)}
                   >
-                    Become a Provider
+                    {t('nav.becomeProvider')}
                   </Link>
                 </>
               ) : (
@@ -148,7 +189,7 @@ const Navigation = () => {
                   }}
                   className="block w-full text-left text-gray-700 hover:text-primary px-3 py-2 rounded-md"
                 >
-                  Sign Out
+                  {t('nav.signOut')}
                 </button>
               )}
             </div>
