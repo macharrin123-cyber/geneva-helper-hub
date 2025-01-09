@@ -55,7 +55,7 @@ const Navigation = () => {
   };
 
   return (
-    <nav className="bg-[#1EAEDB]/90 backdrop-blur-md shadow-lg fixed w-full top-0 z-50">
+    <nav className="bg-[#1E3A8A]/90 backdrop-blur-md shadow-lg fixed w-full top-0 z-50">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex justify-between h-16">
           <div className="flex-shrink-0 flex items-center gap-2">
@@ -85,7 +85,7 @@ const Navigation = () => {
                 <Link to="/signin" className="text-white hover:text-blue-100 px-3 py-2 rounded-md">
                   {t('nav.signIn')}
                 </Link>
-                <Link to="/signup" className="bg-white text-[#1EAEDB] px-4 py-2 rounded-md hover:bg-blue-50">
+                <Link to="/signup" className="bg-white text-[#1E3A8A] px-4 py-2 rounded-md hover:bg-blue-50">
                   {t('nav.becomeProvider')}
                 </Link>
               </>
@@ -127,7 +127,7 @@ const Navigation = () => {
 
         {/* Mobile menu */}
         {isOpen && (
-          <div className="md:hidden bg-[#1EAEDB]">
+          <div className="md:hidden bg-[#1E3A8A]">
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
               <Link
                 to="/"
@@ -183,7 +183,7 @@ const Navigation = () => {
                   </Link>
                   <Link
                     to="/signup"
-                    className="block bg-white text-[#1EAEDB] px-4 py-2 rounded-md hover:bg-blue-50"
+                    className="block bg-white text-[#1E3A8A] px-4 py-2 rounded-md hover:bg-blue-50"
                     onClick={() => setIsOpen(false)}
                   >
                     {t('nav.becomeProvider')}
