@@ -5,6 +5,7 @@ import SearchResults from "@/components/SearchResults";
 import SearchSection from "@/components/home/SearchSection";
 import FreelanceSection from "@/components/home/FreelanceSection";
 import ReviewsSection from "@/components/home/ReviewsSection";
+import { HelpingHand } from "lucide-react";
 
 const Index = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -74,7 +75,7 @@ const Index = () => {
     <div className="min-h-screen bg-gray-50">
       <Navigation />
       
-      <main className="pt-24 pb-12">
+      <main className="pt-24">
         <div className="max-w-7xl mx-auto px-4">
           <SearchSection 
             searchTerm={searchTerm}
@@ -96,6 +97,13 @@ const Index = () => {
 
               <div ref={reviewsRef} className="transition-opacity duration-1000 ease-out">
                 <ReviewsSection reviews={reviews} />
+              </div>
+
+              <div className="flex items-center justify-center gap-2 py-12">
+                <HelpingHand className="h-12 w-12 text-primary" />
+                <h2 className="text-4xl font-bold text-primary font-poppins">
+                  Helpify
+                </h2>
               </div>
             </>
           )}

@@ -1,4 +1,4 @@
-import { Search, HelpingHand } from "lucide-react";
+import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -20,7 +20,7 @@ const SearchSection = ({ searchTerm, onSearchChange, onSearchSubmit }: SearchSec
         {t('home.subtitle')}
       </p>
       
-      <form onSubmit={onSearchSubmit} className="max-w-2xl mx-auto mb-12">
+      <form onSubmit={onSearchSubmit} className="max-w-2xl mx-auto">
         <div className="relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
           <Input
@@ -32,13 +32,6 @@ const SearchSection = ({ searchTerm, onSearchChange, onSearchSubmit }: SearchSec
           />
         </div>
       </form>
-
-      <div className="flex items-center justify-center gap-2">
-        <HelpingHand className="h-12 w-12 text-primary" />
-        <h2 className="text-4xl font-bold text-primary font-poppins">
-          Helpify
-        </h2>
-      </div>
     </div>
   );
 };
