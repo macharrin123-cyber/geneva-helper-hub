@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { LanguageProvider } from "@/contexts/LanguageContext";
+import { useEffect } from "react";
 import Index from "./pages/Index";
 import Signup from "./pages/Signup";
 import SignIn from "./pages/SignIn";
@@ -23,33 +24,58 @@ import ResetPassword from "./pages/ResetPassword";
 
 const queryClient = new QueryClient();
 
+const AppContent = () => {
+  useEffect(() => {
+    const loadFont = async () => {
+      const font = new FontFace(
+        'Poppins',
+        'url(https://fonts.gstatic.com/s/poppins/v20/pxiEyp8kv8JHgFVrJJfecg.woff2)'
+      );
+
+      try {
+        await font.load();
+        document.fonts.add(font);
+        console.log('Poppins font loaded successfully');
+      } catch (error) {
+        console.error('Error loading Poppins font:', error);
+      }
+    };
+
+    loadFont();
+  }, []);
+
+  return (
+    <TooltipProvider>
+      <Toaster />
+      <Sonner />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Index />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/signin" element={<SignIn />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/plumbing" element={<PlumbingPage />} />
+          <Route path="/electrical" element={<ElectricalPage />} />
+          <Route path="/painting" element={<PaintingPage />} />
+          <Route path="/carpentry" element={<CarpentryPage />} />
+          <Route path="/cleaning" element={<CleaningPage />} />
+          <Route path="/moving" element={<MovingPage />} />
+          <Route path="/payment" element={<PaymentPage />} />
+          <Route path="/provider-dashboard" element={<ProviderDashboard />} />
+          <Route path="/client-dashboard" element={<ClientDashboard />} />
+          <Route path="/thank-you" element={<ThankYouPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/how-we-work" element={<HowWeWork />} />
+        </Routes>
+      </BrowserRouter>
+    </TooltipProvider>
+  );
+};
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <LanguageProvider>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/signin" element={<SignIn />} />
-            <Route path="/reset-password" element={<ResetPassword />} />
-            <Route path="/plumbing" element={<PlumbingPage />} />
-            <Route path="/electrical" element={<ElectricalPage />} />
-            <Route path="/painting" element={<PaintingPage />} />
-            <Route path="/carpentry" element={<CarpentryPage />} />
-            <Route path="/cleaning" element={<CleaningPage />} />
-            <Route path="/moving" element={<MovingPage />} />
-            <Route path="/payment" element={<PaymentPage />} />
-            <Route path="/provider-dashboard" element={<ProviderDashboard />} />
-            <Route path="/client-dashboard" element={<ClientDashboard />} />
-            <Route path="/thank-you" element={<ThankYouPage />} />
-            <Route path="/contact" element={<ContactPage />} />
-            <Route path="/how-we-work" element={<HowWeWork />} />
-          </Routes>
-        </BrowserRouter>
-      </TooltipProvider>
+      <AppContent />
     </LanguageProvider>
   </QueryClientProvider>
 );

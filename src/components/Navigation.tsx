@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { Menu, X, HelpingHand } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -59,13 +59,9 @@ const Navigation = () => {
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex justify-between h-16">
           <div className="flex-shrink-0 flex items-center gap-2">
-            <img 
-              src="/lovable-uploads/62b2a12e-2e10-4096-adae-5afec671bbf9.png" 
-              alt="Geneva Coat of Arms" 
-              className="h-8 w-auto"
-            />
-            <Link to="/" className="text-white text-xl font-bold">
-              Geneva Services
+            <HelpingHand className="h-8 w-8 text-white" />
+            <Link to="/" className="text-white text-xl font-poppins font-semibold">
+              Helpify
             </Link>
           </div>
           
