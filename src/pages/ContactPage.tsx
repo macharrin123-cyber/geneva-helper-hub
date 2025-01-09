@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { MessageSquare } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { useLanguage } from "@/contexts/LanguageContext";
 
 const ContactPage = () => {
   const [name, setName] = useState("");
@@ -14,7 +13,6 @@ const ContactPage = () => {
   const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
-  const { t } = useLanguage();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,8 +26,8 @@ const ContactPage = () => {
       if (error) throw error;
 
       toast({
-        title: t('contact.success'),
-        description: t('contact.successDesc'),
+        title: "Message sent!",
+        description: "We'll get back to you as soon as possible.",
       });
 
       // Reset form
@@ -39,8 +37,8 @@ const ContactPage = () => {
     } catch (error) {
       console.error("Error sending message:", error);
       toast({
-        title: t('contact.error'),
-        description: t('contact.errorDesc'),
+        title: "Error",
+        description: "Failed to send message. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -57,17 +55,17 @@ const ContactPage = () => {
           <div className="text-center mb-8">
             <MessageSquare className="mx-auto h-12 w-12 text-primary mb-4" />
             <h1 className="text-3xl font-bold text-gray-900 mb-4">
-              {t('contact.title')}
+              Contact Us
             </h1>
             <p className="text-gray-600">
-              {t('contact.subtitle')}
+              Have a question or feedback? We'd love to hear from you.
             </p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6 bg-white p-8 rounded-lg shadow-sm">
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-                {t('contact.name')}
+                Name
               </label>
               <Input
                 id="name"
@@ -75,13 +73,13 @@ const ContactPage = () => {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
-                placeholder={t('contact.name')}
+                placeholder="Your name"
               />
             </div>
 
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                {t('contact.email')}
+                Email
               </label>
               <Input
                 id="email"
@@ -89,20 +87,20 @@ const ContactPage = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                placeholder={t('contact.email')}
+                placeholder="your@email.com"
               />
             </div>
 
             <div>
               <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">
-                {t('contact.message')}
+                Message
               </label>
               <Textarea
                 id="message"
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 required
-                placeholder={t('contact.message')}
+                placeholder="Your message..."
                 className="min-h-[150px]"
               />
             </div>
@@ -112,7 +110,7 @@ const ContactPage = () => {
               className="w-full"
               disabled={isSubmitting}
             >
-              {isSubmitting ? t('contact.sending') : t('contact.send')}
+              {isSubmitting ? "Sending..." : "Send Message"}
             </Button>
           </form>
         </div>
