@@ -1,4 +1,5 @@
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface Review {
   name: string;
@@ -12,26 +13,33 @@ interface ReviewsSectionProps {
 }
 
 const ReviewsSection = ({ reviews }: ReviewsSectionProps) => {
+  const isMobile = useIsMobile();
+
   return (
-    <div className="mb-20">
-      <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center">
+    <div className="mb-20 px-4 md:px-0">
+      <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-8 md:mb-12 text-center">
         What Our Community Says
       </h2>
       <Carousel className="w-full max-w-5xl mx-auto">
         <CarouselContent className="-ml-2 md:-ml-4">
           {reviews.map((review, index) => (
-            <CarouselItem key={index} className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3">
-              <div className="bg-white p-6 rounded-lg shadow-md h-full">
+            <CarouselItem 
+              key={index} 
+              className={`pl-2 md:pl-4 ${
+                isMobile ? 'basis-full' : 'md:basis-1/2 lg:basis-1/3'
+              }`}
+            >
+              <div className="bg-white p-4 md:p-6 rounded-lg shadow-md h-full">
                 <div className="flex items-center mb-4">
                   <div className="flex-1">
-                    <h3 className="font-semibold text-lg">{review.name}</h3>
-                    <p className="text-sm text-gray-500">{review.service}</p>
+                    <h3 className="font-semibold text-base md:text-lg">{review.name}</h3>
+                    <p className="text-xs md:text-sm text-gray-500">{review.service}</p>
                   </div>
                   <div className="flex">
                     {[...Array(review.rating)].map((_, i) => (
                       <svg
                         key={i}
-                        className="w-5 h-5 text-yellow-400"
+                        className="w-4 h-4 md:w-5 md:h-5 text-yellow-400"
                         fill="currentColor"
                         viewBox="0 0 20 20"
                       >
@@ -40,13 +48,15 @@ const ReviewsSection = ({ reviews }: ReviewsSectionProps) => {
                     ))}
                   </div>
                 </div>
-                <p className="text-gray-600">{review.text}</p>
+                <p className="text-sm md:text-base text-gray-600">{review.text}</p>
               </div>
             </CarouselItem>
           ))}
         </CarouselContent>
-        <CarouselPrevious />
-        <CarouselNext />
+        <div className="hidden md:block">
+          <CarouselPrevious />
+          <CarouselNext />
+        </div>
       </Carousel>
     </div>
   );
