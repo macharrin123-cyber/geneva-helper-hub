@@ -1,8 +1,21 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import ServiceGrid from "@/components/ServiceGrid";
+import SearchResults from "@/components/SearchResults";
+import { Input } from "@/components/ui/input";
+import { Search } from "lucide-react";
 
 const Index = () => {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [hasSearched, setHasSearched] = useState(false);
+
+  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setHasSearched(true);
+    console.log("Search submitted with term:", searchTerm);
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Navigation />
@@ -16,9 +29,26 @@ const Index = () => {
             <p className="text-xl text-gray-600 mb-8">
               Connect with trusted local professionals for all your home service needs
             </p>
+            
+            <form onSubmit={handleSearch} className="max-w-2xl mx-auto mb-12">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                <Input
+                  type="text"
+                  placeholder="Search for services..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-10 h-12 text-lg w-full"
+                />
+              </div>
+            </form>
           </div>
 
-          <ServiceGrid />
+          {hasSearched ? (
+            <SearchResults searchTerm={searchTerm} />
+          ) : (
+            <ServiceGrid />
+          )}
         </div>
       </main>
     </div>
