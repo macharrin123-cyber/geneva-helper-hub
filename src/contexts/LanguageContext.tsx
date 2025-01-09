@@ -38,11 +38,6 @@ export const translations = {
     'service.cleaningDesc': 'Professional home and office cleaning',
     'service.moving': 'Moving',
     'service.movingDesc': 'Reliable moving and relocation services',
-
-    // Home page
-    'home.title': 'Find Local Services in Geneva',
-    'home.subtitle': 'Connect with trusted local professionals for all your home service needs',
-    'home.searchPlaceholder': 'Search for services...',
   },
   fr: {
     // Navigation
