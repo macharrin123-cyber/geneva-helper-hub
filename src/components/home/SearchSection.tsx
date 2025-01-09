@@ -1,4 +1,4 @@
-import { Search } from "lucide-react";
+import { Search, HelpingHand } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -13,9 +13,16 @@ const SearchSection = ({ searchTerm, onSearchChange, onSearchSubmit }: SearchSec
 
   return (
     <div className="text-center mb-12 animate-fade-in">
-      <h1 className="text-4xl font-bold text-gray-900 mb-4">
+      <div className="flex items-center justify-center gap-2 mb-8">
+        <HelpingHand className="h-12 w-12 text-primary" />
+        <h1 className="text-4xl font-bold text-primary font-poppins">
+          Helpify
+        </h1>
+      </div>
+      
+      <h2 className="text-4xl font-bold text-gray-900 mb-4">
         {t('home.title')}
-      </h1>
+      </h2>
       <p className="text-xl text-gray-600 mb-8">
         {t('home.subtitle')}
       </p>

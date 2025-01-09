@@ -1,5 +1,6 @@
 import Navigation from "@/components/Navigation";
 import SignupForm from "@/components/SignupForm";
+import { HelpingHand } from "lucide-react";
 
 const Signup = () => {
   return (
@@ -9,14 +10,15 @@ const Signup = () => {
       <main className="pt-24 pb-12">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-12">
-            <img 
-              src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80"
-              alt="Professional service provider"
-              className="mx-auto mb-8 w-48 h-48 object-cover rounded-full"
-            />
-            <h1 className="text-3xl font-bold text-gray-900 mb-4">
+            <div className="flex items-center justify-center gap-2 mb-8">
+              <HelpingHand className="h-16 w-16 text-primary" />
+              <h1 className="text-4xl font-bold text-primary font-poppins">
+                Helpify
+              </h1>
+            </div>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">
               Join Our Service Provider Network
-            </h1>
+            </h2>
             <p className="text-lg text-gray-600">
               Fill out the form below to start offering your services in Geneva
             </p>
