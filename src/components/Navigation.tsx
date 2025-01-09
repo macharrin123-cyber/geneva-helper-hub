@@ -55,7 +55,7 @@ const Navigation = () => {
   };
 
   return (
-    <nav className="bg-white/80 backdrop-blur-md shadow-lg fixed w-full top-0 z-50">
+    <nav className="bg-[#1EAEDB]/90 backdrop-blur-md shadow-lg fixed w-full top-0 z-50">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex justify-between h-16">
           <div className="flex-shrink-0 flex items-center gap-2">
@@ -64,35 +64,35 @@ const Navigation = () => {
               alt="Geneva Coat of Arms" 
               className="h-8 w-auto"
             />
-            <Link to="/" className="text-primary text-xl font-bold">
+            <Link to="/" className="text-white text-xl font-bold">
               Geneva Services
             </Link>
           </div>
           
           <div className="hidden md:flex items-center space-x-4">
-            <Link to="/" className="text-gray-700 hover:text-primary px-3 py-2 rounded-md">
+            <Link to="/" className="text-white hover:text-blue-100 px-3 py-2 rounded-md">
               {t('nav.home')}
             </Link>
-            <Link to="/how-we-work" className="text-gray-700 hover:text-primary px-3 py-2 rounded-md">
+            <Link to="/how-we-work" className="text-white hover:text-blue-100 px-3 py-2 rounded-md">
               {t('nav.howWeWork')}
             </Link>
-            <Link to="/contact" className="text-gray-700 hover:text-primary px-3 py-2 rounded-md">
+            <Link to="/contact" className="text-white hover:text-blue-100 px-3 py-2 rounded-md">
               {t('nav.contact')}
             </Link>
 
             {!user ? (
               <>
-                <Link to="/signin" className="text-gray-700 hover:text-primary px-3 py-2 rounded-md">
+                <Link to="/signin" className="text-white hover:text-blue-100 px-3 py-2 rounded-md">
                   {t('nav.signIn')}
                 </Link>
-                <Link to="/signup" className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90">
+                <Link to="/signup" className="bg-white text-[#1EAEDB] px-4 py-2 rounded-md hover:bg-blue-50">
                   {t('nav.becomeProvider')}
                 </Link>
               </>
             ) : (
               <button
                 onClick={handleSignOut}
-                className="text-gray-700 hover:text-primary px-3 py-2 rounded-md"
+                className="text-white hover:text-blue-100 px-3 py-2 rounded-md"
               >
                 {t('nav.signOut')}
               </button>
@@ -100,7 +100,7 @@ const Navigation = () => {
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="ml-2">
+                <Button variant="ghost" size="icon" className="ml-2 text-white hover:text-blue-100">
                   <span className="text-xl">{getCurrentFlag()}</span>
                 </Button>
               </DropdownMenuTrigger>
@@ -118,7 +118,7 @@ const Navigation = () => {
           <div className="md:hidden flex items-center">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="text-gray-700 hover:text-primary"
+              className="text-white hover:text-blue-100"
             >
               {isOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
@@ -127,25 +127,25 @@ const Navigation = () => {
 
         {/* Mobile menu */}
         {isOpen && (
-          <div className="md:hidden">
+          <div className="md:hidden bg-[#1EAEDB]">
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
               <Link
                 to="/"
-                className="block text-gray-700 hover:text-primary px-3 py-2 rounded-md"
+                className="block text-white hover:text-blue-100 px-3 py-2 rounded-md"
                 onClick={() => setIsOpen(false)}
               >
                 {t('nav.home')}
               </Link>
               <Link
                 to="/how-we-work"
-                className="block text-gray-700 hover:text-primary px-3 py-2 rounded-md"
+                className="block text-white hover:text-blue-100 px-3 py-2 rounded-md"
                 onClick={() => setIsOpen(false)}
               >
                 {t('nav.howWeWork')}
               </Link>
               <Link
                 to="/contact"
-                className="block text-gray-700 hover:text-primary px-3 py-2 rounded-md"
+                className="block text-white hover:text-blue-100 px-3 py-2 rounded-md"
                 onClick={() => setIsOpen(false)}
               >
                 {t('nav.contact')}
@@ -157,7 +157,7 @@ const Navigation = () => {
                     setLanguage('en');
                     setIsOpen(false);
                   }}
-                  className="text-gray-700 hover:text-primary"
+                  className="text-white hover:text-blue-100"
                 >
                   🇬🇧 English
                 </button>
@@ -166,7 +166,7 @@ const Navigation = () => {
                     setLanguage('fr');
                     setIsOpen(false);
                   }}
-                  className="text-gray-700 hover:text-primary"
+                  className="text-white hover:text-blue-100"
                 >
                   🇫🇷 Français
                 </button>
@@ -176,14 +176,14 @@ const Navigation = () => {
                 <>
                   <Link
                     to="/signin"
-                    className="block text-gray-700 hover:text-primary px-3 py-2 rounded-md"
+                    className="block text-white hover:text-blue-100 px-3 py-2 rounded-md"
                     onClick={() => setIsOpen(false)}
                   >
                     {t('nav.signIn')}
                   </Link>
                   <Link
                     to="/signup"
-                    className="block bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90"
+                    className="block bg-white text-[#1EAEDB] px-4 py-2 rounded-md hover:bg-blue-50"
                     onClick={() => setIsOpen(false)}
                   >
                     {t('nav.becomeProvider')}
@@ -195,7 +195,7 @@ const Navigation = () => {
                     handleSignOut();
                     setIsOpen(false);
                   }}
-                  className="block w-full text-left text-gray-700 hover:text-primary px-3 py-2 rounded-md"
+                  className="block w-full text-left text-white hover:text-blue-100 px-3 py-2 rounded-md"
                 >
                   {t('nav.signOut')}
                 </button>
