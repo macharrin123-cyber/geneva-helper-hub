@@ -13,16 +13,9 @@ const SearchSection = ({ searchTerm, onSearchChange, onSearchSubmit }: SearchSec
 
   return (
     <div className="text-center mb-12 animate-fade-in">
-      <div className="flex items-center justify-center gap-2 mb-8">
-        <HelpingHand className="h-12 w-12 text-primary" />
-        <h1 className="text-4xl font-bold text-primary font-poppins">
-          Helpify
-        </h1>
-      </div>
-      
-      <h2 className="text-4xl font-bold text-gray-900 mb-4">
+      <h1 className="text-4xl font-bold text-gray-900 mb-4">
         {t('home.title')}
-      </h2>
+      </h1>
       <p className="text-xl text-gray-600 mb-8">
         {t('home.subtitle')}
       </p>
@@ -39,6 +32,13 @@ const SearchSection = ({ searchTerm, onSearchChange, onSearchSubmit }: SearchSec
           />
         </div>
       </form>
+
+      <div className="flex items-center justify-center gap-2">
+        <HelpingHand className="h-12 w-12 text-primary" />
+        <h2 className="text-4xl font-bold text-primary font-poppins">
+          Helpify
+        </h2>
+      </div>
     </div>
   );
 };
