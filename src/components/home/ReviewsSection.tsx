@@ -1,5 +1,6 @@
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { useIsMobile } from "@/hooks/use-mobile";
+import Autoplay from "embla-carousel-autoplay";
 
 interface Review {
   name: string;
@@ -14,13 +15,18 @@ interface ReviewsSectionProps {
 
 const ReviewsSection = ({ reviews }: ReviewsSectionProps) => {
   const isMobile = useIsMobile();
+  
+  const plugin = Autoplay({ delay: 3000, stopOnInteraction: true });
 
   return (
     <div className="mb-20 px-4 md:px-0">
       <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-8 md:mb-12 text-center">
         What Our Community Says
       </h2>
-      <Carousel className="w-full max-w-5xl mx-auto">
+      <Carousel 
+        className="w-full max-w-5xl mx-auto"
+        plugins={[plugin]}
+      >
         <CarouselContent className="-ml-2 md:-ml-4">
           {reviews.map((review, index) => (
             <CarouselItem 
