@@ -18,6 +18,7 @@ import ClientDashboard from "./pages/ClientDashboard";
 import ThankYouPage from "./pages/ThankYouPage";
 import ContactPage from "./pages/ContactPage";
 import HowWeWork from "./pages/HowWeWork";
+import ResetPassword from "./pages/ResetPassword";
 
 const queryClient = new QueryClient();
 
@@ -31,6 +32,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/signin" element={<SignIn />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/plumbing" element={<PlumbingPage />} />
           <Route path="/electrical" element={<ElectricalPage />} />
           <Route path="/painting" element={<PaintingPage />} />

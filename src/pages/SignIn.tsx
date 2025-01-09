@@ -2,7 +2,7 @@ import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { supabase } from "@/integrations/supabase/client";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 
 const SignIn = () => {
@@ -51,6 +51,11 @@ const SignIn = () => {
             providers={[]}
             redirectTo={window.location.origin}
           />
+          <div className="mt-4 text-center">
+            <Link to="/reset-password" className="text-sm text-primary hover:underline">
+              Forgot your password?
+            </Link>
+          </div>
         </div>
       </div>
     </div>
