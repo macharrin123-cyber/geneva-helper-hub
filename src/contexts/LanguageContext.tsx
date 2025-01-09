@@ -25,6 +25,17 @@ export const translations = {
     'home.subtitle': 'Connect with trusted local professionals for all your home service needs',
     'home.searchPlaceholder': 'Search for services...',
 
+    // Reset Password
+    'reset.title': 'Reset Your Password',
+    'reset.subtitle': 'Enter your email to receive a reset link',
+    'reset.email': 'Email',
+    'reset.sendLink': 'Send Reset Link',
+    'reset.newPassword': 'New Password',
+    'reset.updatePassword': 'Update Password',
+    'reset.checkEmail': 'Check your email',
+    'reset.emailSent': "We've sent you a password reset link.",
+    'reset.success': 'Your password has been updated.',
+
     // Services
     'service.plumbing': 'Plumbing',
     'service.plumbingDesc': 'Professional plumbing services for your home',
@@ -61,6 +72,17 @@ export const translations = {
     'home.subtitle': 'Connectez-vous avec des professionnels de confiance pour tous vos besoins',
     'home.searchPlaceholder': 'Rechercher des services...',
 
+    // Reset Password
+    'reset.title': 'Réinitialiser votre mot de passe',
+    'reset.subtitle': 'Entrez votre email pour recevoir un lien de réinitialisation',
+    'reset.email': 'Email',
+    'reset.sendLink': 'Envoyer le lien',
+    'reset.newPassword': 'Nouveau mot de passe',
+    'reset.updatePassword': 'Mettre à jour le mot de passe',
+    'reset.checkEmail': 'Vérifiez votre email',
+    'reset.emailSent': 'Nous vous avons envoyé un lien de réinitialisation.',
+    'reset.success': 'Votre mot de passe a été mis à jour.',
+
     // Services
     'service.plumbing': 'Plomberie',
     'service.plumbingDesc': 'Services de plomberie professionnels pour votre maison',
@@ -78,10 +100,10 @@ export const translations = {
     // Common
     'button.book': 'Prendre rendez-vous',
     'button.call': 'Appeler le prestataire',
-    'select.time': 'Sélectionner l\'heure',
+    'select.time': "Sélectionner l'heure",
     'rating': 'Note',
     'rate': 'Tarif',
-    'experience': 'ans d\'expérience',
+    'experience': "ans d'expérience",
   }
 };
 

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Menu, X, Globe } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -50,6 +50,10 @@ const Navigation = () => {
     }
   };
 
+  const getCurrentFlag = () => {
+    return language === 'en' ? '🇬🇧' : '🇫🇷';
+  };
+
   return (
     <nav className="bg-white/80 backdrop-blur-md shadow-lg fixed w-full top-0 z-50">
       <div className="max-w-7xl mx-auto px-4">
@@ -76,10 +80,28 @@ const Navigation = () => {
               {t('nav.contact')}
             </Link>
 
+            {!user ? (
+              <>
+                <Link to="/signin" className="text-gray-700 hover:text-primary px-3 py-2 rounded-md">
+                  {t('nav.signIn')}
+                </Link>
+                <Link to="/signup" className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90">
+                  {t('nav.becomeProvider')}
+                </Link>
+              </>
+            ) : (
+              <button
+                onClick={handleSignOut}
+                className="text-gray-700 hover:text-primary px-3 py-2 rounded-md"
+              >
+                {t('nav.signOut')}
+              </button>
+            )}
+
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon">
-                  <Globe className="h-5 w-5" />
+                <Button variant="ghost" size="icon" className="ml-2">
+                  <span className="text-xl">{getCurrentFlag()}</span>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
@@ -91,26 +113,6 @@ const Navigation = () => {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-
-            {!user ? (
-              <>
-                <Link to="/signin" className="text-gray-700 hover:text-primary px-3 py-2 rounded-md">
-                  {t('nav.signIn')}
-                </Link>
-                <Link to="/signup" className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90">
-                  {t('nav.becomeProvider')}
-                </Link>
-              </>
-            ) : (
-              <>
-                <button
-                  onClick={handleSignOut}
-                  className="text-gray-700 hover:text-primary px-3 py-2 rounded-md"
-                >
-                  {t('nav.signOut')}
-                </button>
-              </>
-            )}
           </div>
 
           <div className="md:hidden flex items-center">
@@ -151,13 +153,19 @@ const Navigation = () => {
 
               <div className="flex gap-2 px-3 py-2">
                 <button
-                  onClick={() => setLanguage('en')}
+                  onClick={() => {
+                    setLanguage('en');
+                    setIsOpen(false);
+                  }}
                   className="text-gray-700 hover:text-primary"
                 >
                   🇬🇧 English
                 </button>
                 <button
-                  onClick={() => setLanguage('fr')}
+                  onClick={() => {
+                    setLanguage('fr');
+                    setIsOpen(false);
+                  }}
                   className="text-gray-700 hover:text-primary"
                 >
                   🇫🇷 Français
