@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Navigation from "@/components/Navigation";
 import ServiceGrid from "@/components/ServiceGrid";
 import SearchResults from "@/components/SearchResults";
@@ -12,6 +12,37 @@ const Index = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [hasSearched, setHasSearched] = useState(false);
   const { t } = useLanguage();
+
+  // Refs for sections we want to animate
+  const servicesRef = useRef<HTMLDivElement>(null);
+  const freelanceRef = useRef<HTMLDivElement>(null);
+  const reviewsRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: "0px 0px -50px 0px"
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate-fade-in', 'opacity-100');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    // Observe all sections
+    [servicesRef, freelanceRef, reviewsRef].forEach(ref => {
+      if (ref.current) {
+        ref.current.classList.add('opacity-0');
+        observer.observe(ref.current);
+      }
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -46,7 +77,7 @@ const Index = () => {
       
       <main className="pt-24 pb-12">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-12">
+          <div className="text-center mb-12 animate-fade-in">
             <h1 className="text-4xl font-bold text-gray-900 mb-4">
               {t('home.title')}
             </h1>
@@ -72,10 +103,12 @@ const Index = () => {
             <SearchResults searchTerm={searchTerm} />
           ) : (
             <>
-              <ServiceGrid />
+              <div ref={servicesRef} className="transition-opacity duration-1000 ease-out">
+                <ServiceGrid />
+              </div>
               
               {/* Freelance Section */}
-              <div className="mt-20 mb-16 bg-white rounded-lg shadow-lg p-8">
+              <div ref={freelanceRef} className="mt-20 mb-16 bg-white rounded-lg shadow-lg p-8 transition-opacity duration-1000 ease-out">
                 <div className="grid md:grid-cols-2 gap-8 items-center">
                   <div className="text-center md:text-left">
                     <h2 className="text-3xl font-bold text-gray-900 mb-6">
@@ -114,7 +147,7 @@ const Index = () => {
               </div>
 
               {/* Reviews Section */}
-              <div className="mb-20">
+              <div ref={reviewsRef} className="mb-20 transition-opacity duration-1000 ease-out">
                 <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center">
                   What Our Community Says
                 </h2>
