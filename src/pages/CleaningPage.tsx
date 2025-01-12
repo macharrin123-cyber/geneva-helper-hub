@@ -8,7 +8,7 @@ const providers = [
     hourlyRate: 45, 
     yearsExperience: 8,
     phone: "+41 76 234 56 78",
-    image: "/photo-1581091226825-a6a2a5aee158"
+    image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158"
   },
   { 
     id: 11, 
@@ -17,7 +17,7 @@ const providers = [
     hourlyRate: 40, 
     yearsExperience: 5,
     phone: "+41 76 345 67 89",
-    image: "/photo-1649972904349-6e44c42644a7"
+    image: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81"
   },
 ];
 

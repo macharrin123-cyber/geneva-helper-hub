@@ -8,7 +8,7 @@ const providers = [
     hourlyRate: 95, 
     yearsExperience: 12,
     phone: "+41 76 567 89 01",
-    image: "/photo-1581092795360-fd1ca04f0952"
+    image: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81"
   },
   { 
     id: 2, 
@@ -17,7 +17,7 @@ const providers = [
     hourlyRate: 85, 
     yearsExperience: 8,
     phone: "+41 76 678 90 12",
-    image: "/photo-1649972904349-6e44c42644a7"
+    image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158"
   },
   { 
     id: 3, 
@@ -26,7 +26,7 @@ const providers = [
     hourlyRate: 90, 
     yearsExperience: 15,
     phone: "+41 76 789 01 23",
-    image: "/photo-1486312338219-ce68d2c6f44d"
+    image: "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952"
   },
 ];
 
