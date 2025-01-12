@@ -11,7 +11,7 @@ interface SearchSectionProps {
 
 const SearchSection = ({ searchTerm, onSearchChange, onSearchSubmit }: SearchSectionProps) => {
   return (
-    <div className="relative h-[600px] -mt-24 mb-16 flex items-center justify-center">
+    <div className="relative h-[600px] -mt-24 w-screen left-[50%] right-[50%] ml-[-50vw] mr-[-50vw]">
       {/* Background image with overlay */}
       <div 
         className="absolute inset-0 bg-cover bg-center"
@@ -23,7 +23,7 @@ const SearchSection = ({ searchTerm, onSearchChange, onSearchSubmit }: SearchSec
       </div>
 
       {/* Content */}
-      <div className="relative z-10 max-w-4xl mx-auto px-4 text-center">
+      <div className="relative z-10 max-w-4xl mx-auto px-4 text-center h-full flex flex-col justify-center">
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 font-poppins">
           Find Local Services in Geneva
         </h1>
