@@ -16,10 +16,10 @@ const SearchSection = ({ searchTerm, onSearchChange, onSearchSubmit }: SearchSec
       <div 
         className="absolute inset-0 bg-cover bg-center"
         style={{
-          backgroundImage: 'url("https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80")',
+          backgroundImage: 'url("/lovable-uploads/f31f1b42-d528-48c6-b2e5-c0fc34ef5ccc.png")',
         }}
       >
-        <div className="absolute inset-0 bg-black/40" /> {/* Dark overlay */}
+        <div className="absolute inset-0 bg-black/50" /> {/* Dark overlay */}
       </div>
 
       {/* Content */}
