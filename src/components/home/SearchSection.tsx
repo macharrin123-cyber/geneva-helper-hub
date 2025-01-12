@@ -1,6 +1,7 @@
-import { Search } from "lucide-react";
+import { useState } from "react";
 import { Input } from "@/components/ui/input";
-import { useLanguage } from "@/contexts/LanguageContext";
+import { Button } from "@/components/ui/button";
+import { Search } from "lucide-react";
 
 interface SearchSectionProps {
   searchTerm: string;
@@ -9,29 +10,42 @@ interface SearchSectionProps {
 }
 
 const SearchSection = ({ searchTerm, onSearchChange, onSearchSubmit }: SearchSectionProps) => {
-  const { t } = useLanguage();
-
   return (
-    <div className="text-center mb-12 animate-fade-in">
-      <h1 className="text-4xl font-bold text-gray-900 mb-4">
-        {t('home.title')}
-      </h1>
-      <p className="text-xl text-gray-600 mb-8">
-        {t('home.subtitle')}
-      </p>
-      
-      <form onSubmit={onSearchSubmit} className="max-w-2xl mx-auto">
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+    <div className="relative h-[600px] -mt-24 mb-16 flex items-center justify-center">
+      {/* Background image with overlay */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center"
+        style={{
+          backgroundImage: 'url("https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80")',
+        }}
+      >
+        <div className="absolute inset-0 bg-black/40" /> {/* Dark overlay */}
+      </div>
+
+      {/* Content */}
+      <div className="relative z-10 max-w-4xl mx-auto px-4 text-center">
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 font-poppins">
+          Find Local Services in Geneva
+        </h1>
+        <p className="text-xl md:text-2xl text-white/90 mb-12">
+          Connect with trusted local professionals for all your home service needs
+        </p>
+
+        {/* Search form */}
+        <form onSubmit={onSearchSubmit} className="flex gap-2 max-w-2xl mx-auto">
           <Input
             type="text"
-            placeholder={t('home.searchPlaceholder')}
+            placeholder="What service are you looking for?"
             value={searchTerm}
             onChange={(e) => onSearchChange(e.target.value)}
-            className="pl-10 h-12 text-lg w-full"
+            className="h-14 text-lg bg-white/95 border-0 focus-visible:ring-2 focus-visible:ring-primary"
           />
-        </div>
-      </form>
+          <Button type="submit" size="lg" className="h-14 px-8">
+            <Search className="mr-2 h-5 w-5" />
+            Search
+          </Button>
+        </form>
+      </div>
     </div>
   );
 };
