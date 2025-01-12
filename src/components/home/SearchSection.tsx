@@ -32,7 +32,7 @@ const SearchSection = ({ searchTerm, onSearchChange, onSearchSubmit }: SearchSec
         </p>
 
         {/* Search form */}
-        <form onSubmit={onSearchSubmit} className="flex gap-2 max-w-2xl mx-auto">
+        <form onSubmit={onSearchSubmit} className="flex gap-2 max-w-3xl mx-auto w-full">
           <Input
             type="text"
             placeholder="What service are you looking for?"
