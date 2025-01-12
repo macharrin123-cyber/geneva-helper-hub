@@ -14,7 +14,7 @@ const SearchSection = ({ searchTerm, onSearchChange, onSearchSubmit }: SearchSec
     <div className="relative h-[600px] -mt-24 w-screen left-[50%] right-[50%] ml-[-50vw] mr-[-50vw]">
       {/* Background image with overlay */}
       <div 
-        className="absolute inset-0 bg-cover bg-center"
+        className="absolute inset-0 bg-cover bg-top"
         style={{
           backgroundImage: 'url("/lovable-uploads/f31f1b42-d528-48c6-b2e5-c0fc34ef5ccc.png")',
         }}
