@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navigation from "@/components/Navigation";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Calendar } from "@/components/ui/calendar";
 import { useToast } from "@/hooks/use-toast";
-import { Phone } from "lucide-react";
+import { Phone, Star } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import {
   Select,
@@ -97,81 +97,108 @@ const ServicePage = ({ serviceType, providers }: ServicePageProps) => {
             {t(`services.${serviceType}`)}
           </h1>
           
-          <div className="space-y-6">
-            <h2 className="text-xl font-semibold text-gray-800">
-              {t('services.availableProviders')}
-            </h2>
+          <div className="space-y-8">
             {providers.map((provider) => (
-              <div key={provider.id} className="space-y-4">
-                <Card 
-                  className={`cursor-pointer transition-shadow hover:shadow-lg ${
-                    selectedProvider === provider.id ? 'ring-2 ring-primary' : ''
-                  }`}
-                  onClick={() => setSelectedProvider(provider.id)}
-                >
-                  <CardHeader>
-                    <div className="flex items-center space-x-4">
+              <Card 
+                key={provider.id}
+                className={`overflow-hidden hover:shadow-lg transition-shadow ${
+                  selectedProvider === provider.id ? 'ring-2 ring-primary' : ''
+                }`}
+              >
+                <CardContent className="p-0">
+                  <div className="grid md:grid-cols-[300px,1fr] gap-6">
+                    {/* Provider Image Section */}
+                    <div className="relative h-[300px]">
                       <img 
                         src={provider.image}
                         alt={provider.name}
-                        className="w-16 h-16 rounded-full object-cover"
+                        className="absolute inset-0 w-full h-full object-cover"
                       />
-                      <CardTitle>{provider.name}</CardTitle>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-2">
-                      <p className="text-sm text-gray-600">{t('services.rating')}: {provider.rating} ⭐</p>
-                      <p className="text-sm text-gray-600">{t('services.rate')}: CHF {provider.hourlyRate}/hour</p>
-                      <p className="text-sm text-gray-600">{provider.yearsExperience} {t('services.experience')}</p>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                {selectedProvider === provider.id && (
-                  <Card>
-                    <CardContent className="pt-6">
-                      <h2 className="text-xl font-semibold text-gray-800 mb-4">
-                        {t('services.selectDateTime')}
-                      </h2>
-                      <Calendar
-                        mode="single"
-                        selected={selectedDate}
-                        onSelect={setSelectedDate}
-                        className="rounded-md border mb-4"
-                      />
-                      <Select onValueChange={setSelectedTime} value={selectedTime}>
-                        <SelectTrigger className="w-full mb-4">
-                          <SelectValue placeholder={t('services.selectTime')} />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {generateTimeSlots().map((time) => (
-                            <SelectItem key={time} value={time}>
-                              {time}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <div className="space-y-2">
-                        <button
-                          onClick={() => handleBooking(provider.id)}
-                          disabled={!selectedDate || !selectedTime}
-                          className="w-full bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent p-4">
+                        <button 
+                          className="w-full bg-white text-gray-900 font-semibold rounded-full py-3 px-6 hover:bg-gray-100 transition-colors"
+                          onClick={() => setSelectedProvider(provider.id)}
                         >
-                          {t('services.bookAppointment')}
-                        </button>
-                        <button
-                          onClick={() => handleCall(provider)}
-                          className="w-full flex items-center justify-center gap-2 bg-secondary text-secondary-foreground px-4 py-2 rounded-md hover:bg-secondary/80 transition-colors"
-                        >
-                          <Phone className="w-4 h-4" />
-                          {t('services.callProvider')}
+                          Select & Continue
                         </button>
                       </div>
-                    </CardContent>
-                  </Card>
-                )}
-              </div>
+                    </div>
+
+                    {/* Provider Info Section */}
+                    <div className="p-6">
+                      <div className="flex justify-between items-start mb-4">
+                        <div>
+                          <h2 className="text-2xl font-bold text-gray-900">{provider.name}</h2>
+                          <div className="flex items-center gap-1 text-gray-700 mt-1">
+                            <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+                            <span className="font-semibold">{provider.rating}</span>
+                            <span className="text-gray-500">(12 reviews)</span>
+                          </div>
+                          <p className="text-gray-600 mt-2">
+                            {provider.yearsExperience} years of experience
+                          </p>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-3xl font-bold text-gray-900">
+                            CHF {provider.hourlyRate}/hr
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="bg-gray-50 rounded-lg p-6 mb-6">
+                        <h3 className="text-xl font-semibold mb-3">How I can help:</h3>
+                        <p className="text-gray-700">
+                          Professional {serviceType} services with {provider.yearsExperience} years of experience. 
+                          Available for both residential and commercial projects. Fully equipped with professional tools 
+                          and ready to help with any {serviceType} needs.
+                        </p>
+                      </div>
+
+                      {selectedProvider === provider.id && (
+                        <div className="space-y-6">
+                          <h3 className="text-xl font-semibold">
+                            {t('services.selectDateTime')}
+                          </h3>
+                          <Calendar
+                            mode="single"
+                            selected={selectedDate}
+                            onSelect={setSelectedDate}
+                            className="rounded-md border"
+                          />
+                          <Select onValueChange={setSelectedTime} value={selectedTime}>
+                            <SelectTrigger className="w-full">
+                              <SelectValue placeholder={t('services.selectTime')} />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {generateTimeSlots().map((time) => (
+                                <SelectItem key={time} value={time}>
+                                  {time}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <div className="flex gap-4">
+                            <button
+                              onClick={() => handleBooking(provider.id)}
+                              disabled={!selectedDate || !selectedTime}
+                              className="flex-1 bg-primary text-white px-6 py-3 rounded-full font-semibold hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                              {t('services.bookAppointment')}
+                            </button>
+                            <button
+                              onClick={() => handleCall(provider)}
+                              className="flex items-center justify-center gap-2 bg-gray-100 text-gray-900 px-6 py-3 rounded-full font-semibold hover:bg-gray-200 transition-colors"
+                            >
+                              <Phone className="w-5 h-5" />
+                              {t('services.callProvider')}
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             ))}
           </div>
         </div>
