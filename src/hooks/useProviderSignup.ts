@@ -21,7 +21,7 @@ export const useProviderSignup = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
 
-  const waitForSession = async (maxAttempts = 10): Promise<boolean> => {
+  const waitForSession = async (maxAttempts = 15): Promise<boolean> => {
     for (let i = 0; i < maxAttempts; i++) {
       console.log(`Attempt ${i + 1} of ${maxAttempts} to get session...`);
       const { data: { session } } = await supabase.auth.getSession();
@@ -31,8 +31,8 @@ export const useProviderSignup = () => {
         return true;
       }
       
-      console.log('No session found, waiting 2 seconds before next attempt...');
-      await delay(2000); // Increased to 2 seconds between attempts
+      console.log('No session found, waiting 3 seconds before next attempt...');
+      await delay(3000);
     }
     return false;
   };
@@ -51,17 +51,16 @@ export const useProviderSignup = () => {
     }
 
     setIsSubmitting(true);
+    console.log('Starting form submission process...');
 
     try {
-      console.log('Starting form submission with data:', formData);
-      
       // First check if user is authenticated
       const { data: { session } } = await supabase.auth.getSession();
       
       if (!session) {
         console.log('No session found, creating new user...');
         // Generate a random password for the user
-        const password = Math.random().toString(36).slice(-8);
+        const password = Math.random().toString(36).slice(-12) + Math.random().toString(36).slice(-12);
         
         const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
           email: formData.email,
@@ -103,6 +102,7 @@ export const useProviderSignup = () => {
       // Upload image
       console.log('Uploading provider image...');
       const publicUrl = await uploadProviderImage(imageFile);
+      console.log('Image uploaded successfully:', publicUrl);
 
       // Create provider record
       console.log('Creating provider record...');
@@ -112,6 +112,7 @@ export const useProviderSignup = () => {
         formData.service,
         currentSession.user.id
       );
+      console.log('Provider record created successfully');
 
       // Create service provider application
       console.log('Creating service provider application...');
@@ -135,6 +136,8 @@ export const useProviderSignup = () => {
         throw new Error('Failed to submit application');
       }
 
+      console.log('Application submitted successfully');
+
       // Send application email
       console.log('Sending application email...');
       const response = await fetch('/functions/v1/send-provider-application', {
@@ -157,14 +160,13 @@ export const useProviderSignup = () => {
       console.log('Application email sent successfully');
 
       toast({
-        title: "Application submitted!",
-        description: "We'll review your information and get back to you soon.",
+        title: "Success!",
+        description: "Your application has been submitted successfully. We'll review it and get back to you soon.",
       });
 
-      // Navigate to thank you page instead of provider dashboard
       navigate('/thank-you');
-
       return true;
+
     } catch (error: any) {
       console.error('Error in provider signup:', error);
       toast({
