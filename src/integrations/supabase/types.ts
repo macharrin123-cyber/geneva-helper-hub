@@ -114,7 +114,7 @@ export type Database = {
           address?: string
           city?: string
           comments?: string | null
-          created_at?: string | null
+          created_at?: string
           id?: string
           payment_intent_id?: string | null
           payment_status?: string | null
@@ -311,3 +311,7 @@ export type CompositeTypes<
   : PublicCompositeTypeNameOrOptions extends keyof PublicSchema["CompositeTypes"]
     ? PublicSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never
+
+export type ServiceBookingWithProvider = Database['public']['Tables']['service_bookings']['Row'] & {
+  provider: Database['public']['Tables']['service_providers']['Row']
+}
