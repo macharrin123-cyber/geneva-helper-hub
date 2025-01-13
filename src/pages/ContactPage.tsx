@@ -19,11 +19,19 @@ const ContactPage = () => {
     setIsSubmitting(true);
 
     try {
-      const { error } = await supabase
+      // First, save to database
+      const { error: dbError } = await supabase
         .from("contact_messages")
         .insert([{ name, email, message }]);
 
-      if (error) throw error;
+      if (dbError) throw dbError;
+
+      // Then, send email notification
+      const { error: emailError } = await supabase.functions.invoke('notify-contact-message', {
+        body: { name, email, message }
+      });
+
+      if (emailError) throw emailError;
 
       toast({
         title: "Message sent!",
