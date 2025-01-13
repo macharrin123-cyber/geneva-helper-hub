@@ -289,3 +289,7 @@ export type CompositeTypes<
   : PublicCompositeTypeNameOrOptions extends keyof PublicSchema["CompositeTypes"]
     ? PublicSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never
+
+export type ServiceBookingWithProvider = Database['public']['Tables']['service_bookings']['Row'] & {
+  service_providers: Database['public']['Tables']['service_providers']['Row']
+}
