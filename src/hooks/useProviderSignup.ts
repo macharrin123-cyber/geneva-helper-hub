@@ -59,6 +59,7 @@ export const useProviderSignup = () => {
     });
 
     if (!imageFile) {
+      console.error('No image file provided');
       toast({
         title: "Error",
         description: "Please upload a profile image",
@@ -80,8 +81,8 @@ export const useProviderSignup = () => {
         name: formData.name.trim(),
         email: formData.email.trim(),
         phone: formData.phone.trim(),
-        service: formData.service.trim(),
-        experience: formData.experience.trim(),
+        service: formData.service,
+        experience: formData.experience,
         description: formData.description.trim(),
         hourly_rate: parseFloat(formData.hourlyRate),
         image_url: publicUrl,
@@ -94,7 +95,7 @@ export const useProviderSignup = () => {
       const { error: applicationError, data: submittedApplication } = await supabase
         .from('service_provider_applications')
         .insert([applicationData])
-        .select('*')
+        .select()
         .single();
 
       if (applicationError) {
@@ -106,7 +107,7 @@ export const useProviderSignup = () => {
 
       // Send application email
       console.log('Sending application email...');
-      const emailResponse = await fetch('/functions/v1/send-provider-application', {
+      const emailResponse = await fetch('/api/send-provider-application', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -24,7 +24,7 @@ const SignupForm = () => {
   };
 
   const isFormValid = () => {
-    return (
+    const valid = (
       imageFile !== null &&
       formData.name.trim() !== "" &&
       formData.email.trim() !== "" &&
@@ -34,24 +34,33 @@ const SignupForm = () => {
       formData.description.trim() !== "" &&
       formData.hourlyRate.trim() !== ""
     );
+    console.log('Form validation result:', valid, { formData, imageFile });
+    return valid;
   };
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const success = await handleSubmit(formData, imageFile);
+    console.log('Form submitted with data:', { formData, imageFile });
     
-    if (success) {
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        service: "",
-        experience: "",
-        description: "",
-        hourlyRate: "",
-      });
-      setImageFile(null);
-      setImagePreview(null);
+    try {
+      const success = await handleSubmit(formData, imageFile);
+      console.log('Form submission result:', success);
+      
+      if (success) {
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          service: "",
+          experience: "",
+          description: "",
+          hourlyRate: "",
+        });
+        setImageFile(null);
+        setImagePreview(null);
+      }
+    } catch (error) {
+      console.error('Error in form submission:', error);
     }
   };
 
