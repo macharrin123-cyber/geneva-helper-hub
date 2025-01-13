@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { Check, X } from "lucide-react";
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import { ServiceProvider } from "@/integrations/supabase/types";
 
 const ProviderDashboard = () => {
   const [bookings, setBookings] = useState<any[]>([]);
@@ -29,7 +30,7 @@ const ProviderDashboard = () => {
     try {
       const { data: providerData, error: providerError } = await supabase
         .from('service_providers')
-        .select('id')
+        .select('*')
         .single();
 
       if (providerError) throw providerError;
@@ -37,7 +38,7 @@ const ProviderDashboard = () => {
       const { data, error } = await supabase
         .from('service_bookings')
         .select('*')
-        .eq('provider_id', parseInt(providerData.id))
+        .eq('provider_id', providerData.id)
         .order('service_date', { ascending: true });
 
       if (error) throw error;
