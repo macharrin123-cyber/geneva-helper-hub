@@ -47,24 +47,29 @@ const ContactPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50">
       <Navigation />
       
-      <main className="pt-24 pb-12">
-        <div className="max-w-2xl mx-auto px-4">
-          <div className="text-center mb-8">
-            <MessageSquare className="mx-auto h-12 w-12 text-primary mb-4" />
-            <h1 className="text-3xl font-bold text-gray-900 mb-4">
+      <main className="pt-24 pb-12 px-4 sm:px-6 lg:px-8 animate-fade-in">
+        <div className="max-w-2xl mx-auto">
+          <div className="text-center mb-12 space-y-4">
+            <div className="inline-block p-4 bg-white rounded-full shadow-md hover:shadow-lg transition-shadow duration-300">
+              <MessageSquare className="h-12 w-12 text-primary animate-pulse" />
+            </div>
+            <h1 className="text-4xl font-bold text-gray-900 tracking-tight">
               Contact Us
             </h1>
-            <p className="text-gray-600">
+            <p className="text-lg text-gray-600 max-w-md mx-auto">
               Have a question or feedback? We'd love to hear from you.
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-6 bg-white p-8 rounded-lg shadow-sm">
-            <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+          <form 
+            onSubmit={handleSubmit} 
+            className="space-y-6 bg-white/80 backdrop-blur-sm p-8 rounded-xl shadow-xl transition-all duration-300 hover:shadow-2xl"
+          >
+            <div className="space-y-2">
+              <label htmlFor="name" className="block text-sm font-medium text-gray-700">
                 Name
               </label>
               <Input
@@ -74,11 +79,12 @@ const ContactPage = () => {
                 onChange={(e) => setName(e.target.value)}
                 required
                 placeholder="Your name"
+                className="transition-all duration-300 hover:border-primary focus:ring-primary"
               />
             </div>
 
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+            <div className="space-y-2">
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                 Email
               </label>
               <Input
@@ -88,11 +94,12 @@ const ContactPage = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 placeholder="your@email.com"
+                className="transition-all duration-300 hover:border-primary focus:ring-primary"
               />
             </div>
 
-            <div>
-              <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">
+            <div className="space-y-2">
+              <label htmlFor="message" className="block text-sm font-medium text-gray-700">
                 Message
               </label>
               <Textarea
@@ -101,16 +108,23 @@ const ContactPage = () => {
                 onChange={(e) => setMessage(e.target.value)}
                 required
                 placeholder="Your message..."
-                className="min-h-[150px]"
+                className="min-h-[150px] transition-all duration-300 hover:border-primary focus:ring-primary"
               />
             </div>
 
             <Button
               type="submit"
-              className="w-full"
+              className="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-300"
               disabled={isSubmitting}
             >
-              {isSubmitting ? "Sending..." : "Send Message"}
+              {isSubmitting ? (
+                <span className="flex items-center justify-center gap-2">
+                  <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></span>
+                  Sending...
+                </span>
+              ) : (
+                "Send Message"
+              )}
             </Button>
           </form>
         </div>
