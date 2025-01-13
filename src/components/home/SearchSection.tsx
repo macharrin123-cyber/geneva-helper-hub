@@ -31,16 +31,20 @@ const SearchSection = ({ searchTerm, onSearchChange, onSearchSubmit }: SearchSec
           Connect with trusted local professionals for all your home service needs
         </p>
 
-        {/* Search form */}
-        <form onSubmit={onSearchSubmit} className="flex gap-2 max-w-3xl mx-auto w-full">
+        {/* Search form - Updated for mobile responsiveness */}
+        <form onSubmit={onSearchSubmit} className="flex flex-col md:flex-row gap-2 max-w-3xl mx-auto w-full">
           <Input
             type="text"
             placeholder="What service are you looking for?"
             value={searchTerm}
             onChange={(e) => onSearchChange(e.target.value)}
-            className="h-14 text-lg bg-white/95 border-0 focus-visible:ring-2 focus-visible:ring-primary"
+            className="h-14 text-lg bg-white/95 border-0 focus-visible:ring-2 focus-visible:ring-primary w-full"
           />
-          <Button type="submit" size="lg" className="h-14 px-8">
+          <Button 
+            type="submit" 
+            size="lg" 
+            className="h-14 px-8 w-full md:w-auto"
+          >
             <Search className="mr-2 h-5 w-5" />
             Search
           </Button>
