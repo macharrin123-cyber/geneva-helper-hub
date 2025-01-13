@@ -105,27 +105,6 @@ export const useProviderSignup = () => {
 
       console.log('Application submitted successfully:', submittedApplication);
 
-      // Send application email using Supabase Edge Function
-      console.log('Sending application email...');
-      const emailResponse = await fetch('/functions/v1/send-provider-application', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...formData,
-          imageUrl: publicUrl,
-        }),
-      });
-
-      if (!emailResponse.ok) {
-        const errorData = await emailResponse.json();
-        console.error('Email sending error:', errorData);
-        throw new Error(errorData.details || 'Failed to send application email');
-      }
-
-      console.log('Application email sent successfully');
-
       toast({
         title: "Success!",
         description: "Your application has been submitted successfully. We'll review it and get back to you soon.",
