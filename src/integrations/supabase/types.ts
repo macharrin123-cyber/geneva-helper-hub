@@ -108,6 +108,48 @@ export type Database = {
         }
         Relationships: []
       }
+      service_provider_applications: {
+        Row: {
+          created_at: string
+          description: string
+          email: string
+          experience: string
+          hourly_rate: number
+          id: string
+          image_url: string
+          name: string
+          phone: string
+          service: string
+          status: string | null
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          email: string
+          experience: string
+          hourly_rate: number
+          id?: string
+          image_url: string
+          name: string
+          phone: string
+          service: string
+          status?: string | null
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          email?: string
+          experience?: string
+          hourly_rate?: number
+          id?: string
+          image_url?: string
+          name?: string
+          phone?: string
+          service?: string
+          status?: string | null
+        }
+        Relationships: []
+      }
       service_providers: {
         Row: {
           created_at: string | null

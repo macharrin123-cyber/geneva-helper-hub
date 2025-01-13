@@ -21,15 +21,18 @@ export const useProviderSignup = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
 
-  const waitForSession = async (maxAttempts = 5): Promise<boolean> => {
+  const waitForSession = async (maxAttempts = 10): Promise<boolean> => {
     for (let i = 0; i < maxAttempts; i++) {
-      console.log(`Attempt ${i + 1} to get session...`);
+      console.log(`Attempt ${i + 1} of ${maxAttempts} to get session...`);
       const { data: { session } } = await supabase.auth.getSession();
+      
       if (session) {
         console.log('Session found:', session.user.id);
         return true;
       }
-      await delay(1000); // Wait 1 second between attempts
+      
+      console.log('No session found, waiting 2 seconds before next attempt...');
+      await delay(2000); // Increased to 2 seconds between attempts
     }
     return false;
   };
@@ -82,10 +85,11 @@ export const useProviderSignup = () => {
 
         console.log('User created successfully:', signUpData.user.id);
         
-        // Wait for session to be established
+        // Wait for session to be established with increased timeout
+        console.log('Waiting for session to be established...');
         const sessionEstablished = await waitForSession();
         if (!sessionEstablished) {
-          throw new Error('Failed to establish session after multiple attempts');
+          throw new Error('Failed to establish session after multiple attempts. Please try signing in manually.');
         }
       }
 
@@ -108,6 +112,28 @@ export const useProviderSignup = () => {
         formData.service,
         currentSession.user.id
       );
+
+      // Create service provider application
+      console.log('Creating service provider application...');
+      const { error: applicationError } = await supabase
+        .from('service_provider_applications')
+        .insert([
+          {
+            name: formData.name,
+            email: formData.email,
+            phone: formData.phone,
+            service: formData.service,
+            experience: formData.experience,
+            description: formData.description,
+            hourly_rate: parseFloat(formData.hourlyRate),
+            image_url: publicUrl
+          }
+        ]);
+
+      if (applicationError) {
+        console.error('Application submission error:', applicationError);
+        throw new Error('Failed to submit application');
+      }
 
       // Send application email
       console.log('Sending application email...');
