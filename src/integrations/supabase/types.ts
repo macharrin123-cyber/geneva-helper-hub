@@ -6,6 +6,19 @@ export type Json =
   | { [key: string]: Json | undefined }
   | Json[]
 
+export interface ServiceProvider {
+  id: string;
+  user_id: string | null;
+  image_url: string;
+  hourly_rate: number;
+  service_type: string;
+  created_at: string | null;
+}
+
+export interface ServiceBookingWithProvider extends Tables<"service_bookings"> {
+  service_providers: ServiceProvider;
+}
+
 export type Database = {
   public: {
     Tables: {
@@ -215,32 +228,9 @@ export type Database = {
   }
 }
 
-type PublicSchema = Database[Extract<keyof Database, "public">]
-
 export type Tables<
-  PublicTableNameOrOptions extends
-    | keyof (PublicSchema["Tables"] & PublicSchema["Views"])
-    | { schema: keyof Database },
-  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-    ? keyof (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
-        Database[PublicTableNameOrOptions["schema"]]["Views"])
-    : never = never,
-> = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
-      Database[PublicTableNameOrOptions["schema"]]["Views"])[TableName] extends {
-      Row: infer R
-    }
-    ? R
-    : never
-  : PublicTableNameOrOptions extends keyof (PublicSchema["Tables"] &
-        PublicSchema["Views"])
-    ? (PublicSchema["Tables"] &
-        PublicSchema["Views"])[PublicTableNameOrOptions] extends {
-        Row: infer R
-      }
-      ? R
-      : never
-    : never
+  TableName extends keyof Database["public"]["Tables"]
+> = Database["public"]["Tables"][TableName]["Row"]
 
 export type TablesInsert<
   PublicTableNameOrOptions extends
