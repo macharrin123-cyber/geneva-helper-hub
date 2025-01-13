@@ -6,6 +6,10 @@ export type Json =
   | { [key: string]: Json | undefined }
   | Json[]
 
+export interface ServiceBookingWithProvider extends Tables<"service_bookings"> {
+  service_providers: Tables<"service_providers"> | null;
+}
+
 export type Database = {
   public: {
     Tables: {
