@@ -4,11 +4,13 @@ import { supabase } from "@/integrations/supabase/client";
 import Navigation from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 const ResetPassword = () => {
   const [email, setEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -18,6 +20,7 @@ const ResetPassword = () => {
 
   const handleResetRequest = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo: `${window.location.origin}/reset-password`,
@@ -30,16 +33,20 @@ const ResetPassword = () => {
         description: "We've sent you a password reset link.",
       });
     } catch (error: any) {
+      console.error("Reset password error:", error);
       toast({
         variant: "destructive",
         title: "Error",
         description: error.message,
       });
+    } finally {
+      setLoading(false);
     }
   };
 
   const handlePasswordReset = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const { error } = await supabase.auth.updateUser({
         password: newPassword,
@@ -49,15 +56,18 @@ const ResetPassword = () => {
 
       toast({
         title: "Success",
-        description: "Your password has been updated.",
+        description: "Your password has been updated. You can now sign in with your new password.",
       });
       navigate("/signin");
     } catch (error: any) {
+      console.error("Update password error:", error);
       toast({
         variant: "destructive",
         title: "Error",
         description: error.message,
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -84,10 +94,14 @@ const ResetPassword = () => {
                   className="mt-1"
                   required
                   minLength={6}
+                  placeholder="Enter your new password"
                 />
+                <p className="mt-1 text-sm text-gray-500">
+                  Password must be at least 6 characters long
+                </p>
               </div>
-              <Button type="submit" className="w-full">
-                Update Password
+              <Button type="submit" className="w-full" disabled={loading}>
+                {loading ? "Updating Password..." : "Update Password"}
               </Button>
             </form>
           ) : (
@@ -103,11 +117,22 @@ const ResetPassword = () => {
                   onChange={(e) => setEmail(e.target.value)}
                   className="mt-1"
                   required
+                  placeholder="Enter your email address"
                 />
               </div>
-              <Button type="submit" className="w-full">
-                Send Reset Link
+              <Button type="submit" className="w-full" disabled={loading}>
+                {loading ? "Sending Reset Link..." : "Send Reset Link"}
               </Button>
+              <p className="text-sm text-center text-gray-600">
+                Remember your password?{" "}
+                <button
+                  type="button"
+                  onClick={() => navigate("/signin")}
+                  className="text-primary hover:underline"
+                >
+                  Sign in
+                </button>
+              </p>
             </form>
           )}
         </div>
