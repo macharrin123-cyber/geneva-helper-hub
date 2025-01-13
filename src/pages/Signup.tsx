@@ -7,10 +7,10 @@ const Signup = () => {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50">
       <Navigation />
       
-      <main className="pt-16 pb-12 px-4 animate-fade-in">
+      <main className="pt-24 pb-12 px-4 animate-fade-in"> {/* Increased top padding from pt-16 to pt-24 */}
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <div className="flex items-center justify-center gap-2 mb-8 transform hover:scale-105 transition-transform duration-300">
+          <div className="text-center mb-16"> {/* Increased bottom margin from mb-12 to mb-16 */}
+            <div className="flex items-center justify-center gap-3 mb-10 transform hover:scale-105 transition-transform duration-300"> {/* Increased gap and bottom margin */}
               <HelpingHand className="h-16 w-16 text-primary" />
               <h1 className="text-4xl font-bold text-primary font-poppins">
                 Helpify
