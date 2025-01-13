@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import { Card, CardContent } from "@/components/ui/card";
@@ -46,6 +46,11 @@ const ServicePage = ({ serviceType, providers }: ServicePageProps) => {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [selectedTime, setSelectedTime] = useState<string>("");
   const [selectedProvider, setSelectedProvider] = useState<number | null>(null);
+
+  // Add useEffect to scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const handleBooking = (providerId: number) => {
     if (!selectedDate || !selectedTime) {
