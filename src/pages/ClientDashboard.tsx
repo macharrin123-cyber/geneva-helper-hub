@@ -6,10 +6,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { supabase } from "@/integrations/supabase/client";
-import { Tables } from "@/integrations/supabase/types";
-import type { ServiceBookingWithProvider } from "@/integrations/supabase/types";
+import type { ServiceBookingWithProvider, Database } from "@/integrations/supabase/types";
 
-type Profile = Tables<"profiles">;
+type Profile = Database['public']['Tables']['profiles']['Row'];
 
 const ClientDashboard = () => {
   const [bookings, setBookings] = useState<ServiceBookingWithProvider[]>([]);
@@ -67,7 +66,6 @@ const ClientDashboard = () => {
 
       if (error) throw error;
       
-      // Explicitly type the data as ServiceBookingWithProvider[]
       const typedData = data as unknown as ServiceBookingWithProvider[];
       setBookings(typedData);
     } catch (error) {

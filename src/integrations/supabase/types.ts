@@ -6,14 +6,8 @@ export type Json =
   | { [key: string]: Json | undefined }
   | Json[]
 
-export interface ServiceProvider {
-  id: string;
-  user_id: string | null;
-  image_url: string;
-  hourly_rate: number;
-  service_type: string;
-  created_at: string | null;
-}
+export type ServiceBooking = Database['public']['Tables']['service_bookings']['Row']
+export type ServiceProvider = Database['public']['Tables']['service_providers']['Row']
 
 export interface ServiceBookingWithProvider extends ServiceBooking {
   service_providers: ServiceProvider;
