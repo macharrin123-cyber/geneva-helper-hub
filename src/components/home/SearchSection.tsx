@@ -43,7 +43,7 @@ const SearchSection = ({ searchTerm, onSearchChange, onSearchSubmit }: SearchSec
           <Button 
             type="submit" 
             size="lg" 
-            className="h-14 px-8 w-full md:w-auto"
+            className="h-14 px-8 mx-auto w-[200px] md:w-auto"
           >
             <Search className="mr-2 h-5 w-5" />
             Search
