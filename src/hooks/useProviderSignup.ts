@@ -105,9 +105,9 @@ export const useProviderSignup = () => {
 
       console.log('Application submitted successfully:', submittedApplication);
 
-      // Send application email
+      // Send application email using Supabase Edge Function
       console.log('Sending application email...');
-      const emailResponse = await fetch('/api/send-provider-application', {
+      const emailResponse = await fetch('/functions/v1/send-provider-application', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
