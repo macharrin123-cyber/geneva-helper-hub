@@ -85,7 +85,7 @@ export type Database = {
           payment_intent_id: string | null
           payment_status: string | null
           postal_code: string
-          provider_id: number
+          provider_id: string
           provider_response: string | null
           service_date: string
           service_time: string
@@ -102,7 +102,7 @@ export type Database = {
           payment_intent_id?: string | null
           payment_status?: string | null
           postal_code: string
-          provider_id: number
+          provider_id: string
           provider_response?: string | null
           service_date: string
           service_time: string
@@ -119,55 +119,13 @@ export type Database = {
           payment_intent_id?: string | null
           payment_status?: string | null
           postal_code?: string
-          provider_id?: number
+          provider_id?: string
           provider_response?: string | null
           service_date?: string
           service_time?: string
           status?: string | null
           street_address?: string
           user_id?: string | null
-        }
-        Relationships: []
-      }
-      service_provider_applications: {
-        Row: {
-          created_at: string
-          description: string
-          email: string
-          experience: string
-          hourly_rate: number
-          id: string
-          image_url: string
-          name: string
-          phone: string
-          service: string
-          status: string | null
-        }
-        Insert: {
-          created_at?: string
-          description: string
-          email: string
-          experience: string
-          hourly_rate: number
-          id?: string
-          image_url: string
-          name: string
-          phone: string
-          service: string
-          status?: string | null
-        }
-        Update: {
-          created_at?: string
-          description?: string
-          email?: string
-          experience?: string
-          hourly_rate?: number
-          id?: string
-          image_url?: string
-          name?: string
-          phone?: string
-          service?: string
-          status?: string | null
         }
         Relationships: []
       }
@@ -213,6 +171,15 @@ export type Database = {
       [_ in never]: never
     }
   }
+}
+
+// Add the missing types
+export type ServiceProvider = Database['public']['Tables']['service_providers']['Row']
+
+export type ServiceBooking = Database['public']['Tables']['service_bookings']['Row']
+
+export type ServiceBookingWithProvider = ServiceBooking & {
+  service_providers: ServiceProvider | null
 }
 
 type PublicSchema = Database[Extract<keyof Database, "public">]
@@ -311,3 +278,4 @@ export type CompositeTypes<
   : PublicCompositeTypeNameOrOptions extends keyof PublicSchema["CompositeTypes"]
     ? PublicSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never
+
