@@ -49,6 +49,20 @@ export const useProviderSignup = () => {
     }
   };
 
+  const notifyAdmin = async (applicationData: any) => {
+    try {
+      const { error } = await supabase.functions.invoke('notify-new-application', {
+        body: applicationData
+      });
+      
+      if (error) {
+        console.error('Error notifying admin:', error);
+      }
+    } catch (error) {
+      console.error('Error in notifyAdmin:', error);
+    }
+  };
+
   const handleSubmit = async (
     formData: ProviderFormData,
     imageFile: File | null
@@ -104,6 +118,13 @@ export const useProviderSignup = () => {
       }
 
       console.log('Application submitted successfully:', submittedApplication);
+
+      // Notify admin about the new application
+      await notifyAdmin({
+        ...applicationData,
+        imageUrl: publicUrl,
+        hourlyRate: formData.hourlyRate
+      });
 
       toast({
         title: "Success!",
