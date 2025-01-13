@@ -91,7 +91,7 @@ export const useProviderSignup = () => {
       console.log('Submitting application with data:', applicationData);
 
       // Create service provider application
-      const { error: applicationError, data: applicationData } = await supabase
+      const { error: applicationError, data: submittedApplication } = await supabase
         .from('service_provider_applications')
         .insert(applicationData)
         .select()
@@ -102,7 +102,7 @@ export const useProviderSignup = () => {
         throw new Error('Failed to submit application: ' + applicationError.message);
       }
 
-      console.log('Application submitted successfully:', applicationData);
+      console.log('Application submitted successfully:', submittedApplication);
 
       // Send application email
       console.log('Sending application email...');
