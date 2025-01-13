@@ -65,6 +65,7 @@ const SignupForm = () => {
         type="text"
         value={formData.name}
         onChange={(value) => setFormData({ ...formData, name: value })}
+        hint="Enter your legal full name as it should appear on official documents"
       />
 
       <FormInput
@@ -73,6 +74,7 @@ const SignupForm = () => {
         type="email"
         value={formData.email}
         onChange={(value) => setFormData({ ...formData, email: value })}
+        hint="Use a professional email address you check regularly"
       />
 
       <FormInput
@@ -81,6 +83,7 @@ const SignupForm = () => {
         type="tel"
         value={formData.phone}
         onChange={(value) => setFormData({ ...formData, phone: value })}
+        hint="Enter a phone number where clients can reach you during business hours"
       />
 
       <ServiceSelect
@@ -96,6 +99,7 @@ const SignupForm = () => {
         onChange={(value) => setFormData({ ...formData, hourlyRate: value })}
         min="0"
         step="0.01"
+        hint="Set your competitive hourly rate in Swiss Francs (CHF). Research market rates for your service"
       />
 
       <FormInput
@@ -105,6 +109,7 @@ const SignupForm = () => {
         value={formData.experience}
         onChange={(value) => setFormData({ ...formData, experience: value })}
         min="0"
+        hint="Total years of professional experience in your service area"
       />
 
       <div>
@@ -119,6 +124,9 @@ const SignupForm = () => {
           rows={4}
           required
         />
+        <p className="mt-1 text-sm text-gray-500">
+          Describe your services, specializations, and what makes you stand out. Include any certifications or special qualifications
+        </p>
       </div>
 
       <button

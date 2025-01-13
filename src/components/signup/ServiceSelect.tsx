@@ -23,6 +23,9 @@ const ServiceSelect = ({ value, onChange }: ServiceSelectProps) => {
         <option value="carpentry">Carpentry</option>
         <option value="painting">Painting</option>
       </select>
+      <p className="mt-1 text-sm text-gray-500">
+        Choose the primary service you'll be offering to clients
+      </p>
     </div>
   );
 };

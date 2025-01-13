@@ -7,6 +7,7 @@ interface FormInputProps {
   required?: boolean;
   min?: string;
   step?: string;
+  hint?: string;
 }
 
 const FormInput = ({ 
@@ -17,7 +18,8 @@ const FormInput = ({
   onChange, 
   required = true,
   min,
-  step 
+  step,
+  hint
 }: FormInputProps) => {
   return (
     <div>
@@ -34,6 +36,11 @@ const FormInput = ({
         min={min}
         step={step}
       />
+      {hint && (
+        <p className="mt-1 text-sm text-gray-500">
+          {hint}
+        </p>
+      )}
     </div>
   );
 };
