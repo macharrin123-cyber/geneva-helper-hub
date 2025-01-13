@@ -41,14 +41,16 @@ const FreelanceSection = () => {
             </div>
           </div>
           
-          <Link to="/signup">
-            <Button 
-              className="text-lg px-8 py-6 bg-primary hover:bg-primary/90 transition-all duration-300 group"
-            >
-              Join as a Service Provider
-              <ArrowRight className="ml-2 h-5 w-5 transform transition-transform group-hover:translate-x-1" />
-            </Button>
-          </Link>
+          <div className="flex justify-center">
+            <Link to="/signup">
+              <Button 
+                className="text-lg px-8 py-6 bg-primary hover:bg-primary/90 transition-all duration-300 group"
+              >
+                Join as a Service Provider
+                <ArrowRight className="ml-2 h-5 w-5 transform transition-transform group-hover:translate-x-1" />
+              </Button>
+            </Link>
+          </div>
         </div>
       </div>
     </div>
