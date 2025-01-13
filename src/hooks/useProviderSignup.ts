@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { uploadProviderImage, createProviderRecord } from "@/utils/providerUtils";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -14,12 +13,41 @@ export interface ProviderFormData {
   hourlyRate: string;
 }
 
-const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
-
 export const useProviderSignup = () => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
+
+  const uploadProviderImage = async (file: File): Promise<string> => {
+    console.log('Starting image upload process...');
+    
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Math.random()}.${fileExt}`;
+      const filePath = `${fileName}`;
+
+      console.log('Uploading file to Supabase storage...');
+      const { error: uploadError, data } = await supabase.storage
+        .from('provider-images')
+        .upload(filePath, file);
+
+      if (uploadError) {
+        console.error('Error uploading image:', uploadError);
+        throw new Error('Failed to upload profile image: ' + uploadError.message);
+      }
+
+      console.log('Image uploaded successfully, getting public URL...');
+      const { data: { publicUrl } } = supabase.storage
+        .from('provider-images')
+        .getPublicUrl(filePath);
+
+      console.log('Public URL generated:', publicUrl);
+      return publicUrl;
+    } catch (error: any) {
+      console.error('Error in uploadProviderImage:', error);
+      throw new Error('Failed to upload image: ' + error.message);
+    }
+  };
 
   const handleSubmit = async (
     formData: ProviderFormData,
@@ -43,7 +71,7 @@ export const useProviderSignup = () => {
       const publicUrl = await uploadProviderImage(imageFile);
       console.log('Image uploaded successfully:', publicUrl);
 
-      // Create service provider application first
+      // Create service provider application
       console.log('Creating service provider application...');
       const { error: applicationError } = await supabase
         .from('service_provider_applications')
@@ -53,7 +81,7 @@ export const useProviderSignup = () => {
             email: formData.email,
             phone: formData.phone,
             service: formData.service,
-            experience: formData.experience,
+            experience: parseInt(formData.experience),
             description: formData.description,
             hourly_rate: parseFloat(formData.hourlyRate),
             image_url: publicUrl,
