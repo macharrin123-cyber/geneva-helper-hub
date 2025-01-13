@@ -6,6 +6,19 @@ export type Json =
   | { [key: string]: Json | undefined }
   | Json[]
 
+export interface ServiceProvider {
+  id: string;
+  user_id: string | null;
+  image_url: string;
+  hourly_rate: number;
+  service_type: string;
+  created_at: string | null;
+}
+
+export interface ServiceBookingWithProvider extends Tables<"service_bookings"> {
+  service_providers: ServiceProvider | null;
+}
+
 export type Database = {
   public: {
     Tables: {
@@ -233,14 +246,14 @@ export type Tables<
     ? R
     : never
   : PublicTableNameOrOptions extends keyof (PublicSchema["Tables"] &
-        PublicSchema["Views"])
-    ? (PublicSchema["Tables"] &
-        PublicSchema["Views"])[PublicTableNameOrOptions] extends {
-        Row: infer R
-      }
-      ? R
-      : never
+      PublicSchema["Views"])
+  ? (PublicSchema["Tables"] &
+      PublicSchema["Views"])[PublicTableNameOrOptions] extends {
+      Row: infer R
+    }
+    ? R
     : never
+  : never
 
 export type TablesInsert<
   PublicTableNameOrOptions extends
