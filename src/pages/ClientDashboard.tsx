@@ -7,12 +7,12 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { supabase } from "@/integrations/supabase/client";
 import { Tables } from "@/integrations/supabase/types";
+import type { ServiceBookingWithProvider } from "@/integrations/supabase/types";
 
 type Profile = Tables<"profiles">;
-type ServiceBooking = Tables<"service_bookings">;
 
 const ClientDashboard = () => {
-  const [bookings, setBookings] = useState<ServiceBooking[]>([]);
+  const [bookings, setBookings] = useState<ServiceBookingWithProvider[]>([]);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
