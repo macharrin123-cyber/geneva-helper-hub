@@ -75,19 +75,17 @@ export const useProviderSignup = () => {
       console.log('Creating service provider application...');
       const { error: applicationError } = await supabase
         .from('service_provider_applications')
-        .insert([
-          {
-            name: formData.name,
-            email: formData.email,
-            phone: formData.phone,
-            service: formData.service,
-            experience: parseInt(formData.experience),
-            description: formData.description,
-            hourly_rate: parseFloat(formData.hourlyRate),
-            image_url: publicUrl,
-            status: 'pending'
-          }
-        ]);
+        .insert({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          service: formData.service,
+          experience: formData.experience,
+          description: formData.description,
+          hourly_rate: parseFloat(formData.hourlyRate),
+          image_url: publicUrl,
+          status: 'pending'
+        });
 
       if (applicationError) {
         console.error('Application submission error:', applicationError);
