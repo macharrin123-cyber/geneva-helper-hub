@@ -9,27 +9,6 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      admin_users: {
-        Row: {
-          created_at: string
-          id: string
-          role: Database["public"]["Enums"]["admin_role"]
-          user_id: string | null
-        }
-        Insert: {
-          created_at?: string
-          id?: string
-          role: Database["public"]["Enums"]["admin_role"]
-          user_id?: string | null
-        }
-        Update: {
-          created_at?: string
-          id?: string
-          role?: Database["public"]["Enums"]["admin_role"]
-          user_id?: string | null
-        }
-        Relationships: []
-      }
       contact_messages: {
         Row: {
           created_at: string
@@ -114,7 +93,7 @@ export type Database = {
           address?: string
           city?: string
           comments?: string | null
-          created_at?: string
+          created_at?: string | null
           id?: string
           payment_intent_id?: string | null
           payment_status?: string | null
@@ -206,7 +185,6 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      admin_role: "admin"
       user_type: "provider" | "client"
     }
     CompositeTypes: {
@@ -278,10 +256,10 @@ export type TablesUpdate<
     : never
   : PublicTableNameOrOptions extends keyof PublicSchema["Tables"]
     ? PublicSchema["Tables"][PublicTableNameOrOptions] extends {
-        Update: infer U
-      }
-      ? U
-      : never
+      Update: infer U
+    }
+    ? U
+    : never
     : never
 
 export type Enums<
@@ -312,6 +290,6 @@ export type CompositeTypes<
     ? PublicSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never
 
-export type ServiceBookingWithProvider = Database['public']['Tables']['service_bookings']['Row'] & {
-  service_providers: Database['public']['Tables']['service_providers']['Row'] | null
-}
+export type ServiceBookingWithProvider = Tables<"service_bookings"> & {
+  service_providers: Tables<"service_providers"> | null;
+};
