@@ -9,6 +9,7 @@ import { HelpingHand } from "lucide-react";
 
 const Index = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const searchResultsRef = useRef<HTMLDivElement>(null);
 
   // Refs for sections we want to animate
   const servicesRef = useRef<HTMLDivElement>(null);
@@ -69,6 +70,10 @@ const Index = () => {
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("Search submitted with term:", searchTerm);
+    // Scroll to search results after a small delay to ensure results are rendered
+    setTimeout(() => {
+      searchResultsRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, 100);
   };
 
   return (
@@ -83,30 +88,32 @@ const Index = () => {
             onSearchSubmit={handleSearch}
           />
 
-          {searchTerm ? (
-            <SearchResults searchTerm={searchTerm} />
-          ) : (
-            <>
-              <div ref={servicesRef} className="transition-opacity duration-1000 ease-out">
-                <ServiceGrid />
-              </div>
-              
-              <div ref={freelanceRef} className="transition-opacity duration-1000 ease-out">
-                <FreelanceSection />
-              </div>
+          <div ref={searchResultsRef}>
+            {searchTerm ? (
+              <SearchResults searchTerm={searchTerm} />
+            ) : (
+              <>
+                <div ref={servicesRef} className="transition-opacity duration-1000 ease-out">
+                  <ServiceGrid />
+                </div>
+                
+                <div ref={freelanceRef} className="transition-opacity duration-1000 ease-out">
+                  <FreelanceSection />
+                </div>
 
-              <div ref={reviewsRef} className="transition-opacity duration-1000 ease-out">
-                <ReviewsSection reviews={reviews} />
-              </div>
+                <div ref={reviewsRef} className="transition-opacity duration-1000 ease-out">
+                  <ReviewsSection reviews={reviews} />
+                </div>
 
-              <div className="flex items-center justify-center gap-2 py-12">
-                <HelpingHand className="h-12 w-12 text-primary" />
-                <h2 className="text-4xl font-bold text-primary font-poppins">
-                  Helpify
-                </h2>
-              </div>
-            </>
-          )}
+                <div className="flex items-center justify-center gap-2 py-12">
+                  <HelpingHand className="h-12 w-12 text-primary" />
+                  <h2 className="text-4xl font-bold text-primary font-poppins">
+                    Helpify
+                  </h2>
+                </div>
+              </>
+            )}
+          </div>
         </div>
       </main>
     </div>
