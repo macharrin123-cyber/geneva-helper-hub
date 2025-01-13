@@ -75,14 +75,14 @@ export const useProviderSignup = () => {
       const publicUrl = await uploadProviderImage(imageFile);
       console.log('Image uploaded successfully:', publicUrl);
 
-      // Prepare application data
+      // Prepare application data - ensure all required fields are present and properly formatted
       const applicationData = {
-        name: formData.name,
-        email: formData.email,
-        phone: formData.phone,
-        service: formData.service,
-        experience: formData.experience,
-        description: formData.description,
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        phone: formData.phone.trim(),
+        service: formData.service.trim(),
+        experience: formData.experience.trim(),
+        description: formData.description.trim(),
         hourly_rate: parseFloat(formData.hourlyRate),
         image_url: publicUrl,
         status: 'pending'
@@ -90,10 +90,10 @@ export const useProviderSignup = () => {
 
       console.log('Submitting application with data:', applicationData);
 
-      // Create service provider application
+      // Create service provider application with explicit column selection
       const { error: applicationError, data: submittedApplication } = await supabase
         .from('service_provider_applications')
-        .insert(applicationData)
+        .insert([applicationData])
         .select()
         .single();
 
