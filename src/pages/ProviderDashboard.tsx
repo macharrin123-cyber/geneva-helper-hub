@@ -2,15 +2,15 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import Navigation from "@/components/Navigation";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
-import { Check, X } from "lucide-react";
-import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
-import { ServiceProvider } from "@/integrations/supabase/types";
+import { ServiceBooking } from "@/integrations/supabase/types";
+import BookingCard from "@/components/dashboard/BookingCard";
+import BookingStats from "@/components/dashboard/BookingStats";
+import BookingTrends from "@/components/dashboard/BookingTrends";
 
 const ProviderDashboard = () => {
-  const [bookings, setBookings] = useState<any[]>([]);
+  const [bookings, setBookings] = useState<ServiceBooking[]>([]);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -19,38 +19,46 @@ const ProviderDashboard = () => {
     const checkAuth = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
-        navigate('/login');
+        navigate('/signin');
+        return;
       }
+      fetchBookings();
     };
+    
     checkAuth();
-    fetchBookings();
   }, [navigate]);
 
   const fetchBookings = async () => {
     try {
+      console.log('Fetching provider data...');
       const { data: providerData, error: providerError } = await supabase
         .from('service_providers')
         .select('*')
         .single();
 
-      if (providerError) throw providerError;
-
-      // Convert the provider ID to a number when querying bookings
-      const providerId = parseInt(providerData.id);
-      if (isNaN(providerId)) {
-        throw new Error('Invalid provider ID format');
+      if (providerError) {
+        console.error('Error fetching provider:', providerError);
+        throw providerError;
       }
 
+      console.log('Provider data:', providerData);
+      console.log('Fetching bookings...');
+      
       const { data, error } = await supabase
         .from('service_bookings')
         .select('*')
-        .eq('provider_id', providerId)
+        .eq('provider_id', providerData.id)
         .order('service_date', { ascending: true });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error fetching bookings:', error);
+        throw error;
+      }
+
+      console.log('Bookings fetched:', data);
       setBookings(data || []);
     } catch (error) {
-      console.error('Error fetching bookings:', error);
+      console.error('Error in fetchBookings:', error);
       toast({
         title: "Error",
         description: "Failed to load bookings",
@@ -63,6 +71,7 @@ const ProviderDashboard = () => {
 
   const handleResponse = async (bookingId: string, response: 'approved' | 'denied') => {
     try {
+      console.log(`Updating booking ${bookingId} with response: ${response}`);
       const { error } = await supabase
         .from('service_bookings')
         .update({ provider_response: response })
@@ -86,36 +95,6 @@ const ProviderDashboard = () => {
     }
   };
 
-  // Prepare data for the pie chart
-  const statusCounts = bookings.reduce((acc: Record<string, number>, booking) => {
-    const status = booking.provider_response || 'pending';
-    acc[status] = (acc[status] || 0) + 1;
-    return acc;
-  }, {});
-
-  const pieChartData = Object.entries(statusCounts).map(([name, value]) => ({
-    name,
-    value
-  }));
-
-  const COLORS = {
-    approved: '#10B981',
-    denied: '#EF4444',
-    pending: '#F59E0B'
-  };
-
-  // Prepare data for the bar chart
-  const monthlyBookings = bookings.reduce((acc: Record<string, number>, booking) => {
-    const month = new Date(booking.service_date).toLocaleString('default', { month: 'short' });
-    acc[month] = (acc[month] || 0) + 1;
-    return acc;
-  }, {});
-
-  const barChartData = Object.entries(monthlyBookings).map(([month, count]) => ({
-    month,
-    bookings: count
-  }));
-
   return (
     <div className="min-h-screen bg-gray-50">
       <Navigation />
@@ -125,119 +104,23 @@ const ProviderDashboard = () => {
           <h1 className="text-3xl font-bold text-gray-900 mb-8">Provider Dashboard</h1>
           
           {loading ? (
-            <p>Loading bookings...</p>
+            <div className="flex justify-center items-center min-h-[200px]">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+            </div>
           ) : (
             <>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Booking Status Distribution</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="h-[300px] w-full">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <PieChart>
-                          <Pie
-                            data={pieChartData}
-                            cx="50%"
-                            cy="50%"
-                            labelLine={false}
-                            label={({ name, percent }) => `${name} (${(percent * 100).toFixed(0)}%)`}
-                            outerRadius={80}
-                            fill="#8884d8"
-                            dataKey="value"
-                          >
-                            {pieChartData.map((entry, index) => (
-                              <Cell 
-                                key={`cell-${index}`} 
-                                fill={COLORS[entry.name as keyof typeof COLORS] || '#8884d8'} 
-                              />
-                            ))}
-                          </Pie>
-                          <Tooltip />
-                        </PieChart>
-                      </ResponsiveContainer>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Monthly Booking Trends</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="h-[300px] w-full">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <BarChart data={barChartData}>
-                          <XAxis dataKey="month" />
-                          <YAxis />
-                          <Tooltip />
-                          <Bar dataKey="bookings" fill="#1E3A8A" />
-                        </BarChart>
-                      </ResponsiveContainer>
-                    </div>
-                  </CardContent>
-                </Card>
+                <BookingStats bookings={bookings} />
+                <BookingTrends bookings={bookings} />
               </div>
 
               <div className="grid gap-6">
                 {bookings.map((booking) => (
-                  <Card key={booking.id}>
-                    <CardHeader>
-                      <CardTitle>Booking Request - {new Date(booking.service_date).toLocaleDateString()}</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="space-y-4">
-                        <div className="grid grid-cols-2 gap-4">
-                          <div>
-                            <p className="text-sm text-gray-500">Time</p>
-                            <p className="font-medium">{booking.service_time}</p>
-                          </div>
-                          <div>
-                            <p className="text-sm text-gray-500">Address</p>
-                            <p className="font-medium">{booking.street_address}, {booking.city}</p>
-                          </div>
-                        </div>
-                        
-                        {booking.comments && (
-                          <div>
-                            <p className="text-sm text-gray-500">Comments</p>
-                            <p className="font-medium">{booking.comments}</p>
-                          </div>
-                        )}
-
-                        {booking.provider_response === 'pending' && (
-                          <div className="flex gap-4">
-                            <Button
-                              onClick={() => handleResponse(booking.id, 'approved')}
-                              className="flex items-center gap-2"
-                            >
-                              <Check className="w-4 h-4" />
-                              Approve
-                            </Button>
-                            <Button
-                              variant="destructive"
-                              onClick={() => handleResponse(booking.id, 'denied')}
-                              className="flex items-center gap-2"
-                            >
-                              <X className="w-4 h-4" />
-                              Deny
-                            </Button>
-                          </div>
-                        )}
-
-                        {booking.provider_response !== 'pending' && (
-                          <div className={`inline-flex px-3 py-1 rounded-full text-sm ${
-                            booking.provider_response === 'approved' 
-                              ? 'bg-green-100 text-green-800' 
-                              : 'bg-red-100 text-red-800'
-                          }`}>
-                            Status: {booking.provider_response}
-                          </div>
-                        )}
-                      </div>
-                    </CardContent>
-                  </Card>
+                  <BookingCard 
+                    key={booking.id} 
+                    booking={booking}
+                    onResponse={handleResponse}
+                  />
                 ))}
 
                 {bookings.length === 0 && (
