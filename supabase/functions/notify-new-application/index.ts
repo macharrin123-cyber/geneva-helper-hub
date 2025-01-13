@@ -8,7 +8,7 @@ const corsHeaders = {
 };
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
-const ADMIN_EMAIL = "your-email@example.com"; // Replace with your email
+const ADMIN_EMAIL = "maxharding99@gmail.com";
 
 serve(async (req) => {
   // Handle CORS preflight requests
