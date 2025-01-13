@@ -19,14 +19,14 @@ export const useProviderSignup = () => {
   const navigate = useNavigate();
 
   const uploadProviderImage = async (file: File): Promise<string> => {
-    console.log('Starting image upload process...');
+    console.log('Starting image upload process...', { fileName: file.name, fileSize: file.size });
     
     try {
       const fileExt = file.name.split('.').pop();
       const fileName = `${Math.random()}.${fileExt}`;
       const filePath = `${fileName}`;
 
-      console.log('Uploading file to Supabase storage...');
+      console.log('Preparing to upload file to Supabase storage...', { filePath });
       const { error: uploadError, data } = await supabase.storage
         .from('provider-images')
         .upload(filePath, file);
@@ -53,6 +53,11 @@ export const useProviderSignup = () => {
     formData: ProviderFormData,
     imageFile: File | null
   ) => {
+    console.log('Starting form submission with data:', { 
+      ...formData, 
+      imageFile: imageFile ? { name: imageFile.name, size: imageFile.size } : null 
+    });
+
     if (!imageFile) {
       toast({
         title: "Error",
@@ -63,40 +68,45 @@ export const useProviderSignup = () => {
     }
 
     setIsSubmitting(true);
-    console.log('Starting form submission process...');
 
     try {
-      // First, upload the image
-      console.log('Uploading provider image...');
+      // Upload image first
+      console.log('Starting image upload...');
       const publicUrl = await uploadProviderImage(imageFile);
       console.log('Image uploaded successfully:', publicUrl);
 
+      // Prepare application data
+      const applicationData = {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        service: formData.service,
+        experience: formData.experience,
+        description: formData.description,
+        hourly_rate: parseFloat(formData.hourlyRate),
+        image_url: publicUrl,
+        status: 'pending'
+      };
+
+      console.log('Submitting application with data:', applicationData);
+
       // Create service provider application
-      console.log('Creating service provider application...');
-      const { error: applicationError } = await supabase
+      const { error: applicationError, data: applicationData } = await supabase
         .from('service_provider_applications')
-        .insert({
-          name: formData.name,
-          email: formData.email,
-          phone: formData.phone,
-          service: formData.service,
-          experience: formData.experience,
-          description: formData.description,
-          hourly_rate: parseFloat(formData.hourlyRate),
-          image_url: publicUrl,
-          status: 'pending'
-        });
+        .insert(applicationData)
+        .select()
+        .single();
 
       if (applicationError) {
         console.error('Application submission error:', applicationError);
         throw new Error('Failed to submit application: ' + applicationError.message);
       }
 
-      console.log('Application submitted successfully');
+      console.log('Application submitted successfully:', applicationData);
 
       // Send application email
       console.log('Sending application email...');
-      const response = await fetch('/functions/v1/send-provider-application', {
+      const emailResponse = await fetch('/functions/v1/send-provider-application', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -107,8 +117,8 @@ export const useProviderSignup = () => {
         }),
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
+      if (!emailResponse.ok) {
+        const errorData = await emailResponse.json();
         console.error('Email sending error:', errorData);
         throw new Error(errorData.details || 'Failed to send application email');
       }
