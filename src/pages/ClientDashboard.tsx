@@ -60,17 +60,16 @@ const ClientDashboard = () => {
         .from('service_bookings')
         .select(`
           *,
-          service_providers (
-            service_type,
-            hourly_rate,
-            image_url
-          )
+          service_providers (*)
         `)
         .eq('user_id', userId)
         .order('service_date', { ascending: false });
 
       if (error) throw error;
-      setBookings(data || []);
+      
+      // Explicitly type the data as ServiceBookingWithProvider[]
+      const typedData = data as unknown as ServiceBookingWithProvider[];
+      setBookings(typedData);
     } catch (error) {
       console.error('Error fetching bookings:', error);
       setError('Failed to load booking data');
