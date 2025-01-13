@@ -110,7 +110,6 @@ export const useProviderSignup = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${supabase.auth.getSession()}`
         },
         body: JSON.stringify({
           ...formData,
