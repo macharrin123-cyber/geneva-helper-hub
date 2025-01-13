@@ -75,7 +75,7 @@ export const useProviderSignup = () => {
       const publicUrl = await uploadProviderImage(imageFile);
       console.log('Image uploaded successfully:', publicUrl);
 
-      // Prepare application data - ensure all required fields are present and properly formatted
+      // Prepare application data
       const applicationData = {
         name: formData.name.trim(),
         email: formData.email.trim(),
@@ -90,11 +90,11 @@ export const useProviderSignup = () => {
 
       console.log('Submitting application with data:', applicationData);
 
-      // Create service provider application with explicit column selection
+      // Create service provider application
       const { error: applicationError, data: submittedApplication } = await supabase
         .from('service_provider_applications')
         .insert([applicationData])
-        .select()
+        .select('*')
         .single();
 
       if (applicationError) {
@@ -110,6 +110,7 @@ export const useProviderSignup = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${supabase.auth.getSession()}`
         },
         body: JSON.stringify({
           ...formData,
