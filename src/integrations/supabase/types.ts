@@ -215,6 +215,10 @@ export type Database = {
   }
 }
 
+export type ServiceBookingWithProvider = Database['public']['Tables']['service_bookings']['Row'] & {
+  service_providers: Database['public']['Tables']['service_providers']['Row'] | null;
+};
+
 type PublicSchema = Database[Extract<keyof Database, "public">]
 
 export type Tables<
