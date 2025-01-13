@@ -35,10 +35,16 @@ const ProviderDashboard = () => {
 
       if (providerError) throw providerError;
 
+      // Convert the provider ID to a number when querying bookings
+      const providerId = parseInt(providerData.id);
+      if (isNaN(providerId)) {
+        throw new Error('Invalid provider ID format');
+      }
+
       const { data, error } = await supabase
         .from('service_bookings')
         .select('*')
-        .eq('provider_id', providerData.id)
+        .eq('provider_id', providerId)
         .order('service_date', { ascending: true });
 
       if (error) throw error;
