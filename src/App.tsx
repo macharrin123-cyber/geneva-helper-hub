@@ -21,6 +21,7 @@ import ThankYouPage from "./pages/ThankYouPage";
 import ContactPage from "./pages/ContactPage";
 import HowWeWork from "./pages/HowWeWork";
 import ResetPassword from "./pages/ResetPassword";
+import ProviderOnboarding from "./pages/ProviderOnboarding";
 
 const queryClient = new QueryClient();
 
@@ -66,6 +67,7 @@ const AppContent = () => {
           <Route path="/thank-you" element={<ThankYouPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/how-we-work" element={<HowWeWork />} />
+          <Route path="/provider-onboarding" element={<ProviderOnboarding />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
