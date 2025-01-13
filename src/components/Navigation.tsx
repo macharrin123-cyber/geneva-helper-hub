@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Menu, X, HelpingHand, Flag } from "lucide-react";
+import { Menu, X, HelpingHand } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -96,9 +96,8 @@ const Navigation = () => {
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="ml-2 text-xl">
-                  <Flag className="h-5 w-5 text-white hover:text-blue-100" />
-                  <span className="ml-2">{getCurrentFlag()}</span>
+                <Button variant="ghost" size="icon" className="ml-2 text-white hover:text-blue-100">
+                  <span className="text-xl">{getCurrentFlag()}</span>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
