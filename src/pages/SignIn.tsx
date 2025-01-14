@@ -1,42 +1,74 @@
 import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { supabase } from "@/integrations/supabase/client";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import { Shield, Key } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 const SignIn = () => {
   const navigate = useNavigate();
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Check if user is already logged in
     const checkUser = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (session) {
-        navigate("/");
+        await routeUserBasedOnType(session.user.id);
       }
     };
     
     checkUser();
 
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === "SIGNED_IN") {
-        navigate("/");
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      console.log('Auth state changed:', event, session);
+      
+      if (event === "SIGNED_IN" && session) {
+        console.log('User signed in, checking profile type...');
+        await routeUserBasedOnType(session.user.id);
       }
     });
 
     return () => subscription.unsubscribe();
   }, [navigate]);
 
+  const routeUserBasedOnType = async (userId: string) => {
+    try {
+      console.log('Fetching user profile for:', userId);
+      const { data: profile, error: profileError } = await supabase
+        .from('profiles')
+        .select('user_type')
+        .eq('id', userId)
+        .single();
+
+      if (profileError) {
+        console.error('Error fetching profile:', profileError);
+        throw profileError;
+      }
+
+      console.log('User profile:', profile);
+
+      if (profile?.user_type === 'provider') {
+        console.log('Routing to provider dashboard');
+        navigate("/provider-dashboard");
+      } else {
+        console.log('Routing to client dashboard');
+        navigate("/client-dashboard");
+      }
+    } catch (error: any) {
+      console.error('Error in routeUserBasedOnType:', error);
+      setError(error.message);
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50">
       <Navigation />
       <div className="max-w-md mx-auto pt-24 px-4">
-        <div className="bg-white p-8 rounded-xl shadow-lg border border-gray-100">
+        <div className="bg-white p-8 rounded-xl shadow-lg border border-gray-100 transform transition-all duration-300 hover:shadow-xl">
           <div className="flex flex-col items-center mb-8">
-            <div className="bg-primary/10 p-3 rounded-full mb-4">
+            <div className="bg-primary/10 p-3 rounded-full mb-4 transform transition-all duration-300 hover:scale-105">
               <Shield className="h-8 w-8 text-primary" />
             </div>
             <h1 className="text-2xl font-bold text-gray-900 text-center">Welcome Back</h1>
@@ -44,6 +76,12 @@ const SignIn = () => {
               Sign in to access your account
             </p>
           </div>
+          
+          {error && (
+            <Alert variant="destructive" className="mb-6">
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
           
           <Auth
             supabaseClient={supabase}
