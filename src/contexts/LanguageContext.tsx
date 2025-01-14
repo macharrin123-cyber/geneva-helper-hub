@@ -60,6 +60,20 @@ export const translations = {
     'services.providerNotFoundDesc': 'The selected provider could not be found',
     'services.callingProvider': 'Calling Provider',
     'services.connectingWith': 'Connecting you with',
+
+    // Freelance Section
+    'freelance.title': 'Make Extra Income as a Service Provider',
+    'freelance.subtitle': 'Whether you\'re a professional or skilled individual, join our platform to offer your services. Set your own schedule, choose your services, and earn on your terms.',
+    'freelance.flexibleSchedule': 'Flexible Schedule',
+    'freelance.flexibleScheduleDesc': 'Work when it suits you - full-time, part-time, or weekends only',
+    'freelance.setRates': 'Set Your Rates',
+    'freelance.setRatesDesc': 'Choose your own hourly rate and the services you want to offer',
+    'freelance.easyStart': 'Easy to Start',
+    'freelance.easyStartDesc': 'Simple signup process - start earning as soon as you\'re verified',
+    'freelance.joinButton': 'Join as a Service Provider',
+
+    // Reviews Section
+    'reviews.title': 'What Our Community Says',
   },
   fr: {
     // Navigation
@@ -110,6 +124,20 @@ export const translations = {
     'services.providerNotFoundDesc': 'Le prestataire sélectionné n\'a pas pu être trouvé',
     'services.callingProvider': 'Appel du Prestataire',
     'services.connectingWith': 'Connexion avec',
+
+    // Freelance Section
+    'freelance.title': 'Gagnez un Revenu Supplémentaire en tant que Prestataire',
+    'freelance.subtitle': 'Que vous soyez professionnel ou qualifié, rejoignez notre plateforme pour offrir vos services. Définissez votre emploi du temps, choisissez vos services et gagnez selon vos conditions.',
+    'freelance.flexibleSchedule': 'Horaires Flexibles',
+    'freelance.flexibleScheduleDesc': 'Travaillez quand cela vous convient - temps plein, temps partiel ou weekends uniquement',
+    'freelance.setRates': 'Fixez vos Tarifs',
+    'freelance.setRatesDesc': 'Choisissez votre tarif horaire et les services que vous souhaitez proposer',
+    'freelance.easyStart': 'Démarrage Facile',
+    'freelance.easyStartDesc': 'Processus d\'inscription simple - commencez à gagner dès que vous êtes vérifié',
+    'freelance.joinButton': 'Rejoindre en tant que Prestataire',
+
+    // Reviews Section
+    'reviews.title': 'Ce que dit notre Communauté',
   }
 };
 
