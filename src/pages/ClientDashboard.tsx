@@ -31,7 +31,9 @@ const ClientDashboard = () => {
       created_at: '2024-03-15',
       provider_response: 'pending',
       payment_status: 'pending',
-      service_providers: {
+      payment_intent_id: null,
+      address: '123 Main St, San Francisco',
+      provider: {
         id: '1',
         user_id: '2',
         image_url: '/placeholder.svg',
@@ -54,7 +56,10 @@ const ClientDashboard = () => {
       created_at: '2024-03-14',
       provider_response: 'approved',
       payment_status: 'completed',
-      service_providers: {
+      payment_intent_id: null,
+      address: '456 Market St, San Francisco',
+      comments: null,
+      provider: {
         id: '2',
         user_id: '3',
         image_url: '/placeholder.svg',
@@ -98,7 +103,7 @@ const ClientDashboard = () => {
               <Card key={booking.id} className="hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
                 <CardHeader className="border-b border-gray-100">
                   <CardTitle className="flex items-center gap-2">
-                    <span className="text-xl">{booking.service_providers?.service_type} Service</span>
+                    <span className="text-xl">{booking.provider.service_type} Service</span>
                     <span className={`ml-auto text-sm px-3 py-1 rounded-full ${
                       booking.provider_response === 'approved' ? 'bg-green-100 text-green-800' : 
                       booking.provider_response === 'denied' ? 'bg-red-100 text-red-800' : 
@@ -129,7 +134,7 @@ const ClientDashboard = () => {
                         <DollarSign className="w-5 h-5 text-gray-500 mt-1" />
                         <div>
                           <p className="text-sm text-gray-500">Rate</p>
-                          <p className="font-medium">CHF {booking.service_providers?.hourly_rate}/hour</p>
+                          <p className="font-medium">CHF {booking.provider.hourly_rate}/hour</p>
                         </div>
                       </div>
                       <div className="flex items-start gap-2">

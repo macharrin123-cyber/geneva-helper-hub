@@ -52,7 +52,12 @@ const ProviderDashboard = () => {
       }
 
       console.log('Bookings fetched:', data);
-      setBookings(data || []);
+      // Convert the data to match ServiceBooking type
+      const typedBookings: ServiceBooking[] = data.map(booking => ({
+        ...booking,
+        provider_id: booking.provider_id.toString() // Convert number to string
+      }));
+      setBookings(typedBookings);
     } catch (error) {
       console.error('Error in fetchBookings:', error);
       toast({
