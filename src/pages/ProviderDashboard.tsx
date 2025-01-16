@@ -47,7 +47,7 @@ const ProviderDashboard = () => {
       const { data, error } = await supabase
         .from('service_bookings')
         .select('*')
-        .eq('provider_id', parseInt(providerData.id)) // Convert string to number
+        .eq('provider_id', parseInt(providerData.id))
         .order('service_date', { ascending: true });
 
       if (error) {
