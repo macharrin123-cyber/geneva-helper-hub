@@ -1,3 +1,5 @@
+import { Database } from "./database.types";
+
 export type Json =
   | string
   | number
@@ -74,6 +76,41 @@ export type Database = {
           user_type?: Database["public"]["Enums"]["user_type"]
         }
         Relationships: []
+      }
+      provider_availability: {
+        Row: {
+          created_at: string
+          day_of_week: number
+          end_time: string
+          id: string
+          provider_id: string
+          start_time: string
+        }
+        Insert: {
+          created_at?: string
+          day_of_week: number
+          end_time: string
+          id?: string
+          provider_id: string
+          start_time: string
+        }
+        Update: {
+          created_at?: string
+          day_of_week?: number
+          end_time?: string
+          id?: string
+          provider_id?: string
+          start_time?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "provider_availability_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "service_providers"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       service_bookings: {
         Row: {
@@ -212,6 +249,7 @@ export type Database = {
       service_providers: {
         Row: {
           created_at: string | null
+          description: string | null
           hourly_rate: number
           id: string
           image_url: string
@@ -220,6 +258,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string | null
+          description?: string | null
           hourly_rate: number
           id?: string
           image_url: string
@@ -228,6 +267,7 @@ export type Database = {
         }
         Update: {
           created_at?: string | null
+          description?: string | null
           hourly_rate?: number
           id?: string
           image_url?: string
@@ -252,6 +292,13 @@ export type Database = {
     }
   }
 }
+
+export type ServiceProvider = Database["public"]["Tables"]["service_providers"]["Row"];
+export type ServiceBooking = Database["public"]["Tables"]["service_bookings"]["Row"];
+export type ServiceBookingWithProvider = ServiceBooking & {
+  provider: ServiceProvider;
+};
+export type ProviderAvailability = Database["public"]["Tables"]["provider_availability"]["Row"];
 
 type PublicSchema = Database[Extract<keyof Database, "public">]
 
@@ -349,3 +396,4 @@ export type CompositeTypes<
   : PublicCompositeTypeNameOrOptions extends keyof PublicSchema["CompositeTypes"]
     ? PublicSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never
+

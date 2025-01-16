@@ -4,33 +4,25 @@ import { useToast } from "@/hooks/use-toast";
 import Navigation from "@/components/Navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
-import { ServiceBooking } from "@/integrations/supabase/types";
+import { ServiceBooking, ServiceProvider } from "@/integrations/supabase/types";
 import BookingCard from "@/components/dashboard/BookingCard";
 import BookingStats from "@/components/dashboard/BookingStats";
 import BookingTrends from "@/components/dashboard/BookingTrends";
+import AvailabilityCalendar from "@/components/dashboard/AvailabilityCalendar";
+import ProfileEditor from "@/components/dashboard/ProfileEditor";
 
 const ProviderDashboard = () => {
   const [bookings, setBookings] = useState<ServiceBooking[]>([]);
+  const [provider, setProvider] = useState<ServiceProvider | null>(null);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Commenting out auth check for testing
-    // const checkAuth = async () => {
-    //   const { data: { session } } = await supabase.auth.getSession();
-    //   if (!session) {
-    //     navigate('/signin');
-    //     return;
-    //   }
-    //   fetchBookings();
-    // };
-    
-    // checkAuth();
-    fetchBookings(); // Directly fetch bookings without auth check
+    fetchProviderData();
   }, [navigate]);
 
-  const fetchBookings = async () => {
+  const fetchProviderData = async () => {
     try {
       console.log('Fetching provider data...');
       const { data: providerData, error: providerError } = await supabase
@@ -44,12 +36,13 @@ const ProviderDashboard = () => {
       }
 
       console.log('Provider data:', providerData);
-      console.log('Fetching bookings...');
+      setProvider(providerData);
       
+      console.log('Fetching bookings...');
       const { data, error } = await supabase
         .from('service_bookings')
         .select('*')
-        .eq('provider_id', parseInt(providerData.id))
+        .eq('provider_id', providerData.id)
         .order('service_date', { ascending: true });
 
       if (error) {
@@ -63,7 +56,7 @@ const ProviderDashboard = () => {
       console.error('Error in fetchBookings:', error);
       toast({
         title: "Error",
-        description: "Failed to load bookings",
+        description: "Failed to load data",
         variant: "destructive",
       });
     } finally {
@@ -86,7 +79,7 @@ const ProviderDashboard = () => {
         description: `Booking ${response} successfully`,
       });
 
-      fetchBookings();
+      fetchProviderData();
     } catch (error) {
       console.error('Error updating booking:', error);
       toast({
@@ -111,12 +104,18 @@ const ProviderDashboard = () => {
             </div>
           ) : (
             <>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                {provider && <ProfileEditor providerId={provider.id} />}
+                {provider && <AvailabilityCalendar providerId={provider.id} />}
+              </div>
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                 <BookingStats bookings={bookings} />
                 <BookingTrends bookings={bookings} />
               </div>
 
               <div className="grid gap-6">
+                <h2 className="text-xl font-semibold text-gray-900">Recent Bookings</h2>
                 {bookings.map((booking) => (
                   <BookingCard 
                     key={booking.id} 
