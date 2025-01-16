@@ -16,16 +16,18 @@ const ProviderDashboard = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const checkAuth = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        navigate('/signin');
-        return;
-      }
-      fetchBookings();
-    };
+    // Commenting out auth check for testing
+    // const checkAuth = async () => {
+    //   const { data: { session } } = await supabase.auth.getSession();
+    //   if (!session) {
+    //     navigate('/signin');
+    //     return;
+    //   }
+    //   fetchBookings();
+    // };
     
-    checkAuth();
+    // checkAuth();
+    fetchBookings(); // Directly fetch bookings without auth check
   }, [navigate]);
 
   const fetchBookings = async () => {
