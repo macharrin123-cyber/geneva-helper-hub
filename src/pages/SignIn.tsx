@@ -6,15 +6,18 @@ import { useNavigate, Link } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import { Shield, Key } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { useToast } from "@/hooks/use-toast";
 
 const SignIn = () => {
   const navigate = useNavigate();
   const [error, setError] = useState<string | null>(null);
+  const { toast } = useToast();
 
   useEffect(() => {
     const checkUser = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (session) {
+        console.log('User already signed in, checking profile...');
         await routeUserBasedOnType(session.user.id);
       }
     };
@@ -28,6 +31,11 @@ const SignIn = () => {
         console.log('User signed in, checking profile type...');
         await routeUserBasedOnType(session.user.id);
       }
+
+      if (event === "SIGNED_OUT") {
+        console.log('User signed out');
+        setError(null);
+      }
     });
 
     return () => subscription.unsubscribe();
@@ -40,7 +48,7 @@ const SignIn = () => {
         .from('profiles')
         .select('user_type')
         .eq('id', userId)
-        .single();
+        .maybeSingle();
 
       if (profileError) {
         console.error('Error fetching profile:', profileError);
@@ -49,7 +57,19 @@ const SignIn = () => {
 
       console.log('User profile:', profile);
 
-      if (profile?.user_type === 'provider') {
+      if (!profile) {
+        console.log('No profile found, creating new profile...');
+        const { error: insertError } = await supabase
+          .from('profiles')
+          .insert([{ id: userId, user_type: 'client' }]);
+
+        if (insertError) throw insertError;
+        
+        navigate("/client-dashboard");
+        return;
+      }
+
+      if (profile.user_type === 'provider') {
         console.log('Routing to provider dashboard');
         navigate("/provider-dashboard");
       } else {
@@ -59,6 +79,11 @@ const SignIn = () => {
     } catch (error: any) {
       console.error('Error in routeUserBasedOnType:', error);
       setError(error.message);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "There was a problem signing you in. Please try again.",
+      });
     }
   };
 
