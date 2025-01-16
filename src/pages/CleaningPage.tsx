@@ -1,27 +1,38 @@
+import { useEffect, useState } from "react";
 import ServicePage from "@/components/ServicePage";
-
-const providers = [
-  { 
-    id: 10, 
-    name: "Sophie Martin", 
-    rating: 4.8, 
-    hourlyRate: 45, 
-    yearsExperience: 8,
-    phone: "+41 76 234 56 78",
-    image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158"
-  },
-  { 
-    id: 11, 
-    name: "Marc Dubois", 
-    rating: 4.7, 
-    hourlyRate: 40, 
-    yearsExperience: 5,
-    phone: "+41 76 345 67 89",
-    image: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81"
-  },
-];
+import { supabase } from "@/integrations/supabase/client";
 
 const CleaningPage = () => {
+  const [providers, setProviders] = useState([]);
+
+  useEffect(() => {
+    const fetchProviders = async () => {
+      const { data, error } = await supabase
+        .from('service_providers')
+        .select('*')
+        .eq('service_type', 'cleaning');
+      
+      if (error) {
+        console.error('Error fetching cleaning providers:', error);
+        return;
+      }
+
+      const formattedProviders = data.map(provider => ({
+        id: provider.id,
+        name: provider.name || 'Service Provider',
+        rating: 4.5,
+        hourlyRate: provider.hourly_rate,
+        yearsExperience: 5,
+        phone: '+41 76 XXX XX XX',
+        image: provider.image_url
+      }));
+
+      setProviders(formattedProviders);
+    };
+
+    fetchProviders();
+  }, []);
+
   return <ServicePage serviceType="cleaning" providers={providers} />;
 };
 

@@ -1,27 +1,38 @@
+import { useEffect, useState } from "react";
 import ServicePage from "@/components/ServicePage";
-
-const providers = [
-  { 
-    id: 6, 
-    name: "Emma Petit", 
-    rating: 4.8, 
-    hourlyRate: 65, 
-    yearsExperience: 10,
-    phone: "+41 76 678 90 12",
-    image: "/photo-1649972904349-6e44c42644a7"
-  },
-  { 
-    id: 7, 
-    name: "Thomas Dubois", 
-    rating: 4.6, 
-    hourlyRate: 60, 
-    yearsExperience: 7,
-    phone: "+41 76 789 01 23",
-    image: "/photo-1581092795360-fd1ca04f0952"
-  },
-];
+import { supabase } from "@/integrations/supabase/client";
 
 const PaintingPage = () => {
+  const [providers, setProviders] = useState([]);
+
+  useEffect(() => {
+    const fetchProviders = async () => {
+      const { data, error } = await supabase
+        .from('service_providers')
+        .select('*')
+        .eq('service_type', 'painting');
+      
+      if (error) {
+        console.error('Error fetching painting providers:', error);
+        return;
+      }
+
+      const formattedProviders = data.map(provider => ({
+        id: provider.id,
+        name: provider.name || 'Service Provider',
+        rating: 4.5,
+        hourlyRate: provider.hourly_rate,
+        yearsExperience: 5,
+        phone: '+41 76 XXX XX XX',
+        image: provider.image_url
+      }));
+
+      setProviders(formattedProviders);
+    };
+
+    fetchProviders();
+  }, []);
+
   return <ServicePage serviceType="painting" providers={providers} />;
 };
 
