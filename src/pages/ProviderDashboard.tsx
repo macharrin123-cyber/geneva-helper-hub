@@ -10,6 +10,7 @@ import BookingStats from "@/components/dashboard/BookingStats";
 import BookingTrends from "@/components/dashboard/BookingTrends";
 import AvailabilityCalendar from "@/components/dashboard/AvailabilityCalendar";
 import ProfileEditor from "@/components/dashboard/ProfileEditor";
+import { LayoutDashboard, Loader2 } from "lucide-react";
 
 const ProviderDashboard = () => {
   const [bookings, setBookings] = useState<ServiceBooking[]>([]);
@@ -91,48 +92,71 @@ const ProviderDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       <Navigation />
       
-      <main className="pt-20 pb-12">
-        <div className="max-w-7xl mx-auto px-4">
-          <h1 className="text-3xl font-bold text-gray-900 mb-8">Provider Dashboard</h1>
+      <main className="pt-20 pb-12 px-4">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex items-center gap-3 mb-8">
+            <LayoutDashboard className="h-8 w-8 text-primary" />
+            <h1 className="text-3xl font-bold text-gray-900">Provider Dashboard</h1>
+          </div>
           
           {loading ? (
             <div className="flex justify-center items-center min-h-[200px]">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+              <div className="flex items-center gap-2 text-primary">
+                <Loader2 className="h-6 w-6 animate-spin" />
+                <span>Loading dashboard...</span>
+              </div>
             </div>
           ) : (
-            <>
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-                {provider && <ProfileEditor providerId={provider.id} />}
-                {provider && <AvailabilityCalendar providerId={provider.id} />}
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                <BookingStats bookings={bookings} />
-                <BookingTrends bookings={bookings} />
-              </div>
-
-              <div className="grid gap-6">
-                <h2 className="text-xl font-semibold text-gray-900">Recent Bookings</h2>
-                {bookings.map((booking) => (
-                  <BookingCard 
-                    key={booking.id} 
-                    booking={booking}
-                    onResponse={handleResponse}
-                  />
-                ))}
-
-                {bookings.length === 0 && (
-                  <Card>
-                    <CardContent className="py-8">
-                      <p className="text-center text-gray-500">No booking requests yet</p>
-                    </CardContent>
-                  </Card>
+            <div className="space-y-8 animate-fade-in">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {provider && (
+                  <div className="transition-all duration-300 hover:translate-y-[-2px] hover:shadow-lg">
+                    <ProfileEditor providerId={provider.id} />
+                  </div>
+                )}
+                {provider && (
+                  <div className="transition-all duration-300 hover:translate-y-[-2px] hover:shadow-lg">
+                    <AvailabilityCalendar providerId={provider.id} />
+                  </div>
                 )}
               </div>
-            </>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="transition-all duration-300 hover:translate-y-[-2px] hover:shadow-lg">
+                  <BookingStats bookings={bookings} />
+                </div>
+                <div className="transition-all duration-300 hover:translate-y-[-2px] hover:shadow-lg">
+                  <BookingTrends bookings={bookings} />
+                </div>
+              </div>
+
+              <div className="space-y-6">
+                <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
+                  Recent Bookings
+                </h2>
+                <div className="grid gap-6">
+                  {bookings.map((booking) => (
+                    <div key={booking.id} className="transition-all duration-300 hover:translate-y-[-2px] hover:shadow-lg">
+                      <BookingCard 
+                        booking={booking}
+                        onResponse={handleResponse}
+                      />
+                    </div>
+                  ))}
+
+                  {bookings.length === 0 && (
+                    <Card className="border border-gray-200 shadow-sm">
+                      <CardContent className="py-8">
+                        <p className="text-center text-gray-500">No booking requests yet</p>
+                      </CardContent>
+                    </Card>
+                  )}
+                </div>
+              </div>
+            </div>
           )}
         </div>
       </main>

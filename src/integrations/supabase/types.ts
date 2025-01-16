@@ -1,22 +1,18 @@
-import { Database } from "./database.types";
+import { Database } from './database.types';
 
-export type Tables<T extends keyof Database['public']['Tables']> = Database['public']['Tables'][T]['Row'];
-export type Enums<T extends keyof Database['public']['Enums']> = Database['public']['Enums'][T];
+export type { Database };
 
-// Export table types
-export type ServiceProvider = Tables<'service_providers'>;
-export type ServiceBooking = Tables<'service_bookings'>;
-export type ProviderAvailability = Tables<'provider_availability'>;
-
-// Extended type for bookings with provider info
-export type ServiceBookingWithProvider = ServiceBooking & {
-  provider: ServiceProvider;
+export type ServiceProvider = Database['public']['Tables']['service_providers']['Row'];
+export type ServiceBooking = Database['public']['Tables']['service_bookings']['Row'];
+export type ProviderAvailability = {
+  id: string;
+  provider_id: string;
+  day_of_week: number;
+  start_time: string;
+  end_time: string;
+  created_at?: string;
 };
 
-export type Json =
-  | string
-  | number
-  | boolean
-  | null
-  | { [key: string]: Json | undefined }
-  | Json[];
+export type ServiceBookingWithProvider = ServiceBooking & {
+  service_providers: ServiceProvider;
+};
