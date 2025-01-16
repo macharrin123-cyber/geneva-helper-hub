@@ -43,7 +43,7 @@ const ProviderDashboard = () => {
       const { data, error } = await supabase
         .from('service_bookings')
         .select('*')
-        .eq('provider_id', providerData.id)
+        .eq('provider_id', parseInt(providerData.id))
         .order('service_date', { ascending: true });
 
       if (error) {
@@ -52,10 +52,9 @@ const ProviderDashboard = () => {
       }
 
       console.log('Bookings fetched:', data);
-      // Convert the data to match ServiceBooking type
       const typedBookings: ServiceBooking[] = data.map(booking => ({
         ...booking,
-        provider_id: booking.provider_id.toString() // Convert number to string
+        provider_id: booking.provider_id.toString()
       }));
       setBookings(typedBookings);
     } catch (error) {
