@@ -253,40 +253,6 @@ export type Database = {
   }
 }
 
-// Define the ServiceProvider type based on the service_providers table schema
-export type ServiceProvider = {
-  id: string;
-  user_id: string | null;
-  image_url: string;
-  hourly_rate: number;
-  service_type: string;
-  created_at: string | null;
-};
-
-// Define the ServiceBooking type based on the service_bookings table schema
-export type ServiceBooking = {
-  id: string;
-  user_id: string | null;
-  provider_id: number;
-  service_date: string;
-  service_time: string;
-  address: string;
-  comments: string | null;
-  status: string | null;
-  created_at: string | null;
-  street_address: string;
-  city: string;
-  postal_code: string;
-  payment_status: string | null;
-  payment_intent_id: string | null;
-  provider_response: string | null;
-};
-
-// Define ServiceBookingWithProvider type that extends ServiceBooking with provider details
-export type ServiceBookingWithProvider = ServiceBooking & {
-  provider: ServiceProvider;
-};
-
 type PublicSchema = Database[Extract<keyof Database, "public">]
 
 export type Tables<
