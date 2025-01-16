@@ -40,7 +40,8 @@ const ClientDashboard = () => {
         hourly_rate: 45,
         service_type: 'Cleaning',
         created_at: '2024-01-01',
-        description: 'Professional cleaning service'
+        description: 'Professional cleaning service',
+        name: 'John Doe'  // Added name property
       }
     },
     {
@@ -66,7 +67,8 @@ const ClientDashboard = () => {
         hourly_rate: 60,
         service_type: 'Plumbing',
         created_at: '2024-01-01',
-        description: 'Expert plumbing services'
+        description: 'Expert plumbing services',
+        name: 'Jane Smith'  // Added name property
       }
     }
   ];
