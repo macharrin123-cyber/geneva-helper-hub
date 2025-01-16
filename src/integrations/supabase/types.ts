@@ -1,5 +1,3 @@
-import { Database } from "./database.types";
-
 export type Json =
   | string
   | number
@@ -293,13 +291,6 @@ export type Database = {
   }
 }
 
-export type ServiceProvider = Database["public"]["Tables"]["service_providers"]["Row"];
-export type ServiceBooking = Database["public"]["Tables"]["service_bookings"]["Row"];
-export type ServiceBookingWithProvider = ServiceBooking & {
-  provider: ServiceProvider;
-};
-export type ProviderAvailability = Database["public"]["Tables"]["provider_availability"]["Row"];
-
 type PublicSchema = Database[Extract<keyof Database, "public">]
 
 export type Tables<
@@ -396,4 +387,3 @@ export type CompositeTypes<
   : PublicCompositeTypeNameOrOptions extends keyof PublicSchema["CompositeTypes"]
     ? PublicSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never
-
