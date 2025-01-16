@@ -251,6 +251,7 @@ export type Database = {
           hourly_rate: number
           id: string
           image_url: string
+          name: string
           service_type: string
           user_id: string | null
         }
@@ -260,6 +261,7 @@ export type Database = {
           hourly_rate: number
           id?: string
           image_url: string
+          name?: string
           service_type: string
           user_id?: string | null
         }
@@ -269,6 +271,7 @@ export type Database = {
           hourly_rate?: number
           id?: string
           image_url?: string
+          name?: string
           service_type?: string
           user_id?: string | null
         }

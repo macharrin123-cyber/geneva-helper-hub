@@ -30,7 +30,7 @@ const CarpentryPage = () => {
 
       const formattedProviders = (data as ServiceProvider[]).map(provider => ({
         id: parseInt(provider.id),
-        name: 'Service Provider', // Default name since it's not in the database
+        name: provider.name,
         rating: 4.5, // Default rating
         hourlyRate: provider.hourly_rate,
         yearsExperience: 5, // Default experience
