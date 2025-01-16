@@ -2,9 +2,9 @@ import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { supabase } from "@/integrations/supabase/client";
 import { useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Navigation from "@/components/Navigation";
-import { Shield, Key } from "lucide-react";
+import { Shield } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useToast } from "@/hooks/use-toast";
 
@@ -170,23 +170,6 @@ const SignIn = () => {
             providers={[]}
             redirectTo={window.location.origin}
           />
-          
-          <div className="mt-6 text-center space-y-4">
-            <Link 
-              to="/reset-password" 
-              className="text-sm text-gray-600 hover:text-primary transition-colors duration-200 flex items-center justify-center gap-2"
-            >
-              <Key className="h-4 w-4" />
-              Forgot your password?
-            </Link>
-            
-            <p className="text-sm text-gray-500">
-              Don't have an account?{' '}
-              <Link to="/signup" className="text-primary hover:text-primary/80 font-medium">
-                Sign up
-              </Link>
-            </p>
-          </div>
         </div>
       </div>
     </div>
