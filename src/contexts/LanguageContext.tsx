@@ -19,6 +19,11 @@ export const translations = {
     'nav.signIn': 'Sign In',
     'nav.signOut': 'Sign Out',
     'nav.becomeProvider': 'Become a Provider',
+    'nav.aboutUs': 'About Us',
+
+    // About page
+    'about.title': 'About Us',
+    'about.description': 'At Helpify, we believe in creating a community where finding help is as seamless and trustworthy as asking a friend. We exist to empower busy individuals and families in Geneva by connecting them with reliable assistance, so they can focus on what truly matters in their lives.',
 
     // Home page
     'home.title': 'Find Local Services in Geneva',
@@ -83,6 +88,11 @@ export const translations = {
     'nav.signIn': 'Connexion',
     'nav.signOut': 'Déconnexion',
     'nav.becomeProvider': 'Devenir prestataire',
+    'nav.aboutUs': 'À propos',
+
+    // About page
+    'about.title': 'À propos de nous',
+    'about.description': 'Chez Helpify, nous croyons en la création d\'une communauté où trouver de l\'aide est aussi simple et fiable que de demander à un ami. Nous existons pour permettre aux individus et aux familles occupés de Genève de se connecter avec une assistance fiable, afin qu\'ils puissent se concentrer sur ce qui compte vraiment dans leur vie.',
 
     // Home page
     'home.title': 'Trouvez des services locaux à Genève',

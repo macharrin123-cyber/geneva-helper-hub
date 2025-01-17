@@ -72,6 +72,9 @@ const Navigation = () => {
             <Link to="/how-we-work" className="text-white hover:text-blue-100 px-3 py-2 rounded-md">
               {t('nav.howWeWork')}
             </Link>
+            <Link to="/about-us" className="text-white hover:text-blue-100 px-3 py-2 rounded-md">
+              {t('nav.aboutUs')}
+            </Link>
             <Link to="/contact" className="text-white hover:text-blue-100 px-3 py-2 rounded-md">
               {t('nav.contact')}
             </Link>
@@ -201,6 +204,13 @@ const Navigation = () => {
                 onClick={() => setIsOpen(false)}
               >
                 {t('nav.howWeWork')}
+              </Link>
+              <Link
+                to="/about-us"
+                className="block text-white hover:text-blue-100 px-3 py-2 rounded-md"
+                onClick={() => setIsOpen(false)}
+              >
+                {t('nav.aboutUs')}
               </Link>
               <Link
                 to="/contact"

@@ -22,6 +22,7 @@ import ContactPage from "./pages/ContactPage";
 import HowWeWork from "./pages/HowWeWork";
 import ResetPassword from "./pages/ResetPassword";
 import ProviderOnboarding from "./pages/ProviderOnboarding";
+import AboutUs from "./pages/AboutUs";
 
 const queryClient = new QueryClient();
 
@@ -68,6 +69,7 @@ const AppContent = () => {
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/how-we-work" element={<HowWeWork />} />
           <Route path="/provider-onboarding" element={<ProviderOnboarding />} />
+          <Route path="/about-us" element={<AboutUs />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
