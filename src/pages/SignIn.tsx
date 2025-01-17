@@ -11,6 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 const SignIn = () => {
   const navigate = useNavigate();
   const [error, setError] = useState<string | null>(null);
+  const [view, setView] = useState<'sign_in' | 'sign_up'>('sign_in');
   const { toast } = useToast();
 
   useEffect(() => {
@@ -96,10 +97,21 @@ const SignIn = () => {
             <div className="bg-primary/10 p-3 rounded-full mb-4 transform transition-all duration-300 hover:scale-105">
               <Shield className="h-8 w-8 text-primary" />
             </div>
-            <h1 className="text-2xl font-bold text-gray-900 text-center">Join Our Community</h1>
-            <p className="text-gray-500 mt-2 text-center max-w-sm">
-              Sign up to start earning money and become part of Geneva's most trusted service network
-            </p>
+            {view === 'sign_up' ? (
+              <>
+                <h1 className="text-2xl font-bold text-gray-900 text-center">Join Our Community</h1>
+                <p className="text-gray-500 mt-2 text-center max-w-sm">
+                  Sign up to start earning money and become part of Geneva's most trusted service network
+                </p>
+              </>
+            ) : (
+              <>
+                <h1 className="text-2xl font-bold text-gray-900 text-center">Welcome Back</h1>
+                <p className="text-gray-500 mt-2 text-center max-w-sm">
+                  Sign in to access your account and continue providing excellent services
+                </p>
+              </>
+            )}
           </div>
           
           {error && (
@@ -110,6 +122,8 @@ const SignIn = () => {
           
           <Auth
             supabaseClient={supabase}
+            view={view}
+            onViewChange={newView => setView(newView as 'sign_in' | 'sign_up')}
             appearance={{
               theme: ThemeSupa,
               variables: {
