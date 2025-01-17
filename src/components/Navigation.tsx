@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Menu, X, HelpingHand } from "lucide-react";
+import { Menu, X, HelpingHand, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -78,9 +78,38 @@ const Navigation = () => {
 
             {!user ? (
               <>
-                <Link to="/signin" className="text-white hover:text-blue-100 px-3 py-2 rounded-md">
-                  {t('nav.signIn')}
-                </Link>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      className="text-white hover:text-blue-100"
+                    >
+                      <User className="h-5 w-5" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent 
+                    align="end" 
+                    className="w-48 bg-white/95 backdrop-blur-sm border border-gray-200"
+                  >
+                    <DropdownMenuItem asChild>
+                      <Link 
+                        to="/signin?type=client" 
+                        className="flex items-center cursor-pointer hover:bg-blue-50"
+                      >
+                        Sign in as Client
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link 
+                        to="/signin?type=provider" 
+                        className="flex items-center cursor-pointer hover:bg-blue-50"
+                      >
+                        Sign in as Provider
+                      </Link>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
                 <Link to="/signup" className="bg-white text-[#1E3A8A] px-4 py-2 rounded-md hover:bg-blue-50">
                   {t('nav.becomeProvider')}
                 </Link>
