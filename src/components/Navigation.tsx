@@ -198,22 +198,52 @@ const Navigation = () => {
               </div>
 
               {!user ? (
-                <>
-                  <Link
-                    to="/signin"
-                    className="block text-white hover:text-blue-100 px-3 py-2 rounded-md"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    {t('nav.signIn')}
-                  </Link>
+                <div className="px-3 py-2">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button 
+                        variant="ghost" 
+                        size="sm"
+                        className="w-full flex items-center justify-between text-white hover:text-blue-100"
+                      >
+                        <span className="flex items-center gap-2">
+                          <User className="h-5 w-5" />
+                          {t('nav.signIn')}
+                        </span>
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent 
+                      align="start"
+                      className="w-48 bg-white/95 backdrop-blur-sm border border-gray-200"
+                    >
+                      <DropdownMenuItem asChild>
+                        <Link 
+                          to="/signin?type=client" 
+                          className="flex items-center cursor-pointer hover:bg-blue-50"
+                          onClick={() => setIsOpen(false)}
+                        >
+                          Sign in as Client
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem asChild>
+                        <Link 
+                          to="/signin?type=provider" 
+                          className="flex items-center cursor-pointer hover:bg-blue-50"
+                          onClick={() => setIsOpen(false)}
+                        >
+                          Sign in as Provider
+                        </Link>
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                   <Link
                     to="/signup"
-                    className="block bg-white text-[#1E3A8A] px-4 py-2 rounded-md hover:bg-blue-50"
+                    className="mt-2 block bg-white text-[#1E3A8A] px-4 py-2 rounded-md hover:bg-blue-50 text-center"
                     onClick={() => setIsOpen(false)}
                   >
                     {t('nav.becomeProvider')}
                   </Link>
-                </>
+                </div>
               ) : (
                 <button
                   onClick={() => {
