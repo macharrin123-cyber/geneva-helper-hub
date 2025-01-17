@@ -2,13 +2,6 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
 
 interface SearchSectionProps {
   searchTerm: string;
@@ -17,31 +10,17 @@ interface SearchSectionProps {
 }
 
 const SearchSection = ({ searchTerm, onSearchChange, onSearchSubmit }: SearchSectionProps) => {
-  const images = [
-    "/lovable-uploads/f31f1b42-d528-48c6-b2e5-c0fc34ef5ccc.png",
-    "/lovable-uploads/40b5fb57-dc21-41d9-9c43-e52b1471f8fb.png",
-    "/lovable-uploads/c6d84094-8544-4ec0-a070-4ab3f541071a.png"
-  ];
-
   return (
     <div className="relative h-[600px] -mt-24 w-screen left-[50%] right-[50%] ml-[-50vw] mr-[-50vw]">
-      {/* Carousel with background images */}
-      <Carousel className="w-full h-full" opts={{ loop: true }}>
-        <CarouselContent className="h-full">
-          {images.map((image, index) => (
-            <CarouselItem key={index} className="h-full">
-              <div 
-                className="absolute inset-0 bg-cover bg-center transition-opacity duration-500"
-                style={{ backgroundImage: `url("${image}")` }}
-              >
-                <div className="absolute inset-0 bg-black/50" /> {/* Dark overlay */}
-              </div>
-            </CarouselItem>
-          ))}
-        </CarouselContent>
-        <CarouselPrevious className="left-4" />
-        <CarouselNext className="right-4" />
-      </Carousel>
+      {/* Background image with overlay */}
+      <div 
+        className="absolute inset-0 bg-cover bg-top"
+        style={{
+          backgroundImage: 'url("/lovable-uploads/f31f1b42-d528-48c6-b2e5-c0fc34ef5ccc.png")',
+        }}
+      >
+        <div className="absolute inset-0 bg-black/50" /> {/* Dark overlay */}
+      </div>
 
       {/* Content */}
       <div className="relative z-10 max-w-4xl mx-auto px-4 text-center h-full flex flex-col justify-center">
