@@ -9,27 +9,32 @@ const AboutUs = () => {
     {
       title: "Community",
       description: "Helpify brings people together, creating a network where everyone feels valued and supported.",
-      icon: "🤝"
+      icon: "🤝",
+      gradient: "linear-gradient(225deg, #FFE29F 0%, #FFA99F 48%, #FF719A 100%)"
     },
     {
       title: "Trust",
       description: "A foundation of reliability and integrity ensures users and helpers can confidently engage.",
-      icon: "🛡️"
+      icon: "🛡️",
+      gradient: "linear-gradient(to right, #243949 0%, #517fa4 100%)"
     },
     {
       title: "Convenience",
       description: "Simplifying everyday challenges, freeing up time for users to focus on what matters most.",
-      icon: "⚡"
+      icon: "⚡",
+      gradient: "linear-gradient(to top, #accbee 0%, #e7f0fd 100%)"
     },
     {
       title: "Empowerment",
       description: "Offering opportunities for supplemental income and purpose-driven engagement for helpers.",
-      icon: "💪"
+      icon: "💪",
+      gradient: "linear-gradient(90deg, hsla(277, 75%, 84%, 1) 0%, hsla(297, 50%, 51%, 1) 100%)"
     },
     {
       title: "Belonging",
       description: "Building a sense of unity and collaboration in Geneva's diverse population.",
-      icon: "🌟"
+      icon: "🌟",
+      gradient: "linear-gradient(90deg, hsla(46, 73%, 75%, 1) 0%, hsla(176, 73%, 88%, 1) 100%)"
     }
   ];
 
@@ -102,17 +107,19 @@ const AboutUs = () => {
                   <motion.div
                     key={value.title}
                     variants={itemVariants}
-                    whileHover={{ scale: 1.03 }}
-                    className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 border border-gray-100"
+                    whileHover={{ scale: 1.03, rotate: 1 }}
+                    className="p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 backdrop-blur-sm"
                     style={{
-                      background: `linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%)`,
+                      background: value.gradient,
                     }}
                   >
-                    <div className="text-4xl mb-4">{value.icon}</div>
-                    <h3 className="text-xl font-semibold mb-2 text-primary">
+                    <div className="text-4xl mb-4 transform hover:scale-110 transition-transform duration-200">
+                      {value.icon}
+                    </div>
+                    <h3 className="text-xl font-semibold mb-2 text-white">
                       {value.title}
                     </h3>
-                    <p className="text-gray-600 leading-relaxed">
+                    <p className="text-white/90 leading-relaxed">
                       {value.description}
                     </p>
                   </motion.div>
