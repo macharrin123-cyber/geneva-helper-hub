@@ -1,14 +1,3 @@
-import { Database } from "./database.types";
-
-export type ServiceProvider = Database["public"]["Tables"]["service_providers"]["Row"];
-export type ServiceBooking = Database["public"]["Tables"]["service_bookings"]["Row"];
-export type Profile = Database["public"]["Tables"]["profiles"]["Row"];
-export type ProviderAvailability = Database["public"]["Tables"]["provider_availability"]["Row"];
-
-export type ServiceBookingWithProvider = ServiceBooking & {
-  provider: ServiceProvider;
-};
-
 export type Json =
   | string
   | number
@@ -160,7 +149,7 @@ export type Database = {
           address?: string
           city?: string
           comments?: string | null
-          created_at?: string
+          created_at?: string | null
           id?: string
           payment_intent_id?: string | null
           payment_status?: string | null
@@ -272,7 +261,7 @@ export type Database = {
           hourly_rate: number
           id?: string
           image_url: string
-          name: string
+          name?: string
           service_type: string
           user_id?: string | null
         }
@@ -314,7 +303,7 @@ export type Tables<
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
     ? keyof (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
         Database[PublicTableNameOrOptions["schema"]]["Views"])
-    : never,
+    : never = never,
 > = PublicTableNameOrOptions extends { schema: keyof Database }
   ? (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
       Database[PublicTableNameOrOptions["schema"]]["Views"])[TableName] extends {
@@ -326,10 +315,10 @@ export type Tables<
         PublicSchema["Views"])
     ? (PublicSchema["Tables"] &
         PublicSchema["Views"])[PublicTableNameOrOptions] extends {
-      Row: infer R
-    }
-    ? R
-    : never
+        Row: infer R
+      }
+      ? R
+      : never
     : never
 
 export type TablesInsert<
@@ -368,10 +357,10 @@ export type TablesUpdate<
     : never
   : PublicTableNameOrOptions extends keyof PublicSchema["Tables"]
     ? PublicSchema["Tables"][PublicTableNameOrOptions] extends {
-      Update: infer U
-    }
-    ? U
-    : never
+        Update: infer U
+      }
+      ? U
+      : never
     : never
 
 export type Enums<
