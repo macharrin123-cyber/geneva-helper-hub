@@ -123,7 +123,6 @@ const SignIn = () => {
           <Auth
             supabaseClient={supabase}
             view={view}
-            onViewChange={newView => setView(newView as 'sign_in' | 'sign_up')}
             appearance={{
               theme: ThemeSupa,
               variables: {
