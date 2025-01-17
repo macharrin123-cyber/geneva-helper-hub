@@ -140,7 +140,41 @@ const Navigation = () => {
             </DropdownMenu>
           </div>
 
-          <div className="md:hidden flex items-center">
+          <div className="md:hidden flex items-center space-x-2">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button 
+                  variant="ghost" 
+                  size="icon"
+                  className="text-white hover:text-blue-100"
+                >
+                  <User className="h-5 w-5" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent 
+                align="end"
+                className="w-48 bg-white/95 backdrop-blur-sm border border-gray-200"
+              >
+                <DropdownMenuItem asChild>
+                  <Link 
+                    to="/signin?type=client" 
+                    className="flex items-center cursor-pointer hover:bg-blue-50"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    Sign in as Client
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link 
+                    to="/signin?type=provider" 
+                    className="flex items-center cursor-pointer hover:bg-blue-50"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    Sign in as Provider
+                  </Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="text-white hover:text-blue-100"
