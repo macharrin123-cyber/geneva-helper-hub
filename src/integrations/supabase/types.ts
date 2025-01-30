@@ -248,30 +248,39 @@ export type Database = {
         Row: {
           created_at: string | null
           description: string | null
+          email: string | null
+          experience: string | null
           hourly_rate: number
           id: string
           image_url: string
           name: string
+          phone: string | null
           service_type: string
           user_id: string | null
         }
         Insert: {
           created_at?: string | null
           description?: string | null
+          email?: string | null
+          experience?: string | null
           hourly_rate: number
           id?: string
           image_url: string
           name?: string
+          phone?: string | null
           service_type: string
           user_id?: string | null
         }
         Update: {
           created_at?: string | null
           description?: string | null
+          email?: string | null
+          experience?: string | null
           hourly_rate?: number
           id?: string
           image_url?: string
           name?: string
+          phone?: string | null
           service_type?: string
           user_id?: string | null
         }

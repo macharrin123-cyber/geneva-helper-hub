@@ -13,17 +13,45 @@ const SearchResults = ({ searchTerm }: SearchResultsProps) => {
     queryKey: ["providers", searchTerm],
     queryFn: async () => {
       console.log("Fetching providers for search term:", searchTerm);
-      const { data, error } = await supabase
+      
+      // First, get regular service providers
+      const { data: serviceProviders, error: spError } = await supabase
         .from("service_providers")
         .select("*")
         .ilike("service_type", `%${searchTerm}%`);
 
-      if (error) {
-        console.error("Error fetching providers:", error);
-        throw error;
+      if (spError) {
+        console.error("Error fetching service providers:", spError);
+        throw spError;
       }
-      console.log("Fetched providers:", data);
-      return data as ServiceProvider[];
+
+      // Then, get approved applications
+      const { data: approvedApplications, error: appError } = await supabase
+        .from("service_provider_applications")
+        .select("*")
+        .eq("status", "approved")
+        .ilike("service", `%${searchTerm}%`);
+
+      if (appError) {
+        console.error("Error fetching approved applications:", appError);
+        throw appError;
+      }
+
+      // Convert applications to provider format
+      const applicationProviders = approvedApplications.map(app => ({
+        id: app.id,
+        name: app.name,
+        service_type: app.service,
+        hourly_rate: app.hourly_rate,
+        image_url: app.image_url,
+        description: app.description,
+        created_at: app.created_at
+      }));
+
+      // Combine both arrays
+      const allProviders = [...serviceProviders, ...applicationProviders];
+      console.log("Fetched providers:", allProviders);
+      return allProviders as ServiceProvider[];
     },
     enabled: searchTerm.length > 0,
   });
@@ -65,11 +93,16 @@ const SearchResults = ({ searchTerm }: SearchResultsProps) => {
           />
           <div className="p-4">
             <h3 className="text-lg font-semibold text-gray-900 mb-2">
-              {provider.service_type}
+              {provider.name || provider.service_type}
             </h3>
             <p className="text-gray-600">
               ${provider.hourly_rate}/hour
             </p>
+            {provider.description && (
+              <p className="text-gray-500 mt-2 text-sm">
+                {provider.description}
+              </p>
+            )}
           </div>
         </div>
       ))}

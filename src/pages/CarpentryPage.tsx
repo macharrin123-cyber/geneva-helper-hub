@@ -18,17 +18,43 @@ const CarpentryPage = () => {
 
   useEffect(() => {
     const fetchProviders = async () => {
-      const { data, error } = await supabase
+      // Fetch regular service providers
+      const { data: serviceProviders, error: spError } = await supabase
         .from('service_providers')
         .select('*')
         .eq('service_type', 'carpentry');
       
-      if (error) {
-        console.error('Error fetching carpentry providers:', error);
+      if (spError) {
+        console.error('Error fetching carpentry providers:', spError);
         return;
       }
 
-      const formattedProviders = (data as ServiceProvider[]).map(provider => ({
+      // Fetch approved applications
+      const { data: approvedApplications, error: appError } = await supabase
+        .from('service_provider_applications')
+        .select('*')
+        .eq('service', 'carpentry')
+        .eq('status', 'approved');
+
+      if (appError) {
+        console.error('Error fetching approved applications:', appError);
+        return;
+      }
+
+      // Combine and format providers
+      const allProviders = [
+        ...serviceProviders,
+        ...approvedApplications.map(app => ({
+          id: app.id,
+          name: app.name,
+          service_type: app.service,
+          hourly_rate: app.hourly_rate,
+          image_url: app.image_url,
+          description: app.description
+        }))
+      ];
+
+      const formattedProviders = allProviders.map(provider => ({
         id: parseInt(provider.id),
         name: provider.name,
         rating: 4.5, // Default rating
