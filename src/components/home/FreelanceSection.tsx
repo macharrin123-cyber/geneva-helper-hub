@@ -4,7 +4,7 @@ import { ArrowRight, Clock, DollarSign, Sparkles } from "lucide-react";
 
 const FreelanceSection = () => {
   return (
-    <div className="mt-20 mb-16 bg-gradient-to-br from-blue-100 to-white rounded-xl shadow-lg overflow-hidden">
+    <div className="mt-20 mb-16 bg-gradient-to-br from-blue-200 to-white rounded-xl shadow-2xl overflow-hidden border border-blue-100 transform transition-all duration-300 hover:shadow-3xl">
       <div className="max-w-7xl mx-auto p-8 md:p-12">
         <div className="text-center max-w-3xl mx-auto">
           <h2 className="text-3xl md:text-4xl font-bold text-[#0C4A6E] mb-6 font-poppins">
@@ -16,7 +16,7 @@ const FreelanceSection = () => {
           </p>
           
           <div className="grid md:grid-cols-3 gap-8 mb-12">
-            <div className="bg-white p-8 rounded-xl shadow-md transform transition-all duration-300 hover:scale-105 hover:shadow-xl">
+            <div className="bg-white p-8 rounded-xl shadow-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl">
               <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Clock className="h-6 w-6 text-[#0C4A6E]" />
               </div>
@@ -24,7 +24,7 @@ const FreelanceSection = () => {
               <p className="text-gray-700">Work when it suits you - full-time, part-time, or weekends only</p>
             </div>
             
-            <div className="bg-white p-8 rounded-xl shadow-md transform transition-all duration-300 hover:scale-105 hover:shadow-xl">
+            <div className="bg-white p-8 rounded-xl shadow-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl">
               <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <DollarSign className="h-6 w-6 text-green-600" />
               </div>
@@ -32,7 +32,7 @@ const FreelanceSection = () => {
               <p className="text-gray-700">Choose your own hourly rate and the services you want to offer</p>
             </div>
             
-            <div className="bg-white p-8 rounded-xl shadow-md transform transition-all duration-300 hover:scale-105 hover:shadow-xl">
+            <div className="bg-white p-8 rounded-xl shadow-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl">
               <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Sparkles className="h-6 w-6 text-purple-600" />
               </div>
