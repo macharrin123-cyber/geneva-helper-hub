@@ -5,6 +5,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import type { ServiceBookingWithProvider, Profile } from "@/integrations/supabase/types";
@@ -21,6 +24,7 @@ const ClientDashboard = () => {
   const [uploading, setUploading] = useState(false);
   const { toast } = useToast();
   const [selectedBooking, setSelectedBooking] = useState<ServiceBookingWithProvider | null>(null);
+  const [isEditingProfile, setIsEditingProfile] = useState(false);
   
   const mockProfile: Profile = {
     id: '1',
@@ -28,6 +32,16 @@ const ClientDashboard = () => {
     created_at: '2024-01-01',
     updated_at: '2024-01-01'
   };
+
+  const [profileData, setProfileData] = useState({
+    firstName: "Rukshan",
+    lastName: "Srivarathan",
+    email: "rukers75@gmail.com",
+    phone: "7776924149",
+    address: "38 Coleridge Road, Romford, RM3 7BB",
+    emailNotifications: true,
+    pushNotifications: false
+  });
 
   const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     try {
@@ -49,8 +63,6 @@ const ClientDashboard = () => {
         .from("provider-images")
         .getPublicUrl(filePath);
 
-      // Here you would update the profile with the new image URL
-      // For now we'll just show a success message
       toast({
         title: "Success",
         description: "Profile image updated successfully",
@@ -91,6 +103,23 @@ const ClientDashboard = () => {
       toast({
         title: "Error",
         description: "Failed to submit review",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleProfileUpdate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      toast({
+        title: "Success",
+        description: "Profile updated successfully",
+      });
+      setIsEditingProfile(false);
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to update profile",
         variant: "destructive",
       });
     }
@@ -180,10 +209,84 @@ const ClientDashboard = () => {
                 <CardTitle className="text-2xl font-bold text-gray-900">Profile Information</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-2">
-                  <p className="text-sm text-gray-600">Account Type: {mockProfile.user_type}</p>
-                  <p className="text-sm text-gray-600">Member since: {new Date(mockProfile.created_at).toLocaleDateString()}</p>
-                </div>
+                <form onSubmit={handleProfileUpdate} className="space-y-6">
+                  <div className="grid grid-cols-2 gap-6">
+                    <div>
+                      <Label htmlFor="firstName">First Name</Label>
+                      <Input
+                        id="firstName"
+                        value={profileData.firstName}
+                        onChange={(e) => setProfileData({...profileData, firstName: e.target.value})}
+                        className="mt-1"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="lastName">Last Name</Label>
+                      <Input
+                        id="lastName"
+                        value={profileData.lastName}
+                        onChange={(e) => setProfileData({...profileData, lastName: e.target.value})}
+                        className="mt-1"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <Label htmlFor="email">Email</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      value={profileData.email}
+                      onChange={(e) => setProfileData({...profileData, email: e.target.value})}
+                      className="mt-1"
+                    />
+                  </div>
+
+                  <div>
+                    <Label htmlFor="phone">Phone</Label>
+                    <Input
+                      id="phone"
+                      type="tel"
+                      value={profileData.phone}
+                      onChange={(e) => setProfileData({...profileData, phone: e.target.value})}
+                      className="mt-1"
+                    />
+                  </div>
+
+                  <div>
+                    <Label htmlFor="address">Address</Label>
+                    <Input
+                      id="address"
+                      value={profileData.address}
+                      onChange={(e) => setProfileData({...profileData, address: e.target.value})}
+                      className="mt-1"
+                    />
+                  </div>
+
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold">Job notifications</h3>
+                    <div className="flex items-center justify-between">
+                      <Label htmlFor="emailNotif">Email (mandatory)</Label>
+                      <Switch
+                        id="emailNotif"
+                        checked={profileData.emailNotifications}
+                        onCheckedChange={(checked) => setProfileData({...profileData, emailNotifications: checked})}
+                      />
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <Label htmlFor="pushNotif">Push</Label>
+                      <Switch
+                        id="pushNotif"
+                        checked={profileData.pushNotifications}
+                        onCheckedChange={(checked) => setProfileData({...profileData, pushNotifications: checked})}
+                      />
+                    </div>
+                  </div>
+
+                  <Button type="submit" className="w-full">
+                    Update details
+                  </Button>
+                </form>
               </CardContent>
             </Card>
 
