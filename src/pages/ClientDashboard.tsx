@@ -1,38 +1,21 @@
 import { useState, useCallback } from "react";
-import { Link } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import type { ServiceBookingWithProvider, Profile } from "@/integrations/supabase/types";
-import { MapPin, Calendar, Clock, DollarSign, ImageIcon, UserRound, Star } from "lucide-react";
-import { useForm } from "react-hook-form";
-
-interface ReviewFormData {
-  rating: number;
-  text: string;
-}
+import { UserRound, ImageIcon, Star, MapPin, Calendar, Clock, DollarSign } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
 const ClientDashboard = () => {
-  const [error] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
   const { toast } = useToast();
-  const [selectedBooking, setSelectedBooking] = useState<ServiceBookingWithProvider | null>(null);
-  const [isEditingProfile, setIsEditingProfile] = useState(false);
   
-  const mockProfile: Profile = {
-    id: '1',
-    user_type: 'client',
-    created_at: '2024-01-01',
-    updated_at: '2024-01-01'
-  };
-
   const [profileData, setProfileData] = useState({
     firstName: "Rukshan",
     lastName: "Srivarathan",
@@ -79,35 +62,6 @@ const ClientDashboard = () => {
     }
   };
 
-  const handleReviewSubmit = async (data: ReviewFormData) => {
-    if (!selectedBooking) return;
-
-    try {
-      const { error: reviewError } = await supabase
-        .from('reviews')
-        .insert({
-          booking_id: selectedBooking.id,
-          user_id: mockProfile.id,
-          rating: data.rating,
-          text: data.text
-        });
-
-      if (reviewError) throw reviewError;
-
-      toast({
-        title: "Success",
-        description: "Review submitted successfully",
-      });
-    } catch (error) {
-      console.error("Error submitting review:", error);
-      toast({
-        title: "Error",
-        description: "Failed to submit review",
-        variant: "destructive",
-      });
-    }
-  };
-
   const handleProfileUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -115,7 +69,6 @@ const ClientDashboard = () => {
         title: "Success",
         description: "Profile updated successfully",
       });
-      setIsEditingProfile(false);
     } catch (error) {
       toast({
         title: "Error",
@@ -125,7 +78,7 @@ const ClientDashboard = () => {
     }
   };
 
-  const mockBookings: ServiceBookingWithProvider[] = [
+  const mockBookings = [
     {
       id: '1',
       user_id: '1',
@@ -318,12 +271,6 @@ const ClientDashboard = () => {
             </CardContent>
           </Card>
 
-          <div className="flex justify-center mb-8">
-            <Button asChild size="lg" className="bg-primary hover:bg-primary/90">
-              <Link to="/">Book a Service</Link>
-            </Button>
-          </div>
-
           <h1 className="text-3xl font-bold text-gray-900 mb-8">My Bookings</h1>
           
           <div className="grid gap-6">
@@ -423,7 +370,6 @@ const ClientDashboard = () => {
                             <Button 
                               variant="outline"
                               className="ml-4"
-                              onClick={() => setSelectedBooking(booking)}
                             >
                               <Star className="w-4 h-4 mr-2" />
                               Leave Review
@@ -436,10 +382,10 @@ const ClientDashboard = () => {
                             <form onSubmit={(e) => {
                               e.preventDefault();
                               const formData = new FormData(e.currentTarget);
-                              handleReviewSubmit({
-                                rating: parseInt(formData.get('rating') as string),
-                                text: formData.get('text') as string
-                              });
+                              // handleReviewSubmit({
+                              //   rating: parseInt(formData.get('rating') as string),
+                              //   text: formData.get('text') as string
+                              // });
                             }} className="space-y-4 mt-4">
                               <div>
                                 <label className="block text-sm font-medium mb-2">Rating</label>
