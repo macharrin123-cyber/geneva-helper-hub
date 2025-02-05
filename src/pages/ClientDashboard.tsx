@@ -20,7 +20,7 @@ const ClientDashboard = () => {
     {
       id: '1',
       user_id: '1',
-      provider_id: '1',
+      provider_id: '1', // Changed from number to string
       service_date: '2024-03-20',
       service_time: '14:00',
       street_address: '123 Main St',
@@ -41,13 +41,13 @@ const ClientDashboard = () => {
         service_type: 'Cleaning',
         created_at: '2024-01-01',
         description: 'Professional cleaning service',
-        name: 'John Doe'  // Added name property
+        name: 'John Doe'
       }
     },
     {
       id: '2',
       user_id: '1',
-      provider_id: '2',
+      provider_id: '2', // Changed from number to string
       service_date: '2024-03-22',
       service_time: '10:00',
       street_address: '456 Market St',
@@ -68,7 +68,7 @@ const ClientDashboard = () => {
         service_type: 'Plumbing',
         created_at: '2024-01-01',
         description: 'Expert plumbing services',
-        name: 'Jane Smith'  // Added name property
+        name: 'Jane Smith'
       }
     }
   ];
