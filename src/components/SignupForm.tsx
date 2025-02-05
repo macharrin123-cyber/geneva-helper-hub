@@ -38,15 +38,13 @@ const SignupForm = () => {
   const isFormValid = () => {
     const valid = (
       imageFile !== null &&
-      cvFile !== null &&
       formData.name.trim() !== "" &&
       formData.email.trim() !== "" &&
       formData.phone.trim() !== "" &&
       formData.service !== "" &&
       formData.experience.trim() !== "" &&
       formData.description.trim() !== "" &&
-      formData.hourlyRate.trim() !== "" &&
-      formData.linkedinProfile.trim() !== ""
+      formData.hourlyRate.trim() !== ""
     );
     console.log('Form validation result:', valid, { formData, imageFile, cvFile });
     return valid;
@@ -88,7 +86,7 @@ const SignupForm = () => {
 
         <div className="animate-fade-in">
           <label htmlFor="cv" className="block text-sm font-medium text-gray-700 mb-4">
-            CV / Resume *
+            CV / Resume (Optional)
           </label>
           <div className="mt-1 flex items-center space-x-6">
             <input
@@ -97,7 +95,6 @@ const SignupForm = () => {
               accept=".pdf,.doc,.docx"
               onChange={handleCvChange}
               className="hidden"
-              required
             />
             <label
               htmlFor="cv"
@@ -175,10 +172,11 @@ const SignupForm = () => {
 
         <FormInput
           id="linkedinProfile"
-          label="LinkedIn Profile URL"
+          label="LinkedIn Profile URL (Optional)"
           type="url"
           value={formData.linkedinProfile}
           onChange={(value) => setFormData({ ...formData, linkedinProfile: value })}
+          required={false}
           hint="Enter the full URL to your LinkedIn profile"
         />
 

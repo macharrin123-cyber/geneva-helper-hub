@@ -167,14 +167,14 @@ export type Database = {
       service_provider_applications: {
         Row: {
           created_at: string
-          cv_url: string
+          cv_url: string | null
           description: string
           email: string
           experience: string
           hourly_rate: number
           id: string
           image_url: string
-          linkedin_profile: string
+          linkedin_profile: string | null
           name: string
           phone: string
           service: string
@@ -182,14 +182,14 @@ export type Database = {
         }
         Insert: {
           created_at?: string
-          cv_url: string
+          cv_url?: string | null
           description: string
           email: string
           experience: string
           hourly_rate: number
           id?: string
           image_url: string
-          linkedin_profile: string
+          linkedin_profile?: string | null
           name: string
           phone: string
           service: string
@@ -197,14 +197,14 @@ export type Database = {
         }
         Update: {
           created_at?: string
-          cv_url?: string
+          cv_url?: string | null
           description?: string
           email?: string
           experience?: string
           hourly_rate?: number
           id?: string
           image_url?: string
-          linkedin_profile?: string
+          linkedin_profile?: string | null
           name?: string
           phone?: string
           service?: string

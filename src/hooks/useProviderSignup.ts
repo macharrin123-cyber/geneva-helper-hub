@@ -26,11 +26,11 @@ export const useProviderSignup = () => {
       cvFile: cvFile ? { name: cvFile.name, size: cvFile.size } : null
     });
 
-    if (!imageFile || !cvFile) {
-      console.error('Missing required files');
+    if (!imageFile) {
+      console.error('Missing required profile image');
       toast({
         title: "Error",
-        description: "Please upload both a profile image and CV",
+        description: "Please upload a profile image",
         variant: "destructive",
       });
       return false;
@@ -59,25 +59,30 @@ export const useProviderSignup = () => {
         .from('provider-images')
         .getPublicUrl(imagePath);
 
-      // Upload CV
-      console.log('Starting CV upload...');
-      const cvExt = cvFile.name.split('.').pop();
-      const cvFileName = `${Math.random()}.${cvExt}`;
-      const cvPath = `${cvFileName}`;
+      let cvUrl = null;
+      // Upload CV if provided
+      if (cvFile) {
+        console.log('Starting CV upload...');
+        const cvExt = cvFile.name.split('.').pop();
+        const cvFileName = `${Math.random()}.${cvExt}`;
+        const cvPath = `${cvFileName}`;
 
-      const { error: cvUploadError } = await supabase.storage
-        .from('provider-images')
-        .upload(cvPath, cvFile);
+        const { error: cvUploadError } = await supabase.storage
+          .from('provider-images')
+          .upload(cvPath, cvFile);
 
-      if (cvUploadError) {
-        console.error('Error uploading CV:', cvUploadError);
-        throw new Error('Failed to upload CV: ' + cvUploadError.message);
+        if (cvUploadError) {
+          console.error('Error uploading CV:', cvUploadError);
+          throw new Error('Failed to upload CV: ' + cvUploadError.message);
+        }
+
+        // Get CV URL
+        const { data: { publicUrl: uploadedCvUrl } } = supabase.storage
+          .from('provider-images')
+          .getPublicUrl(cvPath);
+        
+        cvUrl = uploadedCvUrl;
       }
-
-      // Get CV URL
-      const { data: { publicUrl: cvUrl } } = supabase.storage
-        .from('provider-images')
-        .getPublicUrl(cvPath);
 
       // Submit application
       console.log('Submitting application with URLs:', { imageUrl, cvUrl });
@@ -94,7 +99,7 @@ export const useProviderSignup = () => {
             hourly_rate: parseFloat(formData.hourlyRate),
             image_url: imageUrl,
             cv_url: cvUrl,
-            linkedin_profile: formData.linkedinProfile.trim()
+            linkedin_profile: formData.linkedinProfile.trim() || null
           }
         ]);
 
