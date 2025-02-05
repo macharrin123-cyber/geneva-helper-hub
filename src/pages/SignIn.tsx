@@ -133,7 +133,7 @@ const SignIn = () => {
       const { error: signInError } = await supabase.auth.signInWithOtp({
         email: guestEmail,
         options: {
-          emailRedirectTo: `${window.location.origin}/signin#access_token=true`
+          emailRedirectTo: `${window.location.origin}/signin`
         }
       });
 
