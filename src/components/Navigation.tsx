@@ -67,7 +67,7 @@ const Navigation = () => {
 
   const linkStyles = "text-white relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-white after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left";
 
-  const iconButtonStyles = "text-white hover:text-blue-100 hover:ring-2 hover:ring-[#0EA5E9] transition-all duration-200";
+  const iconButtonStyles = "text-white hover:text-[#0EA5E9] hover:ring-2 hover:ring-[#0EA5E9] transition-all duration-200";
 
   return (
     <nav className="bg-[#0EA5E9]/50 backdrop-blur-md shadow-lg fixed w-full top-0 z-50">
