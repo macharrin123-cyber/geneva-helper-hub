@@ -3,6 +3,7 @@ import ImageUpload from "./signup/ImageUpload";
 import FormInput from "./signup/FormInput";
 import ServiceSelect from "./signup/ServiceSelect";
 import { useProviderSignup, ProviderFormData } from "@/hooks/useProviderSignup";
+import { Upload } from "lucide-react";
 
 const SignupForm = () => {
   const { handleSubmit, isSubmitting } = useProviderSignup();
@@ -14,36 +15,49 @@ const SignupForm = () => {
     experience: "",
     description: "",
     hourlyRate: "",
+    linkedinProfile: "",
   });
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [cvFile, setCvFile] = useState<File | null>(null);
+  const [cvFileName, setCvFileName] = useState<string | null>(null);
 
   const handleImageChange = (file: File | null, preview: string | null) => {
     setImageFile(file);
     setImagePreview(preview);
   };
 
+  const handleCvChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setCvFile(file);
+      setCvFileName(file.name);
+    }
+  };
+
   const isFormValid = () => {
     const valid = (
       imageFile !== null &&
+      cvFile !== null &&
       formData.name.trim() !== "" &&
       formData.email.trim() !== "" &&
       formData.phone.trim() !== "" &&
       formData.service !== "" &&
       formData.experience.trim() !== "" &&
       formData.description.trim() !== "" &&
-      formData.hourlyRate.trim() !== ""
+      formData.hourlyRate.trim() !== "" &&
+      formData.linkedinProfile.trim() !== ""
     );
-    console.log('Form validation result:', valid, { formData, imageFile });
+    console.log('Form validation result:', valid, { formData, imageFile, cvFile });
     return valid;
   };
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted with data:', { formData, imageFile });
+    console.log('Form submitted with data:', { formData, imageFile, cvFile });
     
     try {
-      const success = await handleSubmit(formData, imageFile);
+      const success = await handleSubmit(formData, imageFile, cvFile);
       console.log('Form submission result:', success);
       
       if (success) {
@@ -55,9 +69,12 @@ const SignupForm = () => {
           experience: "",
           description: "",
           hourlyRate: "",
+          linkedinProfile: "",
         });
         setImageFile(null);
         setImagePreview(null);
+        setCvFile(null);
+        setCvFileName(null);
       }
     } catch (error) {
       console.error('Error in form submission:', error);
@@ -68,6 +85,34 @@ const SignupForm = () => {
     <form onSubmit={onSubmit} className="space-y-8">
       <div className="space-y-6">
         <ImageUpload onImageChange={handleImageChange} imagePreview={imagePreview} />
+
+        <div className="animate-fade-in">
+          <label htmlFor="cv" className="block text-sm font-medium text-gray-700 mb-4">
+            CV / Resume *
+          </label>
+          <div className="mt-1 flex items-center space-x-6">
+            <input
+              type="file"
+              id="cv"
+              accept=".pdf,.doc,.docx"
+              onChange={handleCvChange}
+              className="hidden"
+              required
+            />
+            <label
+              htmlFor="cv"
+              className="cursor-pointer inline-flex items-center px-6 py-3 border-2 border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors duration-200 group"
+            >
+              <Upload className="mr-2 h-5 w-5 text-gray-400 group-hover:text-primary transition-colors duration-200" />
+              Upload CV
+            </label>
+            {cvFileName && (
+              <span className="text-sm text-gray-600">
+                {cvFileName}
+              </span>
+            )}
+          </div>
+        </div>
 
         <div className="grid gap-6 md:grid-cols-2">
           <FormInput
@@ -127,6 +172,15 @@ const SignupForm = () => {
             hint="Total years of professional experience"
           />
         </div>
+
+        <FormInput
+          id="linkedinProfile"
+          label="LinkedIn Profile URL"
+          type="url"
+          value={formData.linkedinProfile}
+          onChange={(value) => setFormData({ ...formData, linkedinProfile: value })}
+          hint="Enter the full URL to your LinkedIn profile"
+        />
 
         <div>
           <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">

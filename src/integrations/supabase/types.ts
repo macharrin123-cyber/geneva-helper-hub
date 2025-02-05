@@ -167,12 +167,14 @@ export type Database = {
       service_provider_applications: {
         Row: {
           created_at: string
+          cv_url: string
           description: string
           email: string
           experience: string
           hourly_rate: number
           id: string
           image_url: string
+          linkedin_profile: string
           name: string
           phone: string
           service: string
@@ -180,12 +182,14 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          cv_url: string
           description: string
           email: string
           experience: string
           hourly_rate: number
           id?: string
           image_url: string
+          linkedin_profile: string
           name: string
           phone: string
           service: string
@@ -193,12 +197,14 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          cv_url?: string
           description?: string
           email?: string
           experience?: string
           hourly_rate?: number
           id?: string
           image_url?: string
+          linkedin_profile?: string
           name?: string
           phone?: string
           service?: string
@@ -247,12 +253,14 @@ export type Database = {
       service_providers: {
         Row: {
           created_at: string | null
+          cv_url: string | null
           description: string | null
           email: string | null
           experience: string | null
           hourly_rate: number
           id: string
           image_url: string
+          linkedin_profile: string | null
           name: string
           phone: string | null
           service_type: string
@@ -260,12 +268,14 @@ export type Database = {
         }
         Insert: {
           created_at?: string | null
+          cv_url?: string | null
           description?: string | null
           email?: string | null
           experience?: string | null
           hourly_rate: number
           id?: string
           image_url: string
+          linkedin_profile?: string | null
           name?: string
           phone?: string | null
           service_type: string
@@ -273,12 +283,14 @@ export type Database = {
         }
         Update: {
           created_at?: string | null
+          cv_url?: string | null
           description?: string | null
           email?: string | null
           experience?: string | null
           hourly_rate?: number
           id?: string
           image_url?: string
+          linkedin_profile?: string | null
           name?: string
           phone?: string | null
           service_type?: string
