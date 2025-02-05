@@ -203,93 +203,8 @@ const ClientDashboard = () => {
             </Alert>
           )}
 
-          <div className="flex justify-between items-start mb-8">
-            <Card className="flex-grow mr-8">
-              <CardHeader>
-                <CardTitle className="text-2xl font-bold text-gray-900">Profile Information</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <form onSubmit={handleProfileUpdate} className="space-y-6">
-                  <div className="grid grid-cols-2 gap-6">
-                    <div>
-                      <Label htmlFor="firstName">First Name</Label>
-                      <Input
-                        id="firstName"
-                        value={profileData.firstName}
-                        onChange={(e) => setProfileData({...profileData, firstName: e.target.value})}
-                        className="mt-1"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="lastName">Last Name</Label>
-                      <Input
-                        id="lastName"
-                        value={profileData.lastName}
-                        onChange={(e) => setProfileData({...profileData, lastName: e.target.value})}
-                        className="mt-1"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <Label htmlFor="email">Email</Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      value={profileData.email}
-                      onChange={(e) => setProfileData({...profileData, email: e.target.value})}
-                      className="mt-1"
-                    />
-                  </div>
-
-                  <div>
-                    <Label htmlFor="phone">Phone</Label>
-                    <Input
-                      id="phone"
-                      type="tel"
-                      value={profileData.phone}
-                      onChange={(e) => setProfileData({...profileData, phone: e.target.value})}
-                      className="mt-1"
-                    />
-                  </div>
-
-                  <div>
-                    <Label htmlFor="address">Address</Label>
-                    <Input
-                      id="address"
-                      value={profileData.address}
-                      onChange={(e) => setProfileData({...profileData, address: e.target.value})}
-                      className="mt-1"
-                    />
-                  </div>
-
-                  <div className="space-y-4">
-                    <h3 className="text-lg font-semibold">Job notifications</h3>
-                    <div className="flex items-center justify-between">
-                      <Label htmlFor="emailNotif">Email (mandatory)</Label>
-                      <Switch
-                        id="emailNotif"
-                        checked={profileData.emailNotifications}
-                        onCheckedChange={(checked) => setProfileData({...profileData, emailNotifications: checked})}
-                      />
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <Label htmlFor="pushNotif">Push</Label>
-                      <Switch
-                        id="pushNotif"
-                        checked={profileData.pushNotifications}
-                        onCheckedChange={(checked) => setProfileData({...profileData, pushNotifications: checked})}
-                      />
-                    </div>
-                  </div>
-
-                  <Button type="submit" className="w-full">
-                    Update details
-                  </Button>
-                </form>
-              </CardContent>
-            </Card>
-
+          {/* Profile Image Section - Now centered and above */}
+          <div className="flex justify-center mb-8">
             <div className="relative">
               <label htmlFor="profile-image" className="cursor-pointer block">
                 <div className="w-32 h-32 rounded-full overflow-hidden bg-gray-100 ring-4 ring-primary/20 hover:ring-primary/30 transition-all">
@@ -316,6 +231,92 @@ const ClientDashboard = () => {
               )}
             </div>
           </div>
+
+          <Card className="mb-8">
+            <CardHeader>
+              <CardTitle className="text-2xl font-bold text-gray-900">Profile Information</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={handleProfileUpdate} className="space-y-6">
+                <div className="grid grid-cols-2 gap-6">
+                  <div>
+                    <Label htmlFor="firstName">First Name</Label>
+                    <Input
+                      id="firstName"
+                      value={profileData.firstName}
+                      onChange={(e) => setProfileData({...profileData, firstName: e.target.value})}
+                      className="mt-1"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="lastName">Last Name</Label>
+                    <Input
+                      id="lastName"
+                      value={profileData.lastName}
+                      onChange={(e) => setProfileData({...profileData, lastName: e.target.value})}
+                      className="mt-1"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    value={profileData.email}
+                    onChange={(e) => setProfileData({...profileData, email: e.target.value})}
+                    className="mt-1"
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="phone">Phone</Label>
+                  <Input
+                    id="phone"
+                    type="tel"
+                    value={profileData.phone}
+                    onChange={(e) => setProfileData({...profileData, phone: e.target.value})}
+                    className="mt-1"
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="address">Address</Label>
+                  <Input
+                    id="address"
+                    value={profileData.address}
+                    onChange={(e) => setProfileData({...profileData, address: e.target.value})}
+                    className="mt-1"
+                  />
+                </div>
+
+                <div className="space-y-4">
+                  <h3 className="text-lg font-semibold">Job notifications</h3>
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="emailNotif">Email (mandatory)</Label>
+                    <Switch
+                      id="emailNotif"
+                      checked={profileData.emailNotifications}
+                      onCheckedChange={(checked) => setProfileData({...profileData, emailNotifications: checked})}
+                    />
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="pushNotif">Push</Label>
+                    <Switch
+                      id="pushNotif"
+                      checked={profileData.pushNotifications}
+                      onCheckedChange={(checked) => setProfileData({...profileData, pushNotifications: checked})}
+                    />
+                  </div>
+                </div>
+
+                <Button type="submit" className="w-full">
+                  Update details
+                </Button>
+              </form>
+            </CardContent>
+          </Card>
 
           <div className="flex justify-center mb-8">
             <Button asChild size="lg" className="bg-primary hover:bg-primary/90">
