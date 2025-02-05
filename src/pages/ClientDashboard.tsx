@@ -4,17 +4,24 @@ import Navigation from "@/components/Navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import type { ServiceBookingWithProvider, Profile } from "@/integrations/supabase/types";
-import { MapPin, Calendar, Clock, DollarSign, ImageIcon, UserRound } from "lucide-react";
+import { MapPin, Calendar, Clock, DollarSign, ImageIcon, UserRound, Star } from "lucide-react";
+import { useForm } from "react-hook-form";
+
+interface ReviewFormData {
+  rating: number;
+  text: string;
+}
 
 const ClientDashboard = () => {
   const [error] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
   const { toast } = useToast();
+  const [selectedBooking, setSelectedBooking] = useState<ServiceBookingWithProvider | null>(null);
   
-  // Mock data for development
   const mockProfile: Profile = {
     id: '1',
     user_type: 'client',
@@ -60,21 +67,50 @@ const ClientDashboard = () => {
     }
   };
 
+  const handleReviewSubmit = async (data: ReviewFormData) => {
+    if (!selectedBooking) return;
+
+    try {
+      const { error: reviewError } = await supabase
+        .from('reviews')
+        .insert({
+          booking_id: selectedBooking.id,
+          user_id: mockProfile.id,
+          rating: data.rating,
+          text: data.text
+        });
+
+      if (reviewError) throw reviewError;
+
+      toast({
+        title: "Success",
+        description: "Review submitted successfully",
+      });
+    } catch (error) {
+      console.error("Error submitting review:", error);
+      toast({
+        title: "Error",
+        description: "Failed to submit review",
+        variant: "destructive",
+      });
+    }
+  };
+
   const mockBookings: ServiceBookingWithProvider[] = [
     {
       id: '1',
       user_id: '1',
-      provider_id: '1', // Changed from number to string
+      provider_id: '1',
       service_date: '2024-03-20',
       service_time: '14:00',
       street_address: '123 Main St',
       city: 'San Francisco',
       postal_code: '94105',
       comments: 'Please bring eco-friendly cleaning supplies',
-      status: 'pending',
+      status: 'completed',
       created_at: '2024-03-15',
-      provider_response: 'pending',
-      payment_status: 'pending',
+      provider_response: 'approved',
+      payment_status: 'completed',
       payment_intent_id: null,
       address: '123 Main St, San Francisco',
       provider: {
@@ -85,13 +121,18 @@ const ClientDashboard = () => {
         service_type: 'Cleaning',
         created_at: '2024-01-01',
         description: 'Professional cleaning service',
-        name: 'John Doe'
+        name: 'John Doe',
+        phone: null,
+        experience: null,
+        email: null,
+        cv_url: null,
+        linkedin_profile: null
       }
     },
     {
       id: '2',
       user_id: '1',
-      provider_id: '2', // Changed from number to string
+      provider_id: '2',
       service_date: '2024-03-22',
       service_time: '10:00',
       street_address: '456 Market St',
@@ -112,7 +153,12 @@ const ClientDashboard = () => {
         service_type: 'Plumbing',
         created_at: '2024-01-01',
         description: 'Expert plumbing services',
-        name: 'Jane Smith'
+        name: 'Jane Smith',
+        phone: null,
+        experience: null,
+        email: null,
+        cv_url: null,
+        linkedin_profile: null
       }
     }
   ];
@@ -257,6 +303,61 @@ const ClientDashboard = () => {
                       }`}>
                         Payment: {booking.payment_status}
                       </div>
+
+                      {booking.status === 'completed' && (
+                        <Dialog>
+                          <DialogTrigger asChild>
+                            <Button 
+                              variant="outline"
+                              className="ml-4"
+                              onClick={() => setSelectedBooking(booking)}
+                            >
+                              <Star className="w-4 h-4 mr-2" />
+                              Leave Review
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent>
+                            <DialogHeader>
+                              <DialogTitle>Leave a Review</DialogTitle>
+                            </DialogHeader>
+                            <form onSubmit={(e) => {
+                              e.preventDefault();
+                              const formData = new FormData(e.currentTarget);
+                              handleReviewSubmit({
+                                rating: parseInt(formData.get('rating') as string),
+                                text: formData.get('text') as string
+                              });
+                            }} className="space-y-4 mt-4">
+                              <div>
+                                <label className="block text-sm font-medium mb-2">Rating</label>
+                                <select 
+                                  name="rating"
+                                  className="w-full border rounded-md p-2"
+                                  required
+                                >
+                                  <option value="">Select rating</option>
+                                  {[1, 2, 3, 4, 5].map((num) => (
+                                    <option key={num} value={num}>{num} Star{num !== 1 ? 's' : ''}</option>
+                                  ))}
+                                </select>
+                              </div>
+                              <div>
+                                <label className="block text-sm font-medium mb-2">Review</label>
+                                <textarea 
+                                  name="text"
+                                  className="w-full border rounded-md p-2"
+                                  rows={4}
+                                  required
+                                  placeholder="Write your review here..."
+                                />
+                              </div>
+                              <Button type="submit" className="w-full">
+                                Submit Review
+                              </Button>
+                            </form>
+                          </DialogContent>
+                        </Dialog>
+                      )}
                     </div>
                   </div>
                 </CardContent>
