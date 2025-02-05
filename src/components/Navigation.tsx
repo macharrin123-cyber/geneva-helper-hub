@@ -55,7 +55,7 @@ const Navigation = () => {
   };
 
   return (
-    <nav className="bg-[#1E3A8A]/60 backdrop-blur-md shadow-lg fixed w-full top-0 z-50">
+    <nav className="bg-[#91DDFC]/95 backdrop-blur-md shadow-lg fixed w-full top-0 z-50">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex justify-between h-16">
           <div className="flex-shrink-0 flex items-center gap-2">
