@@ -96,6 +96,11 @@ const Navigation = () => {
             <Link to="/contact" className={linkStyles}>
               {t('nav.contact')}
             </Link>
+            {user && (
+              <Link to="/chat" className={linkStyles}>
+                Chat
+              </Link>
+            )}
 
             {!user ? (
               <>
@@ -351,6 +356,7 @@ const Navigation = () => {
             </div>
           </div>
         )}
+        </div>
       </div>
     </nav>
   );

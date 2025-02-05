@@ -2,17 +2,11 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import { Card, CardContent } from "@/components/ui/card";
-import { Calendar } from "@/components/ui/calendar";
 import { useToast } from "@/hooks/use-toast";
 import { Phone, Star } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { supabase } from "@/integrations/supabase/client";
 
 interface Provider {
   id: number;
@@ -29,34 +23,38 @@ interface ServicePageProps {
   providers: Provider[];
 }
 
-const generateTimeSlots = () => {
-  const slots = [];
-  for (let hour = 8; hour <= 21; hour++) {
-    const formattedHour = hour.toString().padStart(2, '0');
-    slots.push(`${formattedHour}:00`);
-    slots.push(`${formattedHour}:30`);
-  }
-  return slots;
-};
-
 const ServicePage = ({ serviceType, providers }: ServicePageProps) => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const { t } = useLanguage();
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
-  const [selectedTime, setSelectedTime] = useState<string>("");
   const [selectedProvider, setSelectedProvider] = useState<number | null>(null);
+  const [description, setDescription] = useState("");
+  const [user, setUser] = useState<any>(null);
 
-  // Add useEffect to scroll to top when component mounts
   useEffect(() => {
-    window.scrollTo(0, 0);
+    const checkUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      setUser(user);
+    };
+
+    checkUser();
   }, []);
 
-  const handleBooking = (providerId: number) => {
-    if (!selectedDate || !selectedTime) {
+  const handleContact = async (providerId: number) => {
+    if (!user) {
       toast({
-        title: t('services.selectDateTimeError'),
-        description: t('services.selectDateTimeErrorDesc'),
+        title: "Sign in required",
+        description: "Please sign in to contact service providers.",
+        variant: "destructive",
+      });
+      navigate("/signin");
+      return;
+    }
+
+    if (!description.trim()) {
+      toast({
+        title: t('services.descriptionRequired'),
+        description: t('services.descriptionRequiredDesc'),
         variant: "destructive",
       });
       return;
@@ -72,17 +70,27 @@ const ServicePage = ({ serviceType, providers }: ServicePageProps) => {
       return;
     }
 
-    navigate('/payment', {
-      state: {
-        booking: {
-          providerId: provider.id,
-          providerName: provider.name,
-          date: selectedDate,
-          time: selectedTime,
-          hourlyRate: provider.hourlyRate
+    // Create a chat message
+    const { error } = await supabase
+      .from("chat_messages")
+      .insert([
+        {
+          content: `Service request for ${serviceType}: ${description}`,
+          sender_id: user.id,
+          receiver_id: provider.id
         }
-      }
-    });
+      ]);
+
+    if (error) {
+      toast({
+        title: "Error",
+        description: "Failed to send message. Please try again.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    navigate('/chat');
   };
 
   const handleCall = (provider: Provider) => {
@@ -162,33 +170,20 @@ const ServicePage = ({ serviceType, providers }: ServicePageProps) => {
                       {selectedProvider === provider.id && (
                         <div className="space-y-6">
                           <h3 className="text-xl font-semibold">
-                            {t('services.selectDateTime')}
+                            Describe your needs
                           </h3>
-                          <Calendar
-                            mode="single"
-                            selected={selectedDate}
-                            onSelect={setSelectedDate}
-                            className="rounded-md border"
+                          <Textarea
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                            placeholder="Please describe what you need help with..."
+                            className="min-h-[120px]"
                           />
-                          <Select onValueChange={setSelectedTime} value={selectedTime}>
-                            <SelectTrigger className="w-full">
-                              <SelectValue placeholder={t('services.selectTime')} />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {generateTimeSlots().map((time) => (
-                                <SelectItem key={time} value={time}>
-                                  {time}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
                           <div className="flex gap-4">
                             <button
-                              onClick={() => handleBooking(provider.id)}
-                              disabled={!selectedDate || !selectedTime}
-                              className="flex-1 bg-primary text-white px-6 py-3 rounded-full font-semibold hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                              onClick={() => handleContact(provider.id)}
+                              className="flex-1 bg-primary text-white px-6 py-3 rounded-full font-semibold hover:bg-primary/90 transition-colors"
                             >
-                              {t('services.bookAppointment')}
+                              Contact Provider
                             </button>
                             <button
                               onClick={() => handleCall(provider)}

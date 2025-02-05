@@ -38,6 +38,11 @@ const Footer = () => {
                   Contact Us
                 </Link>
               </li>
+              <li>
+                <Link to="/chat" className="text-gray-200 hover:text-white transition-colors">
+                  Chat
+                </Link>
+              </li>
             </ul>
           </div>
 
