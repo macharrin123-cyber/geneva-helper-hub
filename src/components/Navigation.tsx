@@ -65,31 +65,33 @@ const Navigation = () => {
     }
   };
 
+  const linkStyles = "text-white relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-white after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left";
+
   return (
     <nav className="bg-[#0EA5E9]/50 backdrop-blur-md shadow-lg fixed w-full top-0 z-50">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex justify-between h-16">
           <div className="flex-shrink-0 flex items-center gap-2">
             <HelpingHand className="h-8 w-8 text-white" />
-            <Link to="/" className="text-white text-xl font-poppins font-semibold">
+            <Link to="/" className="text-white text-xl font-poppins font-semibold hover:text-blue-100 transition-colors duration-200">
               Helpify
             </Link>
           </div>
           
           <div className="hidden md:flex items-center space-x-4">
-            <Link to="/" className="text-white hover:text-blue-100 px-3 py-2 rounded-md">
+            <Link to="/" className={linkStyles}>
               {t('nav.home')}
             </Link>
-            <Link to="/how-we-work" className="text-white hover:text-blue-100 px-3 py-2 rounded-md">
+            <Link to="/how-we-work" className={linkStyles}>
               {t('nav.howWeWork')}
             </Link>
-            <Link to="/about-us" className="text-white hover:text-blue-100 px-3 py-2 rounded-md">
+            <Link to="/about-us" className={linkStyles}>
               {t('nav.aboutUs')}
             </Link>
-            <Link to="/faq" className="text-white hover:text-blue-100 px-3 py-2 rounded-md">
+            <Link to="/faq" className={linkStyles}>
               FAQ
             </Link>
-            <Link to="/contact" className="text-white hover:text-blue-100 px-3 py-2 rounded-md">
+            <Link to="/contact" className={linkStyles}>
               {t('nav.contact')}
             </Link>
 
@@ -213,35 +215,35 @@ const Navigation = () => {
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
               <Link
                 to="/"
-                className="block text-white hover:text-blue-100 px-3 py-2 rounded-md"
+                className="block text-white hover:text-blue-100 px-3 py-2 rounded-md transition-colors duration-200"
                 onClick={() => setIsOpen(false)}
               >
                 {t('nav.home')}
               </Link>
               <Link
                 to="/how-we-work"
-                className="block text-white hover:text-blue-100 px-3 py-2 rounded-md"
+                className="block text-white hover:text-blue-100 px-3 py-2 rounded-md transition-colors duration-200"
                 onClick={() => setIsOpen(false)}
               >
                 {t('nav.howWeWork')}
               </Link>
               <Link
                 to="/about-us"
-                className="block text-white hover:text-blue-100 px-3 py-2 rounded-md"
+                className="block text-white hover:text-blue-100 px-3 py-2 rounded-md transition-colors duration-200"
                 onClick={() => setIsOpen(false)}
               >
                 {t('nav.aboutUs')}
               </Link>
               <Link
                 to="/faq"
-                className="block text-white hover:text-blue-100 px-3 py-2 rounded-md"
+                className="block text-white hover:text-blue-100 px-3 py-2 rounded-md transition-colors duration-200"
                 onClick={() => setIsOpen(false)}
               >
                 FAQ
               </Link>
               <Link
                 to="/contact"
-                className="block text-white hover:text-blue-100 px-3 py-2 rounded-md"
+                className="block text-white hover:text-blue-100 px-3 py-2 rounded-md transition-colors duration-200"
                 onClick={() => setIsOpen(false)}
               >
                 {t('nav.contact')}
