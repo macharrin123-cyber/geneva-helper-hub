@@ -7,11 +7,14 @@ import Navigation from "@/components/Navigation";
 import { Shield } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useToast } from "@/hooks/use-toast";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 const SignIn = () => {
   const navigate = useNavigate();
   const [error, setError] = useState<string | null>(null);
-  const [view, setView] = useState<'sign_in' | 'sign_up'>('sign_in');
+  const [view, setView] = useState<'sign_in' | 'sign_up' | 'guest'>('sign_in');
+  const [guestEmail, setGuestEmail] = useState('');
   const { toast } = useToast();
 
   useEffect(() => {
@@ -88,6 +91,37 @@ const SignIn = () => {
     }
   };
 
+  const handleGuestContinue = async () => {
+    if (!guestEmail) {
+      setError('Please enter your email');
+      return;
+    }
+
+    try {
+      const { data, error: signInError } = await supabase.auth.signInWithOtp({
+        email: guestEmail,
+        options: {
+          emailRedirectTo: window.location.origin
+        }
+      });
+
+      if (signInError) throw signInError;
+
+      toast({
+        title: "Check your email",
+        description: "We've sent you a magic link to sign in.",
+      });
+    } catch (error: any) {
+      console.error('Error in guest sign in:', error);
+      setError(error.message);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "There was a problem signing you in. Please try again.",
+      });
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50">
       <Navigation />
@@ -97,7 +131,14 @@ const SignIn = () => {
             <div className="bg-primary/10 p-3 rounded-full mb-4 transform transition-all duration-300 hover:scale-105">
               <Shield className="h-8 w-8 text-primary" />
             </div>
-            {view === 'sign_up' ? (
+            {view === 'guest' ? (
+              <>
+                <h1 className="text-2xl font-bold text-gray-900 text-center">Continue as Guest</h1>
+                <p className="text-gray-500 mt-2 text-center max-w-sm">
+                  Enter your email to continue without creating an account
+                </p>
+              </>
+            ) : view === 'sign_up' ? (
               <>
                 <h1 className="text-2xl font-bold text-gray-900 text-center">Join Our Community</h1>
                 <p className="text-gray-500 mt-2 text-center max-w-sm">
@@ -120,69 +161,104 @@ const SignIn = () => {
             </Alert>
           )}
           
-          <Auth
-            supabaseClient={supabase}
-            view={view}
-            appearance={{
-              theme: ThemeSupa,
-              variables: {
-                default: {
-                  colors: {
-                    brand: '#1E3A8A',
-                    brandAccent: '#1d4ed8',
-                    brandButtonText: "white",
-                    defaultButtonBackground: "white",
-                    defaultButtonBackgroundHover: "#f8fafc",
-                    defaultButtonBorder: "lightgray",
-                    defaultButtonText: "gray",
-                    dividerBackground: "#e2e8f0",
-                    inputBackground: "transparent",
-                    inputBorder: "#e2e8f0",
-                    inputBorderHover: "#94a3b8",
-                    inputBorderFocus: "#1E3A8A",
-                    inputText: "#1e293b",
-                    inputLabelText: "#64748b",
-                    inputPlaceholder: "#94a3b8",
+          {view === 'guest' ? (
+            <div className="space-y-4">
+              <Input
+                type="email"
+                placeholder="Enter your email"
+                value={guestEmail}
+                onChange={(e) => setGuestEmail(e.target.value)}
+              />
+              <Button 
+                className="w-full bg-primary hover:bg-primary/90" 
+                onClick={handleGuestContinue}
+              >
+                Continue as Guest
+              </Button>
+              <Button
+                variant="outline"
+                className="w-full"
+                onClick={() => setView('sign_in')}
+              >
+                Back to Sign In
+              </Button>
+            </div>
+          ) : (
+            <>
+              <Auth
+                supabaseClient={supabase}
+                view={view}
+                appearance={{
+                  theme: ThemeSupa,
+                  variables: {
+                    default: {
+                      colors: {
+                        brand: '#1E3A8A',
+                        brandAccent: '#1d4ed8',
+                        brandButtonText: "white",
+                        defaultButtonBackground: "white",
+                        defaultButtonBackgroundHover: "#f8fafc",
+                        defaultButtonBorder: "lightgray",
+                        defaultButtonText: "gray",
+                        dividerBackground: "#e2e8f0",
+                        inputBackground: "transparent",
+                        inputBorder: "#e2e8f0",
+                        inputBorderHover: "#94a3b8",
+                        inputBorderFocus: "#1E3A8A",
+                        inputText: "#1e293b",
+                        inputLabelText: "#64748b",
+                        inputPlaceholder: "#94a3b8",
+                      },
+                      space: {
+                        spaceSmall: '4px',
+                        spaceMedium: '8px',
+                        spaceLarge: '12px',
+                        labelBottomMargin: '8px',
+                        anchorBottomMargin: '4px',
+                        emailInputSpacing: '4px',
+                        socialAuthSpacing: '4px',
+                        buttonPadding: '10px 15px',
+                        inputPadding: '10px 15px',
+                      },
+                      borderWidths: {
+                        buttonBorderWidth: '1px',
+                        inputBorderWidth: '1px',
+                      },
+                      radii: {
+                        borderRadiusButton: '8px',
+                        buttonBorderRadius: '8px',
+                        inputBorderRadius: '8px',
+                      },
+                      fonts: {
+                        bodyFontFamily: `ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"`,
+                        buttonFontFamily: `ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"`,
+                        inputFontFamily: `ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"`,
+                      },
+                    },
                   },
-                  space: {
-                    spaceSmall: '4px',
-                    spaceMedium: '8px',
-                    spaceLarge: '12px',
-                    labelBottomMargin: '8px',
-                    anchorBottomMargin: '4px',
-                    emailInputSpacing: '4px',
-                    socialAuthSpacing: '4px',
-                    buttonPadding: '10px 15px',
-                    inputPadding: '10px 15px',
+                  className: {
+                    container: 'flex flex-col gap-4',
+                    button: 'font-medium shadow-sm hover:shadow-md transition-all duration-200',
+                    divider: 'my-4',
+                    label: 'font-medium',
+                    input: 'focus:ring-2 focus:ring-primary/20 transition-all duration-200',
+                    loader: 'border-primary',
                   },
-                  borderWidths: {
-                    buttonBorderWidth: '1px',
-                    inputBorderWidth: '1px',
-                  },
-                  radii: {
-                    borderRadiusButton: '8px',
-                    buttonBorderRadius: '8px',
-                    inputBorderRadius: '8px',
-                  },
-                  fonts: {
-                    bodyFontFamily: `ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"`,
-                    buttonFontFamily: `ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"`,
-                    inputFontFamily: `ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"`,
-                  },
-                },
-              },
-              className: {
-                container: 'flex flex-col gap-4',
-                button: 'font-medium shadow-sm hover:shadow-md transition-all duration-200',
-                divider: 'my-4',
-                label: 'font-medium',
-                input: 'focus:ring-2 focus:ring-primary/20 transition-all duration-200',
-                loader: 'border-primary',
-              },
-            }}
-            providers={[]}
-            redirectTo={window.location.origin}
-          />
+                }}
+                providers={[]}
+                redirectTo={window.location.origin}
+              />
+              <div className="mt-4 text-center">
+                <Button
+                  variant="ghost"
+                  className="text-gray-600 hover:text-gray-900"
+                  onClick={() => setView('guest')}
+                >
+                  Continue as Guest
+                </Button>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>
