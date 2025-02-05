@@ -70,27 +70,42 @@ const ServicePage = ({ serviceType, providers }: ServicePageProps) => {
       return;
     }
 
-    // Create a chat message
-    const { error } = await supabase
-      .from("chat_messages")
-      .insert({
-        content: `Service request for ${serviceType}: ${description}`,
-        sender_id: user.id,
-        receiver_id: provider.id.toString(),
-        is_read: false
-      });
+    try {
+      // Create initial chat message
+      const { error: chatError } = await supabase
+        .from("chat_messages")
+        .insert({
+          content: description,
+          sender_id: user.id,
+          receiver_id: provider.id.toString(),
+          is_read: false
+        });
 
-    if (error) {
-      console.error('Error creating chat message:', error);
+      if (chatError) {
+        console.error('Error creating chat message:', chatError);
+        toast({
+          title: "Error",
+          description: "Failed to send message. Please try again.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // Navigate to chat page with provider selected
+      navigate('/chat', { 
+        state: { 
+          selectedProviderId: provider.id,
+          initialMessage: description
+        } 
+      });
+    } catch (error) {
+      console.error('Error in handleContact:', error);
       toast({
         title: "Error",
-        description: "Failed to send message. Please try again.",
+        description: "An unexpected error occurred. Please try again.",
         variant: "destructive",
       });
-      return;
     }
-
-    navigate('/chat');
   };
 
   const handleCall = (provider: Provider) => {
