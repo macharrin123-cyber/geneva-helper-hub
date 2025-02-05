@@ -227,7 +227,16 @@ const ClientDashboard = () => {
               <Card key={booking.id} className="hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
                 <CardHeader className="border-b border-gray-100">
                   <CardTitle className="flex items-center gap-2">
-                    <span className="text-xl">{booking.provider.service_type} Service</span>
+                    <div className="flex-1">
+                      <span className="text-xl">{booking.provider.service_type} Service</span>
+                      <div className="flex items-center gap-2 mt-1">
+                        <span className="text-sm text-gray-600">Provider: {booking.provider.name}</span>
+                        <div className="flex items-center gap-1">
+                          <Star className="w-4 h-4 text-yellow-400 fill-current" />
+                          <span className="text-sm text-gray-600">4.8 (24 reviews)</span>
+                        </div>
+                      </div>
+                    </div>
                     <span className={`ml-auto text-sm px-3 py-1 rounded-full ${
                       booking.provider_response === 'approved' ? 'bg-green-100 text-green-800' : 
                       booking.provider_response === 'denied' ? 'bg-red-100 text-red-800' : 
