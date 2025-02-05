@@ -16,7 +16,7 @@ const SearchSection = ({ searchTerm, onSearchChange, onSearchSubmit }: SearchSec
       <div 
         className="absolute inset-0 bg-cover bg-top"
         style={{
-          backgroundImage: 'url("/lovable-uploads/f31f1b42-d528-48c6-b2e5-c0fc34ef5ccc.png")',
+          backgroundImage: 'url("/lovable-uploads/526ec159-afb3-4e91-ba4b-7aae426407d1.png")',
         }}
       >
         <div className="absolute inset-0 bg-black/50" /> {/* Dark overlay */}
