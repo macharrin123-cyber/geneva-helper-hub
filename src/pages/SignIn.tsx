@@ -2,7 +2,7 @@ import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { supabase } from "@/integrations/supabase/client";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import { Shield } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -13,21 +13,52 @@ import { createTestUser } from "@/utils/createTestUser";
 
 const SignIn = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [error, setError] = useState<string | null>(null);
   const [view, setView] = useState<'sign_in' | 'sign_up' | 'guest'>('sign_in');
   const [guestEmail, setGuestEmail] = useState('');
+  const [isProcessingEmailLink, setIsProcessingEmailLink] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
     const checkUser = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session) {
-        console.log('User already signed in, checking profile...');
-        await routeUserBasedOnType(session.user.id);
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session) {
+          console.log('User already signed in, checking profile...');
+          await routeUserBasedOnType(session.user.id);
+        }
+      } catch (error) {
+        console.error('Error checking session:', error);
+        setError('Failed to check authentication status');
       }
     };
     
     checkUser();
+
+    // Handle email confirmation
+    const handleEmailConfirmation = async () => {
+      if (location.hash && location.hash.includes('access_token')) {
+        setIsProcessingEmailLink(true);
+        try {
+          const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+          
+          if (sessionError) throw sessionError;
+          
+          if (session) {
+            console.log('Email confirmation successful, routing user...');
+            await routeUserBasedOnType(session.user.id);
+          }
+        } catch (error) {
+          console.error('Error processing email confirmation:', error);
+          setError('Failed to process email confirmation. Please try signing in again.');
+        } finally {
+          setIsProcessingEmailLink(false);
+        }
+      }
+    };
+
+    handleEmailConfirmation();
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       console.log('Auth state changed:', event, session);
@@ -44,7 +75,7 @@ const SignIn = () => {
     });
 
     return () => subscription.unsubscribe();
-  }, [navigate]);
+  }, [navigate, location]);
 
   const routeUserBasedOnType = async (userId: string) => {
     try {
@@ -99,10 +130,10 @@ const SignIn = () => {
     }
 
     try {
-      const { data, error: signInError } = await supabase.auth.signInWithOtp({
+      const { error: signInError } = await supabase.auth.signInWithOtp({
         email: guestEmail,
         options: {
-          emailRedirectTo: window.location.origin
+          emailRedirectTo: `${window.location.origin}/signin#access_token=true`
         }
       });
 
@@ -114,11 +145,15 @@ const SignIn = () => {
       });
     } catch (error: any) {
       console.error('Error in guest sign in:', error);
-      setError(error.message);
+      if (error.message.includes('rate limit')) {
+        setError('Please wait a minute before requesting another magic link.');
+      } else {
+        setError(error.message);
+      }
       toast({
         variant: "destructive",
         title: "Error",
-        description: "There was a problem signing you in. Please try again.",
+        description: error.message || "There was a problem signing you in. Please try again.",
       });
     }
   };
@@ -138,6 +173,18 @@ const SignIn = () => {
       });
     }
   };
+
+  if (isProcessingEmailLink) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center">
+        <div className="bg-white p-8 rounded-xl shadow-lg border border-gray-100 text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <h2 className="text-xl font-semibold text-gray-900">Signing you in...</h2>
+          <p className="text-gray-500 mt-2">Please wait while we complete the process.</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50">
