@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import ServicePage from "@/components/ServicePage";
 import { supabase } from "@/integrations/supabase/client";
-import type { ServiceProvider } from "@/integrations/supabase/types";
 
 interface Provider {
   id: number;
@@ -14,61 +13,35 @@ interface Provider {
 }
 
 const CarpentryPage = () => {
-  const [providers, setProviders] = useState<Provider[]>([]);
-
-  useEffect(() => {
-    const fetchProviders = async () => {
-      // Fetch regular service providers
-      const { data: serviceProviders, error: spError } = await supabase
-        .from('service_providers')
-        .select('*')
-        .eq('service_type', 'carpentry');
-      
-      if (spError) {
-        console.error('Error fetching carpentry providers:', spError);
-        return;
-      }
-
-      // Fetch approved applications
-      const { data: approvedApplications, error: appError } = await supabase
-        .from('service_provider_applications')
-        .select('*')
-        .eq('service', 'carpentry')
-        .eq('status', 'approved');
-
-      if (appError) {
-        console.error('Error fetching approved applications:', appError);
-        return;
-      }
-
-      // Combine and format providers
-      const allProviders = [
-        ...serviceProviders,
-        ...approvedApplications.map(app => ({
-          id: app.id,
-          name: app.name,
-          service_type: app.service,
-          hourly_rate: app.hourly_rate,
-          image_url: app.image_url,
-          description: app.description
-        }))
-      ];
-
-      const formattedProviders = allProviders.map(provider => ({
-        id: parseInt(provider.id),
-        name: provider.name,
-        rating: 4.5, // Default rating
-        hourlyRate: provider.hourly_rate,
-        yearsExperience: 5, // Default experience
-        phone: '+41 76 XXX XX XX', // Default phone
-        image: provider.image_url
-      }));
-
-      setProviders(formattedProviders);
-    };
-
-    fetchProviders();
-  }, []);
+  const [providers, setProviders] = useState<Provider[]>([
+    {
+      id: 1,
+      name: "Peter Zimmermann",
+      rating: 4.9,
+      hourlyRate: 88,
+      yearsExperience: 20,
+      phone: "+41 76 012 34 56",
+      image: "https://images.unsplash.com/photo-1552058544-f2b08422138a"
+    },
+    {
+      id: 2,
+      name: "Hans Meier",
+      rating: 4.8,
+      hourlyRate: 85,
+      yearsExperience: 15,
+      phone: "+41 76 123 45 67",
+      image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d"
+    },
+    {
+      id: 3,
+      name: "Kurt Wagner",
+      rating: 4.7,
+      hourlyRate: 82,
+      yearsExperience: 12,
+      phone: "+41 76 234 56 78",
+      image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7"
+    }
+  ]);
 
   return <ServicePage serviceType="carpentry" providers={providers} />;
 };

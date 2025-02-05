@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import ServicePage from "@/components/ServicePage";
 import { supabase } from "@/integrations/supabase/client";
-import type { ServiceProvider } from "@/integrations/supabase/types";
 
 interface Provider {
   id: number;
@@ -14,35 +13,35 @@ interface Provider {
 }
 
 const PaintingPage = () => {
-  const [providers, setProviders] = useState<Provider[]>([]);
-
-  useEffect(() => {
-    const fetchProviders = async () => {
-      const { data, error } = await supabase
-        .from('service_providers')
-        .select('*')
-        .eq('service_type', 'painting');
-      
-      if (error) {
-        console.error('Error fetching painting providers:', error);
-        return;
-      }
-
-      const formattedProviders = (data as ServiceProvider[]).map(provider => ({
-        id: parseInt(provider.id),
-        name: provider.name,
-        rating: 4.5, // Default rating
-        hourlyRate: provider.hourly_rate,
-        yearsExperience: 5, // Default experience
-        phone: '+41 76 XXX XX XX', // Default phone
-        image: provider.image_url
-      }));
-
-      setProviders(formattedProviders);
-    };
-
-    fetchProviders();
-  }, []);
+  const [providers, setProviders] = useState<Provider[]>([
+    {
+      id: 1,
+      name: "Lucas Moser",
+      rating: 4.9,
+      hourlyRate: 75,
+      yearsExperience: 12,
+      phone: "+41 76 345 67 89",
+      image: "https://images.unsplash.com/photo-1540569014015-19a7be504e3a"
+    },
+    {
+      id: 2,
+      name: "Simon Frei",
+      rating: 4.8,
+      hourlyRate: 72,
+      yearsExperience: 9,
+      phone: "+41 76 456 78 90",
+      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d"
+    },
+    {
+      id: 3,
+      name: "Daniel Koch",
+      rating: 4.7,
+      hourlyRate: 68,
+      yearsExperience: 7,
+      phone: "+41 76 567 89 01",
+      image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d"
+    }
+  ]);
 
   return <ServicePage serviceType="painting" providers={providers} />;
 };

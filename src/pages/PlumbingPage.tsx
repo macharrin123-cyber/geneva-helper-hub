@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import ServicePage from "@/components/ServicePage";
 import { supabase } from "@/integrations/supabase/client";
-import type { ServiceProvider } from "@/integrations/supabase/types";
 
 interface Provider {
   id: number;
@@ -14,35 +13,35 @@ interface Provider {
 }
 
 const PlumbingPage = () => {
-  const [providers, setProviders] = useState<Provider[]>([]);
-
-  useEffect(() => {
-    const fetchProviders = async () => {
-      const { data, error } = await supabase
-        .from('service_providers')
-        .select('*')
-        .eq('service_type', 'plumbing');
-      
-      if (error) {
-        console.error('Error fetching plumbing providers:', error);
-        return;
-      }
-
-      const formattedProviders = (data as ServiceProvider[]).map(provider => ({
-        id: parseInt(provider.id),
-        name: provider.name,
-        rating: 4.5, // Default rating
-        hourlyRate: provider.hourly_rate,
-        yearsExperience: 5, // Default experience
-        phone: '+41 76 XXX XX XX', // Default phone
-        image: provider.image_url
-      }));
-
-      setProviders(formattedProviders);
-    };
-
-    fetchProviders();
-  }, []);
+  const [providers, setProviders] = useState<Provider[]>([
+    {
+      id: 1,
+      name: "Thomas Schmidt",
+      rating: 4.9,
+      hourlyRate: 95,
+      yearsExperience: 15,
+      phone: "+41 76 456 78 90",
+      image: "https://images.unsplash.com/photo-1560250097-0b93528c311a"
+    },
+    {
+      id: 2,
+      name: "Michael Weber",
+      rating: 4.8,
+      hourlyRate: 90,
+      yearsExperience: 12,
+      phone: "+41 76 567 89 01",
+      image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7"
+    },
+    {
+      id: 3,
+      name: "David Müller",
+      rating: 4.7,
+      hourlyRate: 85,
+      yearsExperience: 8,
+      phone: "+41 76 678 90 12",
+      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e"
+    }
+  ]);
 
   return <ServicePage serviceType="plumbing" providers={providers} />;
 };
