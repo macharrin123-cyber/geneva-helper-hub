@@ -24,6 +24,7 @@ import HowWeWork from "./pages/HowWeWork";
 import ResetPassword from "./pages/ResetPassword";
 import ProviderOnboarding from "./pages/ProviderOnboarding";
 import AboutUs from "./pages/AboutUs";
+import FAQPage from "./pages/FAQPage";
 
 const queryClient = new QueryClient();
 
@@ -73,6 +74,7 @@ const AppContent = () => {
               <Route path="/how-we-work" element={<HowWeWork />} />
               <Route path="/provider-onboarding" element={<ProviderOnboarding />} />
               <Route path="/about-us" element={<AboutUs />} />
+              <Route path="/faq" element={<FAQPage />} />
             </Routes>
           </div>
           <Footer />
