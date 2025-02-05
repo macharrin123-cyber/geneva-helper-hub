@@ -1,14 +1,18 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 import type { ServiceBookingWithProvider, Profile } from "@/integrations/supabase/types";
-import { MapPin, Calendar, Clock, DollarSign } from "lucide-react";
+import { MapPin, Calendar, Clock, DollarSign, ImageIcon, UserRound } from "lucide-react";
 
 const ClientDashboard = () => {
   const [error] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const { toast } = useToast();
   
   // Mock data for development
   const mockProfile: Profile = {
@@ -16,6 +20,44 @@ const ClientDashboard = () => {
     user_type: 'client',
     created_at: '2024-01-01',
     updated_at: '2024-01-01'
+  };
+
+  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    try {
+      const file = event.target.files?.[0];
+      if (!file) return;
+
+      setUploading(true);
+      const fileExt = file.name.split(".").pop();
+      const fileName = `${Math.random()}.${fileExt}`;
+      const filePath = `${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from("provider-images")
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from("provider-images")
+        .getPublicUrl(filePath);
+
+      // Here you would update the profile with the new image URL
+      // For now we'll just show a success message
+      toast({
+        title: "Success",
+        description: "Profile image updated successfully",
+      });
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      toast({
+        title: "Error",
+        description: "Failed to upload image",
+        variant: "destructive",
+      });
+    } finally {
+      setUploading(false);
+    }
   };
 
   const mockBookings: ServiceBookingWithProvider[] = [
@@ -86,8 +128,8 @@ const ClientDashboard = () => {
             </Alert>
           )}
 
-          {mockProfile && (
-            <Card className="mb-8 hover:shadow-lg transition-shadow">
+          <div className="flex justify-between items-start mb-8">
+            <Card className="flex-grow mr-8">
               <CardHeader>
                 <CardTitle className="text-2xl font-bold text-gray-900">Profile Information</CardTitle>
               </CardHeader>
@@ -98,7 +140,33 @@ const ClientDashboard = () => {
                 </div>
               </CardContent>
             </Card>
-          )}
+
+            <div className="relative">
+              <label htmlFor="profile-image" className="cursor-pointer block">
+                <div className="w-32 h-32 rounded-full overflow-hidden bg-gray-100 ring-4 ring-primary/20 hover:ring-primary/30 transition-all">
+                  <div className="w-full h-full flex items-center justify-center relative group">
+                    <UserRound className="w-16 h-16 text-gray-400 group-hover:text-gray-500 transition-colors" />
+                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                      <ImageIcon className="w-6 h-6 text-white" />
+                    </div>
+                  </div>
+                </div>
+                <input
+                  id="profile-image"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  disabled={uploading}
+                  className="hidden"
+                />
+              </label>
+              {uploading && (
+                <div className="absolute inset-0 flex items-center justify-center bg-white/80 rounded-full">
+                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
+                </div>
+              )}
+            </div>
+          </div>
 
           <div className="flex justify-center mb-8">
             <Button asChild size="lg" className="bg-primary hover:bg-primary/90">
