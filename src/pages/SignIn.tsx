@@ -9,6 +9,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { createTestUser } from "@/utils/createTestUser";
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -122,11 +123,27 @@ const SignIn = () => {
     }
   };
 
+  const handleCreateTestUser = async () => {
+    const result = await createTestUser();
+    if (result) {
+      toast({
+        title: "Test User Created",
+        description: "You can now sign in with test@helpify.ch / test123!",
+      });
+    } else {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to create test user. It might already exist.",
+      });
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50">
       <Navigation />
       <div className="max-w-md mx-auto pt-24 px-4">
-        <div className="bg-white p-8 rounded-xl shadow-lg border border-gray-100 transform transition-all duration-300 hover:shadow-xl">
+        <div className="bg-white p-8 rounded-xl shadow-lg border border-gray-100">
           <div className="flex flex-col items-center mb-8">
             <div className="bg-primary/10 p-3 rounded-full mb-4 transform transition-all duration-300 hover:scale-105">
               <Shield className="h-8 w-8 text-primary" />
@@ -248,13 +265,20 @@ const SignIn = () => {
                 providers={[]}
                 redirectTo={window.location.origin}
               />
-              <div className="mt-4 text-center">
+              <div className="mt-4 text-center space-y-2">
                 <Button
                   variant="ghost"
                   className="text-gray-600 hover:text-gray-900"
                   onClick={() => setView('guest')}
                 >
                   Continue as Guest
+                </Button>
+                <Button
+                  variant="outline"
+                  className="w-full text-sm"
+                  onClick={handleCreateTestUser}
+                >
+                  Create Test Account (test@helpify.ch)
                 </Button>
               </div>
             </>
