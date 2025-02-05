@@ -20,60 +20,61 @@ const ChatPage = () => {
   const [newMessage, setNewMessage] = useState("");
   const { toast } = useToast();
   const navigate = useNavigate();
-  const [user, setUser] = useState<any>(null);
+  
+  // Temporary mock user for testing
+  const mockUser = {
+    id: "test-user-id",
+    email: "test@helpify.ch"
+  };
 
   useEffect(() => {
-    const checkUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
-        navigate("/signin");
-        return;
-      }
-      setUser(user);
-      fetchMessages(user.id);
-    };
-
-    checkUser();
-  }, [navigate]);
+    // Temporarily disabled authentication check
+    fetchMessages(mockUser.id);
+  }, []);
 
   const fetchMessages = async (userId: string) => {
-    const { data, error } = await supabase
-      .from("chat_messages")
-      .select("*")
-      .or(`sender_id.eq.${userId},receiver_id.eq.${userId}`)
-      .order("created_at", { ascending: true });
-
-    if (error) {
-      console.error("Error fetching messages:", error);
-      return;
-    }
-
-    setMessages(data || []);
+    // For testing, let's add some mock messages
+    const mockMessages: Message[] = [
+      {
+        id: "1",
+        content: "Hello! How can I help you today?",
+        sender_id: "provider-1",
+        created_at: new Date(Date.now() - 3600000).toISOString(),
+      },
+      {
+        id: "2",
+        content: "I need help with my plumbing issue",
+        sender_id: mockUser.id,
+        created_at: new Date(Date.now() - 1800000).toISOString(),
+      },
+      {
+        id: "3",
+        content: "Could you describe the issue in more detail?",
+        sender_id: "provider-1",
+        created_at: new Date(Date.now() - 900000).toISOString(),
+      }
+    ];
+    
+    setMessages(mockMessages);
   };
 
   const sendMessage = async () => {
-    if (!newMessage.trim() || !user) return;
+    if (!newMessage.trim()) return;
 
-    const { error } = await supabase
-      .from("chat_messages")
-      .insert([
-        {
-          content: newMessage,
-          sender_id: user.id,
-        }
-      ]);
+    const mockNewMessage: Message = {
+      id: Date.now().toString(),
+      content: newMessage,
+      sender_id: mockUser.id,
+      created_at: new Date().toISOString(),
+    };
 
-    if (error) {
-      toast({
-        title: "Error",
-        description: "Failed to send message. Please try again.",
-        variant: "destructive",
-      });
-      return;
-    }
-
+    setMessages(prev => [...prev, mockNewMessage]);
     setNewMessage("");
-    fetchMessages(user.id);
+    
+    toast({
+      title: "Message sent",
+      description: "Your message has been sent successfully.",
+    });
   };
 
   return (
@@ -91,7 +92,7 @@ const ChatPage = () => {
                   <div
                     key={message.id}
                     className={`p-3 rounded-lg max-w-[80%] ${
-                      message.sender_id === user?.id
+                      message.sender_id === mockUser.id
                         ? "ml-auto bg-blue-500 text-white"
                         : "bg-gray-100"
                     }`}
