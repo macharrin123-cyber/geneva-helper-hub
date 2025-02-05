@@ -1,7 +1,9 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
 import type { ServiceBookingWithProvider, Profile } from "@/integrations/supabase/types";
 import { MapPin, Calendar, Clock, DollarSign } from "lucide-react";
 
@@ -97,6 +99,12 @@ const ClientDashboard = () => {
               </CardContent>
             </Card>
           )}
+
+          <div className="flex justify-center mb-8">
+            <Button asChild size="lg" className="bg-primary hover:bg-primary/90">
+              <Link to="/">Book a Service</Link>
+            </Button>
+          </div>
 
           <h1 className="text-3xl font-bold text-gray-900 mb-8">My Bookings</h1>
           
