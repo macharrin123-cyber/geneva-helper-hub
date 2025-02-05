@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState } from 'react';
 
-type Language = 'en' | 'fr';
+type Language = 'en' | 'fr' | 'de' | 'it';
 
 interface LanguageContextType {
   language: Language;
@@ -148,6 +148,78 @@ export const translations = {
 
     // Reviews Section
     'reviews.title': 'Ce que dit notre Communauté',
+  },
+  de: {
+    // Navigation
+    'nav.home': 'Startseite',
+    'nav.howWeWork': 'Wie wir arbeiten',
+    'nav.contact': 'Kontakt',
+    'nav.signIn': 'Anmelden',
+    'nav.signOut': 'Abmelden',
+    'nav.becomeProvider': 'Anbieter werden',
+    'nav.aboutUs': 'Über uns',
+
+    // About page
+    'about.title': 'Über uns',
+    'about.description': 'Bei Helpify glauben wir daran, eine Gemeinschaft zu schaffen, in der Hilfe zu finden so einfach und vertrauenswürdig ist wie einen Freund zu fragen. Wir existieren, um beschäftigte Menschen und Familien in Genf zu unterstützen, indem wir sie mit zuverlässiger Hilfe verbinden.',
+
+    // Home page
+    'home.title': 'Finden Sie lokale Dienstleistungen in Genf',
+    'home.subtitle': 'Verbinden Sie sich mit vertrauenswürdigen lokalen Fachleuten für alle Ihre Haushaltsdienstleistungen',
+    'home.searchPlaceholder': 'Suche nach Dienstleistungen...',
+
+    // Services
+    'service.plumbing': 'Sanitär',
+    'service.plumbingDesc': 'Professionelle Sanitärarbeiten und Installationen',
+    'service.electrical': 'Elektrik',
+    'service.electricalDesc': 'Professionelle Elektrodienstleistungen',
+    'service.painting': 'Malerei',
+    'service.paintingDesc': 'Innen- und Außenmalerarbeiten',
+    'service.carpentry': 'Schreinerei',
+    'service.carpentryDesc': 'Maßgeschneiderte Holzarbeiten und Möbelreparaturen',
+    'service.cleaning': 'Reinigung',
+    'service.cleaningDesc': 'Professionelle Haus- und Büroreinigung',
+    'service.moving': 'Umzug',
+    'service.movingDesc': 'Zuverlässige Umzugs- und Transportdienste',
+
+    // Reviews Section
+    'reviews.title': 'Was unsere Community sagt',
+  },
+  it: {
+    // Navigation
+    'nav.home': 'Home',
+    'nav.howWeWork': 'Come lavoriamo',
+    'nav.contact': 'Contatti',
+    'nav.signIn': 'Accedi',
+    'nav.signOut': 'Esci',
+    'nav.becomeProvider': 'Diventa fornitore',
+    'nav.aboutUs': 'Chi siamo',
+
+    // About page
+    'about.title': 'Chi siamo',
+    'about.description': 'In Helpify crediamo nel creare una comunità dove trovare aiuto sia semplice e affidabile come chiedere a un amico. Esistiamo per supportare individui e famiglie impegnate a Ginevra, collegandoli con assistenza affidabile.',
+
+    // Home page
+    'home.title': 'Trova servizi locali a Ginevra',
+    'home.subtitle': 'Connettiti con professionisti locali affidabili per tutti i tuoi servizi domestici',
+    'home.searchPlaceholder': 'Cerca servizi...',
+
+    // Services
+    'service.plumbing': 'Idraulica',
+    'service.plumbingDesc': 'Riparazioni e installazioni idrauliche professionali',
+    'service.electrical': 'Elettricità',
+    'service.electricalDesc': 'Servizi elettrici professionali',
+    'service.painting': 'Pittura',
+    'service.paintingDesc': 'Servizi di pittura interni ed esterni',
+    'service.carpentry': 'Falegnameria',
+    'service.carpentryDesc': 'Lavori in legno su misura e riparazioni mobili',
+    'service.cleaning': 'Pulizie',
+    'service.cleaningDesc': 'Pulizie professionali per casa e ufficio',
+    'service.moving': 'Traslochi',
+    'service.movingDesc': 'Servizi di trasloco e trasporto affidabili',
+
+    // Reviews Section
+    'reviews.title': 'Cosa dice la nostra community',
   }
 };
 

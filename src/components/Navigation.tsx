@@ -51,7 +51,18 @@ const Navigation = () => {
   };
 
   const getCurrentFlag = () => {
-    return language === 'en' ? '🇬🇧' : '🇫🇷';
+    switch (language) {
+      case 'en':
+        return '🇬🇧';
+      case 'fr':
+        return '🇫🇷';
+      case 'de':
+        return '🇩🇪';
+      case 'it':
+        return '🇮🇹';
+      default:
+        return '🇬🇧';
+    }
   };
 
   return (
@@ -141,6 +152,12 @@ const Navigation = () => {
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setLanguage('fr')}>
                   🇫🇷 Français
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setLanguage('de')}>
+                  🇩🇪 Deutsch
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setLanguage('it')}>
+                  🇮🇹 Italiano
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -248,6 +265,24 @@ const Navigation = () => {
                   className="text-white hover:text-blue-100"
                 >
                   🇫🇷 Français
+                </button>
+                <button
+                  onClick={() => {
+                    setLanguage('de');
+                    setIsOpen(false);
+                  }}
+                  className="text-white hover:text-blue-100"
+                >
+                  🇩🇪 Deutsch
+                </button>
+                <button
+                  onClick={() => {
+                    setLanguage('it');
+                    setIsOpen(false);
+                  }}
+                  className="text-white hover:text-blue-100"
+                >
+                  🇮🇹 Italiano
                 </button>
               </div>
 
