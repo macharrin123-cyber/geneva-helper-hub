@@ -73,15 +73,15 @@ const ServicePage = ({ serviceType, providers }: ServicePageProps) => {
     // Create a chat message
     const { error } = await supabase
       .from("chat_messages")
-      .insert([
-        {
-          content: `Service request for ${serviceType}: ${description}`,
-          sender_id: user.id,
-          receiver_id: provider.id
-        }
-      ]);
+      .insert({
+        content: `Service request for ${serviceType}: ${description}`,
+        sender_id: user.id,
+        receiver_id: provider.id.toString(),
+        is_read: false
+      });
 
     if (error) {
+      console.error('Error creating chat message:', error);
       toast({
         title: "Error",
         description: "Failed to send message. Please try again.",
