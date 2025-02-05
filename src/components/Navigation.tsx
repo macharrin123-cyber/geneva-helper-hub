@@ -80,6 +80,7 @@ const Navigation = () => {
             </Link>
           </div>
           
+          {/* Desktop menu */}
           <div className="hidden md:flex items-center space-x-4">
             <Link to="/" className={linkStyles}>
               {t('nav.home')}
@@ -172,6 +173,7 @@ const Navigation = () => {
             </DropdownMenu>
           </div>
 
+          {/* Mobile menu button */}
           <div className="md:hidden flex items-center space-x-2">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -255,6 +257,15 @@ const Navigation = () => {
               >
                 {t('nav.contact')}
               </Link>
+              {user && (
+                <Link
+                  to="/chat"
+                  className="block text-white hover:text-blue-100 px-3 py-2 rounded-md transition-colors duration-200"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Chat
+                </Link>
+              )}
 
               <div className="flex gap-2 px-3 py-2">
                 <button
@@ -356,7 +367,6 @@ const Navigation = () => {
             </div>
           </div>
         )}
-        </div>
       </div>
     </nav>
   );
