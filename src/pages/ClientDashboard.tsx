@@ -194,7 +194,7 @@ const ClientDashboard = () => {
 
         <Card className="mb-6 md:mb-8">
           <CardHeader>
-            <CardTitle className="text-xl md:text-2xl font-bold text-gray-900">Profile Information</CardTitle>
+            <CardTitle className="text-xl md:text-2xl font-bold text-gray-900 text-center md:text-left">Profile Information</CardTitle>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleProfileUpdate} className="space-y-4 md:space-y-6">
@@ -278,18 +278,18 @@ const ClientDashboard = () => {
           </CardContent>
         </Card>
 
-        <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6 md:mb-8">My Bookings</h1>
+        <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6 md:mb-8 text-center md:text-left">My Bookings</h1>
         
         <div className="grid gap-4 md:gap-6">
           {mockBookings.map((booking) => (
             <Card key={booking.id} className="hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
               <CardHeader className="border-b border-gray-100 pb-4">
                 <CardTitle className="flex flex-col md:flex-row md:items-center gap-2">
-                  <div className="flex-1">
+                  <div className="flex-1 text-center md:text-left">
                     <span className="text-lg md:text-xl block md:inline">{booking.provider.service_type} Service</span>
-                    <div className="flex flex-col md:flex-row md:items-center gap-1 md:gap-2 mt-1">
+                    <div className="flex flex-col md:flex-row md:items-center gap-1 md:gap-2 mt-1 justify-center md:justify-start">
                       <span className="text-sm text-gray-600">Provider: {booking.provider.name}</span>
-                      <div className="flex items-center gap-1">
+                      <div className="flex items-center gap-1 justify-center md:justify-start">
                         <Star className="w-4 h-4 text-yellow-400 fill-current" />
                         <span className="text-sm text-gray-600">4.8 (24 reviews)</span>
                       </div>
