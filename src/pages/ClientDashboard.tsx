@@ -13,14 +13,51 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useIsMobile } from "@/hooks/use-mobile";
 
+interface ProfileData {
+  id?: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  address: string;
+  emailNotifications: boolean;
+  pushNotifications: boolean;
+  imageUrl: string;
+}
+
 const ClientDashboard = () => {
   const [error, setError] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
   const { toast } = useToast();
   const isMobile = useIsMobile();
   const navigate = useNavigate();
+  const [user, setUser] = useState<any>(null);
 
-  const [profileData, setProfileData] = useState({
+  useEffect(() => {
+    const getUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      setUser(user);
+      if (user) {
+        // Fetch profile data
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', user.id)
+          .single();
+          
+        if (profile) {
+          setProfileData(prev => ({
+            ...prev,
+            id: profile.id,
+            imageUrl: profile.image_url || ''
+          }));
+        }
+      }
+    };
+    getUser();
+  }, []);
+
+  const [profileData, setProfileData] = useState<ProfileData>({
     firstName: "Rukshan",
     lastName: "Srivarathan",
     email: "rukers75@gmail.com",
@@ -60,11 +97,15 @@ const ClientDashboard = () => {
 
       console.log('Got public URL:', publicUrl);
 
+      if (!user?.id) {
+        throw new Error("No user ID found");
+      }
+
       // Update profile data with new image URL
       const { error: updateError } = await supabase
         .from("profiles")
         .update({ image_url: publicUrl })
-        .eq("id", profileData.id);
+        .eq("id", user.id);
 
       if (updateError) {
         console.error("Error updating profile:", updateError);
@@ -485,3 +526,4 @@ const ClientDashboard = () => {
 };
 
 export default ClientDashboard;
+
