@@ -275,23 +275,24 @@ const ClientDashboard = () => {
             </Alert>
           )}
 
-          {/* Chat Icon with Notification Badge */}
-          <div className="fixed right-6 bottom-6 z-50">
+          {/* Enhanced Chat Icon with Notification Badge */}
+          <div className="fixed right-8 bottom-8 z-50">
             <Button
               variant="default"
               size="icon"
-              className="h-12 w-12 rounded-full shadow-lg"
+              className="h-16 w-16 rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 bg-primary hover:bg-primary/90 hover:scale-105 transform"
               onClick={() => navigate('/chat')}
             >
-              <MessageSquare className="h-6 w-6" />
+              <MessageSquare className="h-8 w-8 text-white" />
               {unreadMessages > 0 && (
                 <Badge 
                   variant="destructive" 
-                  className="absolute -top-2 -right-2 h-6 w-6 flex items-center justify-center rounded-full"
+                  className="absolute -top-2 -right-2 h-7 w-7 flex items-center justify-center rounded-full text-sm font-bold animate-pulse"
                 >
                   {unreadMessages}
                 </Badge>
               )}
+              <span className="sr-only">Open chat</span>
             </Button>
           </div>
 
