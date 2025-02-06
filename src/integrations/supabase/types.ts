@@ -1,3 +1,28 @@
+import { Database } from "./database.types";
+
+// Basic types from database tables
+export type ServiceProvider = Database["public"]["Tables"]["service_providers"]["Row"];
+export type ServiceBooking = Database["public"]["Tables"]["service_bookings"]["Row"];
+export type ProviderAvailability = Database["public"]["Tables"]["provider_availability"]["Row"];
+export type ChatMessage = Database["public"]["Tables"]["chat_messages"]["Row"];
+
+// Legacy Provider type used by service pages
+export interface Provider {
+  id: number;
+  name: string;
+  rating: number;
+  hourlyRate: number;
+  yearsExperience: number;
+  phone: string;
+  image: string;
+  email: string;
+}
+
+// Re-export database types
+export type { Database } from "./database.types";
+export type Tables<T extends keyof Database['public']['Tables']> = Database['public']['Tables'][T]['Row'];
+export type Enums<T extends keyof Database['public']['Enums']> = Database['public']['Enums'][T];
+
 export type Json =
   | string
   | number
@@ -65,7 +90,7 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "service_bookings"
             referencedColumns: ["id"]
-          },
+          }
         ]
       }
       contact_messages: {
@@ -148,7 +173,7 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "service_providers"
             referencedColumns: ["id"]
-          },
+          }
         ]
       }
       reviews: {
@@ -183,7 +208,7 @@ export type Database = {
             isOneToOne: true
             referencedRelation: "service_bookings"
             referencedColumns: ["id"]
-          },
+          }
         ]
       }
       service_bookings: {
@@ -323,7 +348,7 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "service_provider_applications"
             referencedColumns: ["id"]
-          },
+          }
         ]
       }
       service_providers: {
@@ -403,7 +428,7 @@ export type Database = {
   }
 }
 
-type PublicSchema = Database[Extract<keyof Database, "public">]
+export type PublicSchema = Database[Extract<keyof Database, "public">]
 
 export type Tables<
   PublicTableNameOrOptions extends

@@ -8,7 +8,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent } from "@/components/ui/card";
-import { Tables } from "@/integrations/supabase/types";
+import { ServiceBooking, ServiceProvider, ChatMessage } from "@/integrations/supabase/types";
 import { Search, Send, Mail, Phone, MapPin, Clock, Star } from "lucide-react";
 
 type ServiceBooking = Tables<"service_bookings">["Row"];
