@@ -214,7 +214,7 @@ const ServicePage = ({ serviceType, providers }: ServicePageProps) => {
                               onClick={() => handleContact(provider.id)}
                               className="flex-1 bg-primary text-white px-6 py-3 rounded-full font-semibold hover:bg-primary/90 transition-colors"
                             >
-                              Contact Provider
+                              Send Message
                             </button>
                           </div>
                         </div>
