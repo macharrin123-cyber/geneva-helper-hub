@@ -3,11 +3,21 @@ import { useNavigate } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { Phone, Star, Flag } from "lucide-react";
+import { Phone, Star } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
-import type { Provider } from "@/integrations/supabase/types";
+
+interface Provider {
+  id: number;
+  name: string;
+  rating: number;
+  hourlyRate: number;
+  yearsExperience: number;
+  phone: string;
+  image: string;
+  email: string;
+}
 
 interface ServicePageProps {
   serviceType: 'plumbing' | 'electrical' | 'moving' | 'carpentry' | 'painting' | 'cleaning';
@@ -162,15 +172,7 @@ const ServicePage = ({ serviceType, providers }: ServicePageProps) => {
                     <div className="p-6">
                       <div className="flex justify-between items-start mb-4">
                         <div>
-                          <div className="flex items-center gap-2">
-                            <h2 className="text-2xl font-bold text-gray-900">{provider.name}</h2>
-                            {provider.country_code && (
-                              <Flag 
-                                className="h-5 w-5 text-gray-600" 
-                                aria-label={`Nationality: ${provider.nationality || 'Not specified'}`}
-                              />
-                            )}
-                          </div>
+                          <h2 className="text-2xl font-bold text-gray-900">{provider.name}</h2>
                           <div className="flex items-center gap-1 text-gray-700 mt-1">
                             <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
                             <span className="font-semibold">{provider.rating}</span>
@@ -185,6 +187,15 @@ const ServicePage = ({ serviceType, providers }: ServicePageProps) => {
                             CHF {provider.hourlyRate}/hr
                           </p>
                         </div>
+                      </div>
+
+                      <div className="bg-gray-50 rounded-lg p-6 mb-6">
+                        <h3 className="text-xl font-semibold mb-3">How I can help:</h3>
+                        <p className="text-gray-700">
+                          Professional {serviceType} services with {provider.yearsExperience} years of experience. 
+                          Available for both residential and commercial projects. Fully equipped with professional tools 
+                          and ready to help with any {serviceType} needs.
+                        </p>
                       </div>
 
                       {selectedProvider === provider.id && (

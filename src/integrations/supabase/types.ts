@@ -487,21 +487,3 @@ export type CompositeTypes<
   : PublicCompositeTypeNameOrOptions extends keyof PublicSchema["CompositeTypes"]
     ? PublicSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never
-
-export type Provider = {
-  id: number;
-  name: string;
-  rating: number;
-  hourlyRate: number;
-  yearsExperience: number;
-  phone: string;
-  image: string;
-  email: string;
-  nationality?: string;
-  country_code?: string;
-};
-
-export type ServiceProvider = Database['public']['Tables']['service_providers']['Row'];
-export type ServiceBooking = Database['public']['Tables']['service_bookings']['Row'];
-export type ChatMessage = Database['public']['Tables']['chat_messages']['Row'];
-export type ProviderAvailability = Database['public']['Tables']['provider_availability']['Row'];
