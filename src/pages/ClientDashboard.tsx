@@ -222,22 +222,27 @@ const ClientDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100" 
-         style={{
-           backgroundImage: 'url("/lovable-uploads/e20a7267-cc03-45b8-a841-007d68e9aa3e.png")',
-           backgroundSize: 'cover',
-           backgroundPosition: 'center 65%',
-           backgroundAttachment: 'fixed'
-         }}>
-      <Navigation />
-      <main className="pt-16 md:pt-20 pb-8 md:pb-12 animate-fadeIn">
-        {error && (
-          <Alert variant="destructive" className="mb-4 md:mb-6">
-            <AlertDescription>{error}</AlertDescription>
-          </Alert>
-        )}
+    <div className="min-h-screen relative">
+      <div 
+        className="absolute inset-0 z-0"
+        style={{
+          backgroundImage: 'url("/lovable-uploads/e20a7267-cc03-45b8-a841-007d68e9aa3e.png")',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center 65%',
+          backgroundAttachment: 'fixed',
+          opacity: '0.5'
+        }}
+      />
+      <div className="relative z-10">
+        <Navigation />
+        <main className="pt-16 md:pt-20 pb-8 md:pb-12 animate-fadeIn">
+          {error && (
+            <Alert variant="destructive" className="mb-4 md:mb-6">
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
 
-        {/* Profile Image Section */}
+          {/* Profile Image Section */}
         <div className="flex flex-col items-center mb-6 md:mb-8">
           <div className="relative mb-4">
             <label htmlFor="profile-image" className="cursor-pointer block">
@@ -530,7 +535,8 @@ const ClientDashboard = () => {
             </Card>
           )}
         </div>
-      </main>
+        </main>
+      </div>
     </div>
   );
 };
