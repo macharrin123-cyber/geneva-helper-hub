@@ -4,12 +4,16 @@ import { supabase } from "@/integrations/supabase/client";
 import Navigation from "@/components/Navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Avatar } from "@/components/ui/avatar";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent } from "@/components/ui/card";
-import { ServiceBooking, ServiceProvider, ChatMessage } from "@/integrations/supabase/types";
-import { Search, Send } from "lucide-react";
+import { Tables } from "@/integrations/supabase/types";
+import { Search, Send, Mail, Phone, MapPin, Clock, Star } from "lucide-react";
+
+type ServiceBooking = Tables<"service_bookings">["Row"];
+type ServiceProvider = Tables<"service_providers">["Row"];
+type ChatMessage = Tables<"chat_messages">["Row"];
 
 const ChatPage = () => {
   const [selectedProvider, setSelectedProvider] = useState<ServiceProvider | null>(null);
@@ -82,6 +86,8 @@ const ChatPage = () => {
       sender_id: "current-user",
       receiver_id: selectedProvider.id,
       created_at: new Date().toISOString(),
+      booking_id: null,
+      is_read: false
     };
 
     setMessages([...messages, message]);
@@ -126,7 +132,8 @@ const ChatPage = () => {
                   >
                     <div className="flex items-center space-x-3">
                       <Avatar className="h-10 w-10">
-                        <img src={provider.image_url} alt={provider.name} />
+                        <AvatarImage src={provider.image_url} alt={provider.name} />
+                        <AvatarFallback>{provider.name?.charAt(0)}</AvatarFallback>
                       </Avatar>
                       <div>
                         <p className="font-medium">{provider.name}</p>
@@ -142,13 +149,38 @@ const ChatPage = () => {
             <div className="col-span-9">
               {selectedProvider ? (
                 <div className="h-full flex flex-col">
-                  <div className="p-4 border-b flex items-center space-x-3">
-                    <Avatar className="h-10 w-10">
-                      <img src={selectedProvider.image_url} alt={selectedProvider.name} />
-                    </Avatar>
-                    <div>
-                      <p className="font-medium">{selectedProvider.name}</p>
-                      <p className="text-sm text-gray-500">{selectedProvider.service_type}</p>
+                  {/* Enhanced Provider Profile Section */}
+                  <div className="p-6 border-b bg-gradient-to-r from-primary/5 to-primary/10">
+                    <div className="flex items-start space-x-6">
+                      <Avatar className="h-20 w-20 ring-4 ring-primary/20">
+                        <AvatarImage src={selectedProvider.image_url} alt={selectedProvider.name} />
+                        <AvatarFallback>{selectedProvider.name?.charAt(0)}</AvatarFallback>
+                      </Avatar>
+                      <div className="flex-1">
+                        <h2 className="text-2xl font-semibold text-gray-900">{selectedProvider.name}</h2>
+                        <p className="text-gray-500 mt-1">{selectedProvider.service_type}</p>
+                        <div className="mt-4 grid grid-cols-2 gap-4">
+                          <div className="flex items-center text-gray-600">
+                            <Mail className="h-4 w-4 mr-2" />
+                            <span>{selectedProvider.email}</span>
+                          </div>
+                          <div className="flex items-center text-gray-600">
+                            <Phone className="h-4 w-4 mr-2" />
+                            <span>{selectedProvider.phone || 'Not provided'}</span>
+                          </div>
+                          <div className="flex items-center text-gray-600">
+                            <MapPin className="h-4 w-4 mr-2" />
+                            <span>{selectedProvider.address || 'Location not specified'}</span>
+                          </div>
+                          <div className="flex items-center text-gray-600">
+                            <Clock className="h-4 w-4 mr-2" />
+                            <span>${selectedProvider.hourly_rate}/hour</span>
+                          </div>
+                        </div>
+                        {selectedProvider.description && (
+                          <p className="mt-4 text-gray-600">{selectedProvider.description}</p>
+                        )}
+                      </div>
                     </div>
                   </div>
 
