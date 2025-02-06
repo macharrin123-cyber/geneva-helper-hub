@@ -16,6 +16,7 @@ interface Provider {
   yearsExperience: number;
   phone: string;
   image: string;
+  email: string;
 }
 
 interface ServicePageProps {
@@ -83,12 +84,22 @@ const ServicePage = ({ serviceType, providers }: ServicePageProps) => {
 
       if (chatError) {
         console.error('Error creating chat message:', chatError);
-        toast({
-          title: "Error",
-          description: "Failed to send message. Please try again.",
-          variant: "destructive",
-        });
-        return;
+        throw chatError;
+      }
+
+      // Send email notification to provider
+      const { error: emailError } = await supabase.functions.invoke('notify-provider', {
+        body: {
+          providerEmail: provider.email,
+          providerName: provider.name,
+          clientMessage: description,
+          serviceType: serviceType
+        }
+      });
+
+      if (emailError) {
+        console.error('Error sending email notification:', emailError);
+        // Don't throw here - we still want to navigate to chat even if email fails
       }
 
       // Navigate to chat page with provider selected
@@ -97,6 +108,11 @@ const ServicePage = ({ serviceType, providers }: ServicePageProps) => {
           selectedProviderId: provider.id,
           initialMessage: description
         } 
+      });
+
+      toast({
+        title: "Message sent!",
+        description: "Your message has been sent to the provider.",
       });
     } catch (error) {
       console.error('Error in handleContact:', error);
