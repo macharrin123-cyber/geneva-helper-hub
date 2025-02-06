@@ -1,16 +1,7 @@
 import { useEffect, useState } from "react";
 import ServicePage from "@/components/ServicePage";
 import { supabase } from "@/integrations/supabase/client";
-
-interface Provider {
-  id: number;
-  name: string;
-  rating: number;
-  hourlyRate: number;
-  yearsExperience: number;
-  phone: string;
-  image: string;
-}
+import type { Provider } from "@/integrations/supabase/types";
 
 const PlumbingPage = () => {
   const [providers, setProviders] = useState<Provider[]>([
@@ -21,7 +12,8 @@ const PlumbingPage = () => {
       hourlyRate: 95,
       yearsExperience: 15,
       phone: "+41 76 456 78 90",
-      image: "https://images.unsplash.com/photo-1560250097-0b93528c311a"
+      image: "https://images.unsplash.com/photo-1560250097-0b93528c311a",
+      email: "thomas.schmidt@example.com"
     },
     {
       id: 2,
@@ -30,7 +22,8 @@ const PlumbingPage = () => {
       hourlyRate: 90,
       yearsExperience: 12,
       phone: "+41 76 567 89 01",
-      image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7"
+      image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7",
+      email: "michael.weber@example.com"
     },
     {
       id: 3,
@@ -39,7 +32,8 @@ const PlumbingPage = () => {
       hourlyRate: 85,
       yearsExperience: 8,
       phone: "+41 76 678 90 12",
-      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e"
+      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e",
+      email: "david.mueller@example.com"
     }
   ]);
 

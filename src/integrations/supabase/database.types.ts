@@ -45,5 +45,8 @@ export interface Database {
         }
       }
     }
+    Enums: {
+      // Add any enums here if needed
+    }
   }
 }

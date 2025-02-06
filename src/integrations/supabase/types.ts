@@ -3,6 +3,18 @@ import { Database } from "./database.types";
 export type Tables<T extends keyof Database['public']['Tables']> = Database['public']['Tables'][T]['Row']
 export type Enums<T extends keyof Database['public']['Enums']> = Database['public']['Enums'][T]
 
+// This is the Provider type used by the service pages
+export interface Provider {
+  id: number;
+  name: string;
+  rating: number;
+  hourlyRate: number;
+  yearsExperience: number;
+  phone: string;
+  image: string;
+  email: string;
+}
+
 export type ServiceProvider = {
   id: string;
   user_id?: string;
@@ -55,15 +67,4 @@ export type ProviderAvailability = {
   start_time: string;
   end_time: string;
   created_at: string;
-}
-
-export type Provider = {
-  id: number;
-  name: string;
-  rating: number;
-  hourlyRate: number;
-  yearsExperience: number;
-  phone: string;
-  image: string;
-  email: string;
 }

@@ -1,16 +1,7 @@
 import { useEffect, useState } from "react";
 import ServicePage from "@/components/ServicePage";
 import { supabase } from "@/integrations/supabase/client";
-
-interface Provider {
-  id: number;
-  name: string;
-  rating: number;
-  hourlyRate: number;
-  yearsExperience: number;
-  phone: string;
-  image: string;
-}
+import type { Provider } from "@/integrations/supabase/types";
 
 const PaintingPage = () => {
   const [providers, setProviders] = useState<Provider[]>([
@@ -21,7 +12,8 @@ const PaintingPage = () => {
       hourlyRate: 75,
       yearsExperience: 12,
       phone: "+41 76 345 67 89",
-      image: "https://images.unsplash.com/photo-1540569014015-19a7be504e3a"
+      image: "https://images.unsplash.com/photo-1540569014015-19a7be504e3a",
+      email: "lucas.moser@example.com"
     },
     {
       id: 2,
@@ -30,7 +22,8 @@ const PaintingPage = () => {
       hourlyRate: 72,
       yearsExperience: 9,
       phone: "+41 76 456 78 90",
-      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d"
+      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d",
+      email: "simon.frei@example.com"
     },
     {
       id: 3,
@@ -39,7 +32,8 @@ const PaintingPage = () => {
       hourlyRate: 68,
       yearsExperience: 7,
       phone: "+41 76 567 89 01",
-      image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d"
+      image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d",
+      email: "daniel.koch@example.com"
     }
   ]);
 

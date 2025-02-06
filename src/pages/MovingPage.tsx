@@ -1,6 +1,7 @@
 import ServicePage from "@/components/ServicePage";
+import type { Provider } from "@/integrations/supabase/types";
 
-const providers = [
+const providers: Provider[] = [
   { 
     id: 1, 
     name: "Marc Dubois", 
@@ -8,7 +9,8 @@ const providers = [
     hourlyRate: 95, 
     yearsExperience: 12,
     phone: "+41 76 567 89 01",
-    image: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81"
+    image: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81",
+    email: "marc.dubois@example.com"
   },
   { 
     id: 2, 
@@ -17,7 +19,8 @@ const providers = [
     hourlyRate: 85, 
     yearsExperience: 8,
     phone: "+41 76 678 90 12",
-    image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158"
+    image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158",
+    email: "sophie.laurent@example.com"
   },
   { 
     id: 3, 
@@ -26,7 +29,8 @@ const providers = [
     hourlyRate: 90, 
     yearsExperience: 15,
     phone: "+41 76 789 01 23",
-    image: "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952"
+    image: "https://images.unsplash.com/photo-1581092795360-fd1ca04f0952",
+    email: "thomas.mueller@example.com"
   },
 ];
 
