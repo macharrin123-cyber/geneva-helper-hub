@@ -226,7 +226,7 @@ const ClientDashboard = () => {
          style={{
            backgroundImage: 'url("/lovable-uploads/e20a7267-cc03-45b8-a841-007d68e9aa3e.png")',
            backgroundSize: 'cover',
-           backgroundPosition: 'center',
+           backgroundPosition: 'center 65%',
            backgroundAttachment: 'fixed'
          }}>
       <Navigation />
