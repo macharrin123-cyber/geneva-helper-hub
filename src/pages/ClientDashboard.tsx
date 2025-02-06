@@ -37,73 +37,6 @@ const ClientDashboard = () => {
     imageUrl: ""
   });
 
-  const mockBookings = [
-    {
-      id: '1',
-      user_id: '1',
-      provider_id: '1',
-      service_date: '2024-03-20',
-      service_time: '14:00',
-      street_address: '123 Main St',
-      city: 'San Francisco',
-      postal_code: '94105',
-      comments: 'Please bring eco-friendly cleaning supplies',
-      status: 'completed',
-      created_at: '2024-03-15',
-      provider_response: 'approved',
-      payment_status: 'completed',
-      payment_intent_id: null,
-      address: '123 Main St, San Francisco',
-      provider: {
-        id: '1',
-        user_id: '2',
-        image_url: '/placeholder.svg',
-        hourly_rate: 45,
-        service_type: 'Cleaning',
-        created_at: '2024-01-01',
-        description: 'Professional cleaning service',
-        name: 'John Doe',
-        phone: null,
-        experience: null,
-        email: null,
-        cv_url: null,
-        linkedin_profile: null
-      }
-    },
-    {
-      id: '2',
-      user_id: '1',
-      provider_id: '2',
-      service_date: '2024-03-22',
-      service_time: '10:00',
-      street_address: '456 Market St',
-      city: 'San Francisco',
-      postal_code: '94105',
-      status: 'completed',
-      created_at: '2024-03-14',
-      provider_response: 'approved',
-      payment_status: 'completed',
-      payment_intent_id: null,
-      address: '456 Market St, San Francisco',
-      comments: null,
-      provider: {
-        id: '2',
-        user_id: '3',
-        image_url: '/placeholder.svg',
-        hourly_rate: 60,
-        service_type: 'Plumbing',
-        created_at: '2024-01-01',
-        description: 'Expert plumbing services',
-        name: 'Jane Smith',
-        phone: null,
-        experience: null,
-        email: null,
-        cv_url: null,
-        linkedin_profile: null
-      }
-    }
-  ];
-
   useEffect(() => {
     const getUser = async () => {
       const { data: { user } } = await supabase.auth.getUser();
@@ -211,5 +144,72 @@ const ClientDashboard = () => {
     </div>
   );
 };
+
+const mockBookings = [
+    {
+      id: '1',
+      user_id: '1',
+      provider_id: '1',
+      service_date: '2024-03-20',
+      service_time: '14:00',
+      street_address: '123 Main St',
+      city: 'San Francisco',
+      postal_code: '94105',
+      comments: 'Please bring eco-friendly cleaning supplies',
+      status: 'completed',
+      created_at: '2024-03-15',
+      provider_response: 'approved',
+      payment_status: 'completed',
+      payment_intent_id: null,
+      address: '123 Main St, San Francisco',
+      provider: {
+        id: '1',
+        user_id: '2',
+        image_url: '/placeholder.svg',
+        hourly_rate: 45,
+        service_type: 'Cleaning',
+        created_at: '2024-01-01',
+        description: 'Professional cleaning service',
+        name: 'John Doe',
+        phone: null,
+        experience: null,
+        email: null,
+        cv_url: null,
+        linkedin_profile: null
+      }
+    },
+    {
+      id: '2',
+      user_id: '1',
+      provider_id: '2',
+      service_date: '2024-03-22',
+      service_time: '10:00',
+      street_address: '456 Market St',
+      city: 'San Francisco',
+      postal_code: '94105',
+      status: 'completed',
+      created_at: '2024-03-14',
+      provider_response: 'approved',
+      payment_status: 'completed',
+      payment_intent_id: null,
+      address: '456 Market St, San Francisco',
+      comments: null,
+      provider: {
+        id: '2',
+        user_id: '3',
+        image_url: '/placeholder.svg',
+        hourly_rate: 60,
+        service_type: 'Plumbing',
+        created_at: '2024-01-01',
+        description: 'Expert plumbing services',
+        name: 'Jane Smith',
+        phone: null,
+        experience: null,
+        email: null,
+        cv_url: null,
+        linkedin_profile: null
+      }
+    }
+];
 
 export default ClientDashboard;
