@@ -222,7 +222,13 @@ const ClientDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100" 
+         style={{
+           backgroundImage: 'url("/lovable-uploads/e20a7267-cc03-45b8-a841-007d68e9aa3e.png")',
+           backgroundSize: 'cover',
+           backgroundPosition: 'center',
+           backgroundAttachment: 'fixed'
+         }}>
       <Navigation />
       <main className="pt-16 md:pt-20 pb-8 md:pb-12 animate-fadeIn">
         {error && (
