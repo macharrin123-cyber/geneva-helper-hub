@@ -181,21 +181,21 @@ const ServicePage = ({ serviceType, providers }: ServicePageProps) => {
                             )}
                           </div>
                           <p className="text-primary font-medium">Super {serviceType} Provider</p>
-                          <div className="flex items-center gap-1 text-gray-700 mt-2">
-                            <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
-                            <span className="font-semibold">{provider.rating}</span>
-                            <span className="text-gray-500">(12 reviews)</span>
-                          </div>
                           <div className="mt-3 text-gray-600">
                             <p>{provider.yearsExperience} years of experience • {provider.nationality}</p>
                             <p className="mt-1">Available in Geneva area</p>
                           </div>
                         </div>
-                        <div className="text-right">
+                        <div className="text-right space-y-2">
                           <p className="text-3xl font-bold text-gray-900">
                             CHF {provider.hourlyRate}/hr
                           </p>
                           <p className="text-sm text-gray-500">50-min session</p>
+                          <div className="flex items-center justify-end gap-1">
+                            <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+                            <span className="font-semibold">{provider.rating}</span>
+                            <span className="text-gray-500">(12 reviews)</span>
+                          </div>
                         </div>
                       </div>
 
