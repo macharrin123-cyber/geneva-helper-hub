@@ -225,7 +225,7 @@ export type Database = {
           address?: string
           city?: string
           comments?: string | null
-          created_at?: string
+          created_at?: string | null
           id?: string
           payment_intent_id?: string | null
           payment_status?: string | null
@@ -303,7 +303,7 @@ export type Database = {
           created_at?: string
           email: string
           expires_at: string
-          id: string
+          id?: string
           token: string
           used?: boolean | null
         }
@@ -358,7 +358,7 @@ export type Database = {
           id?: string
           image_url: string
           linkedin_profile?: string | null
-          name: string
+          name?: string
           nationality?: string | null
           phone?: string | null
           service_type: string
@@ -412,7 +412,7 @@ export type Tables<
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
     ? keyof (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
         Database[PublicTableNameOrOptions["schema"]]["Views"])
-    : never,
+    : never = never,
 > = PublicTableNameOrOptions extends { schema: keyof Database }
   ? (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
       Database[PublicTableNameOrOptions["schema"]]["Views"])[TableName] extends {
@@ -499,21 +499,3 @@ export type CompositeTypes<
   : PublicCompositeTypeNameOrOptions extends keyof PublicSchema["CompositeTypes"]
     ? PublicSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never
-
-export type Provider = {
-  id: number;
-  name: string;
-  rating: number;
-  hourlyRate: number;
-  yearsExperience: number;
-  phone: string;
-  image: string;
-  email: string;
-  nationality?: string;
-  country_code?: string;
-};
-
-export type ServiceProvider = Database['public']['Tables']['service_providers']['Row'];
-export type ServiceBooking = Database['public']['Tables']['service_bookings']['Row'];
-export type ChatMessage = Database['public']['Tables']['chat_messages']['Row'];
-export type ProviderAvailability = Database['public']['Tables']['provider_availability']['Row'];
