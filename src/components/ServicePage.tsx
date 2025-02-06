@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { Phone, Star, Flag } from "lucide-react";
+import { Phone, Star } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
@@ -17,10 +17,6 @@ interface Provider {
   phone: string;
   image: string;
   email: string;
-  nationality?: string;
-  country_code?: string;
-  address?: string;
-  services?: string[];
 }
 
 interface ServicePageProps {
@@ -176,15 +172,7 @@ const ServicePage = ({ serviceType, providers }: ServicePageProps) => {
                     <div className="p-6">
                       <div className="flex justify-between items-start mb-4">
                         <div>
-                          <div className="flex items-center gap-2">
-                            <h2 className="text-2xl font-bold text-gray-900">{provider.name}</h2>
-                            {provider.nationality && (
-                              <div className="flex items-center gap-1">
-                                <Flag className="h-4 w-4" />
-                                <span className="text-sm text-gray-600">{provider.nationality}</span>
-                              </div>
-                            )}
-                          </div>
+                          <h2 className="text-2xl font-bold text-gray-900">{provider.name}</h2>
                           <div className="flex items-center gap-1 text-gray-700 mt-1">
                             <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
                             <span className="font-semibold">{provider.rating}</span>
@@ -201,52 +189,35 @@ const ServicePage = ({ serviceType, providers }: ServicePageProps) => {
                         </div>
                       </div>
 
-                      {selectedProvider === provider.id && (
-                        <>
-                          <div className="bg-gray-50 rounded-lg p-6 mb-6">
-                            <h3 className="text-xl font-semibold mb-3">About {provider.name}:</h3>
-                            {provider.address && (
-                              <p className="text-gray-700 mb-2">
-                                📍 {provider.address}
-                              </p>
-                            )}
-                            {provider.services && provider.services.length > 0 && (
-                              <div className="mt-3">
-                                <p className="font-medium text-gray-900 mb-2">Services offered:</p>
-                                <div className="flex flex-wrap gap-2">
-                                  {provider.services.map((service, index) => (
-                                    <span 
-                                      key={index}
-                                      className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm"
-                                    >
-                                      {service}
-                                    </span>
-                                  ))}
-                                </div>
-                              </div>
-                            )}
-                          </div>
+                      <div className="bg-gray-50 rounded-lg p-6 mb-6">
+                        <h3 className="text-xl font-semibold mb-3">How I can help:</h3>
+                        <p className="text-gray-700">
+                          Professional {serviceType} services with {provider.yearsExperience} years of experience. 
+                          Available for both residential and commercial projects. Fully equipped with professional tools 
+                          and ready to help with any {serviceType} needs.
+                        </p>
+                      </div>
 
-                          <div className="space-y-6">
-                            <h3 className="text-xl font-semibold">
-                              Describe your needs
-                            </h3>
-                            <Textarea
-                              value={description}
-                              onChange={(e) => setDescription(e.target.value)}
-                              placeholder="Please describe what you need help with..."
-                              className="min-h-[120px]"
-                            />
-                            <div className="flex">
-                              <button
-                                onClick={() => handleContact(provider.id)}
-                                className="flex-1 bg-primary text-white px-6 py-3 rounded-full font-semibold hover:bg-primary/90 transition-colors"
-                              >
-                                Send Message
-                              </button>
-                            </div>
+                      {selectedProvider === provider.id && (
+                        <div className="space-y-6">
+                          <h3 className="text-xl font-semibold">
+                            Describe your needs
+                          </h3>
+                          <Textarea
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                            placeholder="Please describe what you need help with..."
+                            className="min-h-[120px]"
+                          />
+                          <div className="flex">
+                            <button
+                              onClick={() => handleContact(provider.id)}
+                              className="flex-1 bg-primary text-white px-6 py-3 rounded-full font-semibold hover:bg-primary/90 transition-colors"
+                            >
+                              Send Message
+                            </button>
                           </div>
-                        </>
+                        </div>
                       )}
                     </div>
                   </div>

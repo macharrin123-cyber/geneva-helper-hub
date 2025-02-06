@@ -328,8 +328,6 @@ export type Database = {
       }
       service_providers: {
         Row: {
-          address: string | null
-          country_code: string | null
           created_at: string | null
           cv_url: string | null
           description: string | null
@@ -340,15 +338,11 @@ export type Database = {
           image_url: string
           linkedin_profile: string | null
           name: string
-          nationality: string | null
           phone: string | null
           service_type: string
-          services: string[] | null
           user_id: string | null
         }
         Insert: {
-          address?: string | null
-          country_code?: string | null
           created_at?: string | null
           cv_url?: string | null
           description?: string | null
@@ -359,15 +353,11 @@ export type Database = {
           image_url: string
           linkedin_profile?: string | null
           name?: string
-          nationality?: string | null
           phone?: string | null
           service_type: string
-          services?: string[] | null
           user_id?: string | null
         }
         Update: {
-          address?: string | null
-          country_code?: string | null
           created_at?: string | null
           cv_url?: string | null
           description?: string | null
@@ -378,10 +368,8 @@ export type Database = {
           image_url?: string
           linkedin_profile?: string | null
           name?: string
-          nationality?: string | null
           phone?: string | null
           service_type?: string
-          services?: string[] | null
           user_id?: string | null
         }
         Relationships: []
