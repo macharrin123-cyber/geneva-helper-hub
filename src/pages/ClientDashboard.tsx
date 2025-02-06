@@ -1,4 +1,3 @@
-<lov-code>
 import { useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navigation from "@/components/Navigation";
@@ -584,4 +583,15 @@ const ClientDashboard = () => {
             {mockBookings.length === 0 && (
               <Card>
                 <CardContent className="py-8">
-                  <p className="text-center text-gray-500">No
+                  <p className="text-center text-gray-500">No bookings found.</p>
+                </CardContent>
+              </Card>
+            )}
+          </div>
+        </main>
+      </div>
+    </div>
+  );
+};
+
+export default ClientDashboard;
