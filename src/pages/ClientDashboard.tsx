@@ -232,8 +232,8 @@ const ClientDashboard = () => {
         )}
 
         {/* Profile Image Section */}
-        <div className="flex justify-center mb-6 md:mb-8">
-          <div className="relative">
+        <div className="flex flex-col items-center mb-6 md:mb-8">
+          <div className="relative mb-4">
             <label htmlFor="profile-image" className="cursor-pointer block">
               <div className="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden bg-gray-100 ring-4 ring-primary/20 hover:ring-primary/30 transition-all">
                 <div className="w-full h-full flex items-center justify-center relative group">
@@ -266,8 +266,12 @@ const ClientDashboard = () => {
               </div>
             )}
           </div>
+          <h2 className="text-xl md:text-2xl font-semibold text-gray-900">
+            Welcome back {profileData.firstName}!
+          </h2>
         </div>
 
+        {/* Rest of the dashboard content */}
         <Card className="mb-6 md:mb-8">
           <CardHeader>
             <CardTitle className="text-xl md:text-2xl font-bold text-gray-900 text-center md:text-left">Profile Information</CardTitle>
@@ -526,5 +530,3 @@ const ClientDashboard = () => {
 };
 
 export default ClientDashboard;
-
-
