@@ -81,7 +81,7 @@ const Navigation = () => {
           </div>
           
           {/* Desktop menu */}
-          <div className="hidden md:flex items-center space-x-4">
+          <div className="hidden md:flex items-center space-x-6">
             <Link to="/" className={linkStyles}>
               {t('nav.home')}
             </Link>
@@ -91,16 +91,18 @@ const Navigation = () => {
             <Link to="/about-us" className={linkStyles}>
               {t('nav.aboutUs')}
             </Link>
-            <Link to="/faq" className={linkStyles}>
-              FAQ
-            </Link>
             <Link to="/contact" className={linkStyles}>
               {t('nav.contact')}
             </Link>
             {user && (
-              <Link to="/chat" className={linkStyles}>
-                Chat
-              </Link>
+              <>
+                <Link to="/chat" className={linkStyles}>
+                  Chat
+                </Link>
+                <Link to="/client-dashboard" className={linkStyles}>
+                  Account
+                </Link>
+              </>
             )}
 
             {!user ? (
@@ -244,13 +246,6 @@ const Navigation = () => {
                 {t('nav.aboutUs')}
               </Link>
               <Link
-                to="/faq"
-                className="block text-white hover:text-blue-100 px-3 py-2 rounded-md transition-colors duration-200"
-                onClick={() => setIsOpen(false)}
-              >
-                FAQ
-              </Link>
-              <Link
                 to="/contact"
                 className="block text-white hover:text-blue-100 px-3 py-2 rounded-md transition-colors duration-200"
                 onClick={() => setIsOpen(false)}
@@ -258,13 +253,22 @@ const Navigation = () => {
                 {t('nav.contact')}
               </Link>
               {user && (
-                <Link
-                  to="/chat"
-                  className="block text-white hover:text-blue-100 px-3 py-2 rounded-md transition-colors duration-200"
-                  onClick={() => setIsOpen(false)}
-                >
-                  Chat
-                </Link>
+                <>
+                  <Link
+                    to="/chat"
+                    className="block text-white hover:text-blue-100 px-3 py-2 rounded-md transition-colors duration-200"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    Chat
+                  </Link>
+                  <Link
+                    to="/client-dashboard"
+                    className="block text-white hover:text-blue-100 px-3 py-2 rounded-md transition-colors duration-200"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    Account
+                  </Link>
+                </>
               )}
 
               <div className="flex gap-2 px-3 py-2">
@@ -308,43 +312,6 @@ const Navigation = () => {
 
               {!user ? (
                 <div className="px-3 py-2">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button 
-                        variant="ghost" 
-                        size="sm"
-                        className="w-full flex items-center justify-between text-white hover:text-blue-100"
-                      >
-                        <span className="flex items-center gap-2">
-                          <User className="h-5 w-5" />
-                          {t('nav.signIn')}
-                        </span>
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent 
-                      align="start"
-                      className="w-48 bg-white/95 backdrop-blur-sm border border-gray-200"
-                    >
-                      <DropdownMenuItem asChild>
-                        <Link 
-                          to="/signin?type=client" 
-                          className="flex items-center cursor-pointer hover:bg-blue-50"
-                          onClick={() => setIsOpen(false)}
-                        >
-                          Sign in as Client
-                        </Link>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem asChild>
-                        <Link 
-                          to="/signin?type=provider" 
-                          className="flex items-center cursor-pointer hover:bg-blue-50"
-                          onClick={() => setIsOpen(false)}
-                        >
-                          Sign in as Provider
-                        </Link>
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
                   <Link
                     to="/signup"
                     className="mt-2 block bg-white text-[#1E3A8A] px-4 py-2 rounded-md hover:bg-blue-50 text-center"
