@@ -209,19 +209,12 @@ const ServicePage = ({ serviceType, providers }: ServicePageProps) => {
                             placeholder="Please describe what you need help with..."
                             className="min-h-[120px]"
                           />
-                          <div className="flex gap-4">
+                          <div className="flex">
                             <button
                               onClick={() => handleContact(provider.id)}
                               className="flex-1 bg-primary text-white px-6 py-3 rounded-full font-semibold hover:bg-primary/90 transition-colors"
                             >
                               Contact Provider
-                            </button>
-                            <button
-                              onClick={() => handleCall(provider)}
-                              className="flex items-center justify-center gap-2 bg-gray-100 text-gray-900 px-6 py-3 rounded-full font-semibold hover:bg-gray-200 transition-colors"
-                            >
-                              <Phone className="w-5 h-5" />
-                              {t('services.callProvider')}
                             </button>
                           </div>
                         </div>
