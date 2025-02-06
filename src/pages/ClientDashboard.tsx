@@ -27,7 +27,8 @@ const ClientDashboard = () => {
     phone: "7776924149",
     address: "38 Coleridge Road, Romford, RM3 7BB",
     emailNotifications: true,
-    pushNotifications: false
+    pushNotifications: false,
+    imageUrl: ""
   });
 
   const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -40,15 +41,41 @@ const ClientDashboard = () => {
       const fileName = `${Math.random()}.${fileExt}`;
       const filePath = `${fileName}`;
 
+      console.log('Starting image upload to Supabase storage...');
+
       const { error: uploadError } = await supabase.storage
         .from("provider-images")
         .upload(filePath, file);
 
-      if (uploadError) throw uploadError;
+      if (uploadError) {
+        console.error("Error uploading image:", uploadError);
+        throw uploadError;
+      }
+
+      console.log('Image uploaded successfully, getting public URL...');
 
       const { data: { publicUrl } } = supabase.storage
         .from("provider-images")
         .getPublicUrl(filePath);
+
+      console.log('Got public URL:', publicUrl);
+
+      // Update profile data with new image URL
+      const { error: updateError } = await supabase
+        .from("profiles")
+        .update({ image_url: publicUrl })
+        .eq("id", profileData.id);
+
+      if (updateError) {
+        console.error("Error updating profile:", updateError);
+        throw updateError;
+      }
+
+      // Update local state with new image URL
+      setProfileData(prev => ({
+        ...prev,
+        imageUrl: publicUrl
+      }));
 
       toast({
         title: "Success",
@@ -169,7 +196,15 @@ const ClientDashboard = () => {
             <label htmlFor="profile-image" className="cursor-pointer block">
               <div className="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden bg-gray-100 ring-4 ring-primary/20 hover:ring-primary/30 transition-all">
                 <div className="w-full h-full flex items-center justify-center relative group">
-                  <UserRound className="w-12 h-12 md:w-16 md:h-16 text-gray-400 group-hover:text-gray-500 transition-colors" />
+                  {profileData.imageUrl ? (
+                    <img 
+                      src={profileData.imageUrl} 
+                      alt="Profile" 
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <UserRound className="w-12 h-12 md:w-16 md:h-16 text-gray-400 group-hover:text-gray-500 transition-colors" />
+                  )}
                   <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                     <ImageIcon className="w-5 h-5 md:w-6 md:h-6 text-white" />
                   </div>
